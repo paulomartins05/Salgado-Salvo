@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+
+@theme {
+  --color-background-primary: #F4EAD2;
+  --color-background-secondary: #3A4729;
+  --color-laranja-destaque: #D46B34;
+  --color-text-secondary: #C2B897;
+  --color-text-tertiary: #E5A93D;
+
+  
+  --font-playfair: var(--font-playfair);
+  --font-lora: var(--font-lora);
+  --font-inter: var(--font-inter);
+}
+
+
+body {
+  background-color: #F4EAD2;
+}

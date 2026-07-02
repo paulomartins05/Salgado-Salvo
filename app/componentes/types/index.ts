@@ -17,7 +17,7 @@ export interface Product {
 export interface Category {
   id: string;
   name: string;
-  icon: string; // URL de imagem 
+  icon: string;
   count: number;
 }
 

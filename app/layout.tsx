@@ -21,16 +21,14 @@ export const metadata: Metadata = {
   title: "Salgado Salvo",
   description: "Plataforma de resgate de lanches",
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR"> 
-      <body>
-        {}
+    <html lang="pt-BR">
+      <body className={`${playfair.variable} ${lora.variable} ${inter.variable}`}>
         {children}
       </body>
     </html>

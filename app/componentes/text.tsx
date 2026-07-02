@@ -2,12 +2,10 @@ import { cva, VariantProps } from "class-variance-authority";
 import React from "react";
 import { cn } from "../lib/utils";
 
-export const textVariants = cva(`
-   text-background-secondary
-  `, {
+export const textVariants = cva(``, {
     variants: {
       variant: {
-        // H1 e Títulos de grande impacto
+      // H1
       playfair: "font-playfair text-4xl md:text-5xl font-bold text-salgado-laranja", 
       
       // H2 e Títulos de Seção

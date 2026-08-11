@@ -1,0 +1,64 @@
+import Image from "next/image";
+import Link from "next/link"; 
+
+export interface ProdutoProps {
+  id: number | string;
+  nome: string;
+  descricao: string;
+  preco: number;
+  tempoPostagem: string;
+  imagemUrl: string;
+}
+
+export default function CardProduto({ 
+  id, 
+  nome, 
+  descricao, 
+  preco, 
+  tempoPostagem, 
+  imagemUrl 
+}: ProdutoProps) {
+  
+  const precoFormatado = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(preco);
+
+  return (
+    <Link href={`/resgates/${id}`} className="block h-full cursor-pointer group">
+      <div className="bg-white rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full border border-gray-100 pb-2 group-hover:-translate-y-1">
+        
+        <div className="relative bg-[#F8F9FA] h-48 w-full flex items-center justify-center p-4">
+          <div className="absolute top-3 right-3 bg-white px-3 py-1 rounded-full text-xs font-bold text-background-secondary shadow-sm flex items-center gap-1 z-10">
+            📍 Postado há {tempoPostagem}
+          </div>
+          <div className="relative w-full h-full">
+            <Image 
+              src={imagemUrl} 
+              alt={nome} 
+              fill
+              className="object-contain mix-blend-multiply drop-shadow-md"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            />
+          </div>
+        </div>
+
+        <div className="p-5 flex flex-col flex-grow gap-3">
+          <div>
+            <h3 className="font-inter font-bold text-background-secondary text-sm md:text-base line-clamp-2 mb-1 group-hover:text-laranja-destaque transition-colors">
+              {nome}
+            </h3>
+            <p className="font-inter text-xs text-background-secondary/60 line-clamp-2">
+              {descricao}
+            </p>
+          </div>
+          <div className="mt-auto pt-2">
+            <span className="font-inter font-bold text-lg text-background-secondary">
+              {precoFormatado}
+            </span>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}

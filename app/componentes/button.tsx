@@ -1,4 +1,3 @@
-// O asChild geralmente exige a biblioteca @radix-ui/react-slot.
 
 import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";

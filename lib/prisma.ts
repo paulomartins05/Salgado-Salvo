@@ -1,19 +1,10 @@
-import { PrismaClient } from '@prisma/client'
+import "dotenv/config";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "../generated/prisma/client";
 
-// Cria a função que inicializa o Prisma
-const prismaClientSingleton = () => {
-  return new PrismaClient()
-}
+const connectionString = `${process.env.DATABASE_URL}`;
 
-// Garante que o TypeScript entenda a variável global
-declare global {
-  var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>
-}
+const adapter = new PrismaPg({ connectionString });
+const prisma = new PrismaClient({ adapter });
 
-// Se já existir uma conexão aberta, usa ela. Se não, cria uma nova.
-const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
-
-export default prisma
-
-// No ambiente de desenvolvimento, salva a conexão na variável global para sobreviver ao recarregamento do Next.js
-if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma
+export { prisma };

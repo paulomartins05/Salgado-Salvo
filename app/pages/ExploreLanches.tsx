@@ -1,6 +1,6 @@
 import Container from "../componentes/container";
 import Text from "../componentes/text"; 
-import { cn } from "../lib/utils";
+import { cn } from "../../lib/utils";
 import Link from "next/link"; 
 
 const categoriasLanches = [

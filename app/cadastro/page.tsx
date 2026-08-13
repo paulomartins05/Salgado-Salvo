@@ -4,6 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image"; 
 
+// Auth-Client, do Better-Auth
+import { authClient } from "@/lib/auth-client"
+
 
 import EyeOpenIcon from "../assets/icon/eye-open-login.svg";     
 import EyeClosedIcon from "../assets/icon/eye-close-login.svg"; 
@@ -35,21 +38,35 @@ export default function CadastroPage() {
     }));
   };
 
-  /*
-   * FUNÇÃO: handleSubmit
-   * Disparada quando o usuário clica em "FINALIZAR CADASTRO".
-   */
-  const handleSubmit = (e: React.FormEvent) => {
+  
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); 
     
-    // Validação básica: verificar se as senhas batem
     if (formData.senha !== formData.confirmarSenha) {
       alert("As senhas não coincidem. Por favor, verifique.");
       return;
     }
 
-    console.log(`Cadastrando novo ${tipoConta}:`, formData);
-    alert(`Conta de ${tipoConta} criada com sucesso! (Simulação)`);
+    // Cadastrando usuario
+    const { data, error} = await authClient.signUp.email({
+      name: formData.nome,
+      email: formData.email,
+      password: formData.senha,
+      callbackURL: "/"
+
+    }, {
+      onRequest: () => { // Enquanto roda
+
+      },
+      onSuccess: () => { 
+        alert("SUCESSO!!!!!")
+      }, 
+      onError: (ctx) => {
+        alert("Deu erro!")
+        console.log(ctx.error.message)
+      }
+    })
+    
   };
 
   return (

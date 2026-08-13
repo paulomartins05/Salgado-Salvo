@@ -8,6 +8,8 @@ import LockIcon from "../assets/icon/lock-login.svg";
 import EyeOpenIcon from "../assets/icon/eye-open-login.svg";     
 import EyeClosedIcon from "../assets/icon/eye-close-login.svg"; 
 
+import { authClient } from "@/lib/auth-client";
+
 export default function LoginPage() {
 
 
@@ -33,14 +35,24 @@ export default function LoginPage() {
   };
 
   // É Chamada Quando é Clicado em "Entrar"
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Teste manual, dos dados de login
-    console.log("Tentativa de login com os dados:", formData);
-    
-    // Chamada para a API
-    alert("Login simulado com sucesso!"); 
+    const {} = await authClient.signIn.email({
+      email: formData.email,
+      password: formData.senha,
+      callbackURL: "/"
+    }, {
+      onRequest: () => {},
+      onSuccess:(ctx) => {
+        alert("SUCESSO !!!!!!!!")
+        console.log("logado: ", ctx)
+      },
+      onError: (ctx) => {
+        alert("Erro ao logar")
+        console.log(ctx.error.message)
+      }
+    })
   };
 
  

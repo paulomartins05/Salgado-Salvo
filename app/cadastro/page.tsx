@@ -13,6 +13,7 @@ import { authClient } from "@/lib/auth-client"
 import EyeOpenIcon from "../assets/icon/eye-open-login.svg";     
 import EyeClosedIcon from "../assets/icon/eye-close-login.svg"; 
 import DeleteIcon from "../assets/icon/delete-photo-profile.svg"
+import { email } from "better-auth";
 
 // BASE64, imagem pra texto                -- TROCAR PARA: Vercel Blob ou o Cloudinary
 const converterParaBase64 = (file: File): Promise<string> => {
@@ -80,20 +81,21 @@ export default function CadastroPage() {
       imagemFinal = await converterParaBase64(fotoPerfil)
     }
 
-    // Cadastrando usuario
-    const { data, error} = await authClient.signUp.email({
+    const payload = {
       name: formData.nome,
       email: formData.email,
       password: formData.senha,
       image: imagemFinal,
       telefone: formData.telefone,
       role: tipoConta === "parceiro" ? "PARCEIRO" : "CONSUMIDOR",
-      cnpj: tipoConta === "parceiro" ? formData.cnpj : null,
-      localizacao: tipoConta === "parceiro" ? formData.localizacao : null,
+      cnpj: tipoConta === "parceiro" ? formData.cnpj : undefined,
+      localizacao: tipoConta === "parceiro" ? formData.localizacao : undefined,
 
       callbackURL: "/"
+    }
 
-    }, {
+    // Cadastrando usuario
+    const { data, error} = await authClient.signUp.email( payload as any, {
       onRequest: () => { // Enquanto roda
 
       },

@@ -86,6 +86,11 @@ export default function CadastroPage() {
       email: formData.email,
       password: formData.senha,
       image: imagemFinal,
+      telefone: formData.telefone,
+      role: tipoConta === "parceiro" ? "PARCEIRO" : "CONSUMIDOR",
+      cnpj: tipoConta === "parceiro" ? formData.cnpj : null,
+      localizacao: tipoConta === "parceiro" ? formData.localizacao : null,
+
       callbackURL: "/"
 
     }, {

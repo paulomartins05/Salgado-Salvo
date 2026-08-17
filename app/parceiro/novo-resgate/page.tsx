@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import Header from "../../pages/header"; 
-import Container from "../../componentes/container"; 
+import { useState, useEffect } from "react";
 
+import Container from "../../componentes/container"; 
 import { criarOferta } from "@/app/actions/ofertas";
+import { authClient } from "@/lib/auth-client"
+import Header from "../../pages/header"; 
 
 const categoriasDisponiveis = [
   { id: "Salgados", label: "Salgados", icon: "🥟" },
@@ -31,6 +32,8 @@ const formatCoinInput = (valorAtual: string): string => {
 
 export default function CadastrarNovoResgate() {
 
+  const { data: session} = authClient.useSession()
+
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [formData, setFormData] = useState({
@@ -44,6 +47,18 @@ export default function CadastrarNovoResgate() {
     validade: "",
     termosAceitos: false,
   });
+
+  useEffect(() => {
+    const enderecoDoUsuario = (session?.user as any)?.localizacao
+
+    if(enderecoDoUsuario) {
+      setFormData((prev) => ({
+        ...prev,
+        localizacao: enderecoDoUsuario
+      }))
+    }
+
+  }, [session]) 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -169,7 +184,7 @@ export default function CadastrarNovoResgate() {
                      <span className="absolute top-3 left-3 flex items-center text-gray-400">📝</span>
                     <textarea 
                       name="descricao" required value={formData.descricao} onChange={handleChange}
-                      placeholder="Ingredientes, validade, etc..."
+                      placeholder="Ingredientes, etc..."
                       className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-[#D9774A] focus:border-transparent outline-none transition-all resize-none h-[50px]"
                     />
                   </div>
@@ -249,7 +264,29 @@ export default function CadastrarNovoResgate() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 
                 <div className="flex flex-col gap-2 md:col-span-2">
-                  <label className="text-sm text-background-secondary/80 font-medium">Localização de Retirada</label>
+                  
+                  {/* Cabeçalho do Input com o Botão de Restaurar */}
+                  <div className="flex justify-between items-end">
+                    <label className="text-sm text-background-secondary/80 font-medium">
+                      Localização de Retirada
+                    </label>
+                    
+                    {(session?.user as any)?.localizacao && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormData((prev) => ({
+                            ...prev,
+                            localizacao: (session?.user as any).localizacao
+                          }));
+                        }}
+                        className="text-xs text-[#D9774A] hover:text-[#c4683e] font-semibold flex items-center gap-1 transition-colors bg-[#D9774A]/10 px-2 py-1 rounded-md"
+                      >
+                        🏠 Meu endereço
+                      </button>
+                    )}
+                  </div>
+
                   <div className="relative">
                     <span className="absolute inset-y-0 left-3 flex items-center">📍</span>
                     <input 

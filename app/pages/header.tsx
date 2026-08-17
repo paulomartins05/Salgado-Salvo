@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Container from "../componentes/container";
 import NavLink from "../componentes/navLink";
-import Logo from "../assets/image/logo.png";
+import Logo from "../assets/image/logo-salgado-salvo.svg";
 import Button from "../componentes/button";
 import MenuMobile from "../componentes/MenuMobile";
 
@@ -21,7 +21,7 @@ export default function Header() {
             <Image 
               src={Logo} 
               alt="Logo Salgado Salvo" 
-              className="h-10 md:h-14 w-auto" 
+              className="h-10 md:h-20 w-auto" 
             />
           </Link>
 

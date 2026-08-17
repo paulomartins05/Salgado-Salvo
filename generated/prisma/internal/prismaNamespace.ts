@@ -400,7 +400,8 @@ export const ModelName = {
   User: 'User',
   Session: 'Session',
   Account: 'Account',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  Oferta: 'Oferta'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -416,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification"
+    modelProps: "user" | "session" | "account" | "verification" | "oferta"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -716,6 +717,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Oferta: {
+      payload: Prisma.$OfertaPayload<ExtArgs>
+      fields: Prisma.OfertaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OfertaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfertaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OfertaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfertaPayload>
+        }
+        findFirst: {
+          args: Prisma.OfertaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfertaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OfertaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfertaPayload>
+        }
+        findMany: {
+          args: Prisma.OfertaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfertaPayload>[]
+        }
+        create: {
+          args: Prisma.OfertaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfertaPayload>
+        }
+        createMany: {
+          args: Prisma.OfertaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OfertaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfertaPayload>[]
+        }
+        delete: {
+          args: Prisma.OfertaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfertaPayload>
+        }
+        update: {
+          args: Prisma.OfertaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfertaPayload>
+        }
+        deleteMany: {
+          args: Prisma.OfertaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OfertaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OfertaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfertaPayload>[]
+        }
+        upsert: {
+          args: Prisma.OfertaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OfertaPayload>
+        }
+        aggregate: {
+          args: Prisma.OfertaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOferta>
+        }
+        groupBy: {
+          args: Prisma.OfertaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OfertaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OfertaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OfertaCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -817,6 +892,22 @@ export const VerificationScalarFieldEnum = {
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
+export const OfertaScalarFieldEnum = {
+  id: 'id',
+  titulo: 'titulo',
+  descricao: 'descricao',
+  precoOriginal: 'precoOriginal',
+  precoDesconto: 'precoDesconto',
+  quantidade: 'quantidade',
+  dataValidade: 'dataValidade',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  vendedorId: 'vendedorId'
+} as const
+
+export type OfertaScalarFieldEnum = (typeof OfertaScalarFieldEnum)[keyof typeof OfertaScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -879,6 +970,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 
@@ -1050,6 +1155,7 @@ export type GlobalOmitConfig = {
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
+  oferta?: Prisma.OfertaOmit
 }
 
 /* Types for Logging */

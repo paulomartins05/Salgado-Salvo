@@ -54,7 +54,8 @@ export const ModelName = {
   User: 'User',
   Session: 'Session',
   Account: 'Account',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  Oferta: 'Oferta'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -133,6 +134,22 @@ export const VerificationScalarFieldEnum = {
 } as const
 
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+export const OfertaScalarFieldEnum = {
+  id: 'id',
+  titulo: 'titulo',
+  descricao: 'descricao',
+  precoOriginal: 'precoOriginal',
+  precoDesconto: 'precoDesconto',
+  quantidade: 'quantidade',
+  dataValidade: 'dataValidade',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  vendedorId: 'vendedorId'
+} as const
+
+export type OfertaScalarFieldEnum = (typeof OfertaScalarFieldEnum)[keyof typeof OfertaScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -61,3 +61,8 @@ export type Account = Prisma.AccountModel
  * 
  */
 export type Verification = Prisma.VerificationModel
+/**
+ * Model Oferta
+ * 
+ */
+export type Oferta = Prisma.OfertaModel

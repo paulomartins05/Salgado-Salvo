@@ -9,7 +9,6 @@ datasource db {
 }
 
 model User {
-  // Obrigatórios do better-auth
   id            String    @id @default(cuid())
   name          String
   email         String    @unique
@@ -18,15 +17,15 @@ model User {
   createdAt     DateTime  @default(now()) 
   updatedAt     DateTime  @updatedAt
 
-  // Campos exclusivos do Salgado Salvo
   role          String    @default("CONSUMIDOR")
   telefone      String?
   cnpj          String?   
   localizacao   String?   
 
-  // Obrigatórias para o better-auth 
   sessions      Session[]
   accounts      Account[]
+
+  ofertas       Oferta[]
 }
 
 model Session {
@@ -65,4 +64,20 @@ model Verification {
   expiresAt  DateTime
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
+}
+
+model Oferta {
+  id              String   @id @default(cuid())
+  titulo          String   
+  descricao       String   
+  precoOriginal   Float    
+  precoDesconto   Float    
+  quantidade      Int      
+  dataValidade    DateTime 
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  vendedorId      String
+  vendedor        User     @relation(fields: [vendedorId], references: [id], onDelete: Cascade)
 }

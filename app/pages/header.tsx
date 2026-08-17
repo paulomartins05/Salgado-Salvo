@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image";
 import Link from "next/link";
 import Container from "../componentes/container";
@@ -6,7 +8,10 @@ import Logo from "../assets/image/logo.png";
 import Button from "../componentes/button";
 import MenuMobile from "../componentes/MenuMobile";
 
+import { authClient } from "@/lib/auth-client";
+
 export default function Header() {
+  const {data:session} = authClient.useSession()
   return (
     <header className="w-full py-3 bg-background-primary relative">
       <Container>
@@ -36,9 +41,17 @@ export default function Header() {
             </Button>
             
             <div className="hidden md:block">
-              <Button variant="outline" size="icon" className="border-background-secondary">
-                👤
-              </Button>
+              {session ? (
+                <Button variant="outline" size="icon" className="border-background-secondary" >
+                  👤
+                </Button>
+              ) : (
+                <Link href={"/login"}>
+                  <Button className="bg-[#D9774A] hover:bg-[#c4683e] text-white border-transparent">
+                    Entrar
+                  </Button>
+                </Link>
+              )}
             </div>
 
             <MenuMobile />

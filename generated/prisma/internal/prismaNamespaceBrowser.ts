@@ -141,9 +141,11 @@ export const OfertaScalarFieldEnum = {
   titulo: 'titulo',
   descricao: 'descricao',
   precoOriginal: 'precoOriginal',
-  precoDesconto: 'precoDesconto',
+  precoResgate: 'precoResgate',
   quantidade: 'quantidade',
   dataValidade: 'dataValidade',
+  categoria: 'categoria',
+  localizacao: 'localizacao',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   vendedorId: 'vendedorId'

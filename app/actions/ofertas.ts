@@ -22,8 +22,10 @@ export async function criarOferta(formData: FormData) {
 
   const titulo = formData.get("titulo") as string
   const descricao = formData.get("descricao") as string
+  const categoria = formData.get("categoria") as string
+  const localizacao = formData.get("localizacao") as string
   const precoOriginal = parseFloat(formData.get("precoOriginal") as string)
-  const precoDesconto = parseFloat(formData.get("precoDesconto") as string) 
+  const precoResgate = parseFloat(formData.get("precoResgate") as string) 
   const quantidade = parseInt(formData.get("quantidade") as string)
   const dataValidade = new Date(formData.get("dataValidade") as string)
 
@@ -32,8 +34,10 @@ export async function criarOferta(formData: FormData) {
       data: {
         titulo,
         descricao,
+        categoria,
+        localizacao,
         precoOriginal,
-        precoDesconto,
+        precoResgate,
         quantidade,
         dataValidade,
 

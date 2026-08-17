@@ -71,9 +71,11 @@ model Oferta {
   titulo          String   
   descricao       String   
   precoOriginal   Float    
-  precoDesconto   Float    
+  precoResgate   Float    
   quantidade      Int      
   dataValidade    DateTime 
+  categoria       String
+  localizacao     String
   
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

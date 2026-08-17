@@ -4,6 +4,8 @@ import { useState } from "react";
 import Header from "../../pages/header"; 
 import Container from "../../componentes/container"; 
 
+import { criarOferta } from "@/app/actions/ofertas";
+
 const categoriasDisponiveis = [
   { id: "Salgados", label: "Salgados", icon: "🥟" },
   { id: "Doces", label: "Doces", icon: "🍩" },
@@ -13,6 +15,9 @@ const categoriasDisponiveis = [
 ];
 
 export default function CadastrarNovoResgate() {
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const [formData, setFormData] = useState({
     nome: "",
     descricao: "",
@@ -36,7 +41,7 @@ export default function CadastrarNovoResgate() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); 
     
     if (!formData.termosAceitos) {
@@ -44,8 +49,45 @@ export default function CadastrarNovoResgate() {
       return;
     }
 
-    console.log("DADOS PRONTOS PARA O BACKEND:", formData);
-    alert(`Sucesso! O produto "${formData.nome}" foi empacotado e estaria sendo enviado para o banco de dados agora! Abra o console do navegador (F12) para ver o JSON.`);
+    if(!formData.categoria) {
+      alert("Favor selecionar uma categoria")
+    }
+
+
+    setIsSubmitting(true)
+
+    try {
+      const serverData = new FormData();
+
+      serverData.append("titulo", formData.nome)
+      serverData.append("descricao", formData.descricao)
+      serverData.append("precoOriginal", formData.precoOriginal)
+      serverData.append("precoDesconto", formData.precoResgate)
+      serverData.append("quantidade", formData.quantidade.toString())
+
+      const horasEmMilissegundos = parseInt(formData.validade) * 60 * 60 * 1000
+      const dataExpiraçao = new Date(Date.now() + horasEmMilissegundos)
+      serverData.append("dataValidade", dataExpiraçao.toISOString())
+
+      
+      serverData.append("categoria", formData.categoria)
+      serverData.append("localizacao", formData.localizacao)
+      
+
+      await criarOferta(serverData)
+
+      alert(`Sucesso!!!!!!!!! "${formData.nome}", foi criado`)
+
+      window.location.href = "/"
+      
+    } catch (error: any) {
+      alert(error.message)
+      console.log(error)  
+    } finally {
+      setIsSubmitting(false)
+    }
+
+    
   };
 
   return (
@@ -247,7 +289,13 @@ export default function CadastrarNovoResgate() {
 
               <button 
                 type="submit" 
-                className="w-full bg-[#D9774A] hover:bg-[#c4683e] text-white font-bold text-lg py-4 rounded-xl shadow-[0_4px_14px_0_rgba(217,119,74,0.39)] hover:shadow-[0_6px_20px_rgba(217,119,74,0.23)] hover:bg-[rgba(217,119,74,0.9)] transform hover:-translate-y-0.5 transition-all duration-200"
+                disabled={isSubmitting}
+                className={`w-full bg-[#D9774A] hover:bg-[#c4683e] text-white font-bold text-lg py-4 rounded-xl shadow-[0_4px_14px_0_rgba(217,119,74,0.39)] hover:shadow-[0_6px_20px_rgba(217,119,74,0.23)] hover:bg-[rgba(217,119,74,0.9)] transform hover:-translate-y-0.5 transition-all duration-200
+                ${isSubmitting 
+                    ? "bg-gray-400 text-gray-200 cursor-not-allowed" // Estilo bloqueado
+                    : "bg-[#D9774A] hover:bg-[#c4683e] text-white hover:shadow-[0_6px_20px_rgba(217,119,74,0.23)] hover:bg-[rgba(217,119,74,0.9)] transform hover:-translate-y-0.5" 
+                  }
+                `}
               >
                 PUBLICAR NOVO RESGATE 🚀
               </button>

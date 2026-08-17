@@ -14,6 +14,21 @@ const categoriasDisponiveis = [
   { id: "Outros", label: "Outros", icon: "🛒" },
 ];
 
+const formatCoinInput = (valorAtual: string): string => {
+  const apenasNumeros = valorAtual.replace(/\D/g, "")
+
+  if(!apenasNumeros) {
+    return ""
+  }
+
+  const centavos = Number(apenasNumeros) / 100
+
+  return centavos.toLocaleString("PT-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+}
+
 export default function CadastrarNovoResgate() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -41,6 +56,17 @@ export default function CadastrarNovoResgate() {
     }
   };
 
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = e.target
+    const valorFormatado = formatCoinInput(value)
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: valorFormatado,
+    }))
+
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); 
     
@@ -53,6 +79,9 @@ export default function CadastrarNovoResgate() {
       alert("Favor selecionar uma categoria")
     }
 
+    const precoOriginalLimpo = formData.precoOriginal.replace(/\./g, "").replace(",", ".");
+    const precoResgateLimpo = formData.precoResgate.replace(/\./g, "").replace(",", ".");
+
 
     setIsSubmitting(true)
 
@@ -61,8 +90,8 @@ export default function CadastrarNovoResgate() {
 
       serverData.append("titulo", formData.nome)
       serverData.append("descricao", formData.descricao)
-      serverData.append("precoOriginal", formData.precoOriginal)
-      serverData.append("precoDesconto", formData.precoResgate)
+      serverData.append("precoOriginal", precoOriginalLimpo)
+      serverData.append("precoResgate", precoResgateLimpo)
       serverData.append("quantidade", formData.quantidade.toString())
 
       const horasEmMilissegundos = parseInt(formData.validade) * 60 * 60 * 1000
@@ -182,7 +211,12 @@ export default function CadastrarNovoResgate() {
                   <div className="relative">
                     <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">R$</span>
                     <input 
-                      type="number" step="0.01" name="precoOriginal" required value={formData.precoOriginal} onChange={handleChange}
+                      type="text" 
+                      step="0.01" 
+                      inputMode="numeric"
+                      name="precoOriginal"
+                      required value={formData.precoOriginal} 
+                      onChange={handlePriceChange}
                       placeholder="6,00"
                       className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-500 line-through focus:ring-2 focus:ring-gray-300 outline-none transition-all"
                     />
@@ -194,7 +228,12 @@ export default function CadastrarNovoResgate() {
                   <div className="relative">
                     <span className="absolute inset-y-0 left-3 flex items-center font-bold text-[#2E7D32]">R$</span>
                     <input 
-                      type="number" step="0.01" name="precoResgate" required value={formData.precoResgate} onChange={handleChange}
+                      type="text" 
+                      step="0.01" 
+                      inputMode="numeric"
+                      name="precoResgate" 
+                      required value={formData.precoResgate} 
+                      onChange={handlePriceChange}
                       placeholder="3,90"
                       className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-[#4CAF50]/40 bg-[#E8F5E9] font-bold text-background-secondary focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent outline-none transition-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)]"
                     />

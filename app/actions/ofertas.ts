@@ -4,6 +4,14 @@ import {prisma} from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { v2 as cloudinary} from "cloudinary"
+import { rejects } from "assert";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+})
 
 
 export async function criarOferta(formData: FormData) {
@@ -29,6 +37,27 @@ export async function criarOferta(formData: FormData) {
   const quantidade = parseInt(formData.get("quantidade") as string)
   const dataValidade = new Date(formData.get("dataValidade") as string)
 
+  const imagem = formData.get("imagem") as File | null
+  let urlImagemSalva = null
+
+  if (imagem) {
+    const bytes = await imagem.arrayBuffer()
+    const buffer = Buffer.from(bytes)
+
+    urlImagemSalva = await new Promise<string>((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream({
+        folder: "salgado_salvo",
+        format: "webp",
+        quality: "auto"
+      }, (error, result) => {
+        if (error) {reject(error)}
+        else {resolve(result?.secure_url || "")}
+      }
+    )
+    uploadStream.end(buffer)
+    })
+  }
+
   try {
     const novaOferta = await prisma.oferta.create({
       data: {
@@ -40,7 +69,7 @@ export async function criarOferta(formData: FormData) {
         precoResgate,
         quantidade,
         dataValidade,
-
+        imagemUrl: urlImagemSalva,
         vendedorId: session.user.id,
       }
     })

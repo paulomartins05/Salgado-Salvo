@@ -48,6 +48,7 @@ export type OfertaMinAggregateOutputType = {
   dataValidade: Date | null
   categoria: string | null
   localizacao: string | null
+  imagemUrl: string | null
   createdAt: Date | null
   updatedAt: Date | null
   vendedorId: string | null
@@ -63,6 +64,7 @@ export type OfertaMaxAggregateOutputType = {
   dataValidade: Date | null
   categoria: string | null
   localizacao: string | null
+  imagemUrl: string | null
   createdAt: Date | null
   updatedAt: Date | null
   vendedorId: string | null
@@ -78,6 +80,7 @@ export type OfertaCountAggregateOutputType = {
   dataValidade: number
   categoria: number
   localizacao: number
+  imagemUrl: number
   createdAt: number
   updatedAt: number
   vendedorId: number
@@ -107,6 +110,7 @@ export type OfertaMinAggregateInputType = {
   dataValidade?: true
   categoria?: true
   localizacao?: true
+  imagemUrl?: true
   createdAt?: true
   updatedAt?: true
   vendedorId?: true
@@ -122,6 +126,7 @@ export type OfertaMaxAggregateInputType = {
   dataValidade?: true
   categoria?: true
   localizacao?: true
+  imagemUrl?: true
   createdAt?: true
   updatedAt?: true
   vendedorId?: true
@@ -137,6 +142,7 @@ export type OfertaCountAggregateInputType = {
   dataValidade?: true
   categoria?: true
   localizacao?: true
+  imagemUrl?: true
   createdAt?: true
   updatedAt?: true
   vendedorId?: true
@@ -239,6 +245,7 @@ export type OfertaGroupByOutputType = {
   dataValidade: Date
   categoria: string
   localizacao: string
+  imagemUrl: string | null
   createdAt: Date
   updatedAt: Date
   vendedorId: string
@@ -277,6 +284,7 @@ export type OfertaWhereInput = {
   dataValidade?: Prisma.DateTimeFilter<"Oferta"> | Date | string
   categoria?: Prisma.StringFilter<"Oferta"> | string
   localizacao?: Prisma.StringFilter<"Oferta"> | string
+  imagemUrl?: Prisma.StringNullableFilter<"Oferta"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Oferta"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Oferta"> | Date | string
   vendedorId?: Prisma.StringFilter<"Oferta"> | string
@@ -293,6 +301,7 @@ export type OfertaOrderByWithRelationInput = {
   dataValidade?: Prisma.SortOrder
   categoria?: Prisma.SortOrder
   localizacao?: Prisma.SortOrder
+  imagemUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   vendedorId?: Prisma.SortOrder
@@ -312,6 +321,7 @@ export type OfertaWhereUniqueInput = Prisma.AtLeast<{
   dataValidade?: Prisma.DateTimeFilter<"Oferta"> | Date | string
   categoria?: Prisma.StringFilter<"Oferta"> | string
   localizacao?: Prisma.StringFilter<"Oferta"> | string
+  imagemUrl?: Prisma.StringNullableFilter<"Oferta"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Oferta"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Oferta"> | Date | string
   vendedorId?: Prisma.StringFilter<"Oferta"> | string
@@ -328,6 +338,7 @@ export type OfertaOrderByWithAggregationInput = {
   dataValidade?: Prisma.SortOrder
   categoria?: Prisma.SortOrder
   localizacao?: Prisma.SortOrder
+  imagemUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   vendedorId?: Prisma.SortOrder
@@ -351,6 +362,7 @@ export type OfertaScalarWhereWithAggregatesInput = {
   dataValidade?: Prisma.DateTimeWithAggregatesFilter<"Oferta"> | Date | string
   categoria?: Prisma.StringWithAggregatesFilter<"Oferta"> | string
   localizacao?: Prisma.StringWithAggregatesFilter<"Oferta"> | string
+  imagemUrl?: Prisma.StringNullableWithAggregatesFilter<"Oferta"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Oferta"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Oferta"> | Date | string
   vendedorId?: Prisma.StringWithAggregatesFilter<"Oferta"> | string
@@ -366,6 +378,7 @@ export type OfertaCreateInput = {
   dataValidade: Date | string
   categoria: string
   localizacao: string
+  imagemUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   vendedor: Prisma.UserCreateNestedOneWithoutOfertasInput
@@ -381,6 +394,7 @@ export type OfertaUncheckedCreateInput = {
   dataValidade: Date | string
   categoria: string
   localizacao: string
+  imagemUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   vendedorId: string
@@ -396,6 +410,7 @@ export type OfertaUpdateInput = {
   dataValidade?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.StringFieldUpdateOperationsInput | string
   localizacao?: Prisma.StringFieldUpdateOperationsInput | string
+  imagemUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vendedor?: Prisma.UserUpdateOneRequiredWithoutOfertasNestedInput
@@ -411,6 +426,7 @@ export type OfertaUncheckedUpdateInput = {
   dataValidade?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.StringFieldUpdateOperationsInput | string
   localizacao?: Prisma.StringFieldUpdateOperationsInput | string
+  imagemUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vendedorId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -426,6 +442,7 @@ export type OfertaCreateManyInput = {
   dataValidade: Date | string
   categoria: string
   localizacao: string
+  imagemUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   vendedorId: string
@@ -441,6 +458,7 @@ export type OfertaUpdateManyMutationInput = {
   dataValidade?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.StringFieldUpdateOperationsInput | string
   localizacao?: Prisma.StringFieldUpdateOperationsInput | string
+  imagemUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -455,6 +473,7 @@ export type OfertaUncheckedUpdateManyInput = {
   dataValidade?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.StringFieldUpdateOperationsInput | string
   localizacao?: Prisma.StringFieldUpdateOperationsInput | string
+  imagemUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vendedorId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -480,6 +499,7 @@ export type OfertaCountOrderByAggregateInput = {
   dataValidade?: Prisma.SortOrder
   categoria?: Prisma.SortOrder
   localizacao?: Prisma.SortOrder
+  imagemUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   vendedorId?: Prisma.SortOrder
@@ -501,6 +521,7 @@ export type OfertaMaxOrderByAggregateInput = {
   dataValidade?: Prisma.SortOrder
   categoria?: Prisma.SortOrder
   localizacao?: Prisma.SortOrder
+  imagemUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   vendedorId?: Prisma.SortOrder
@@ -516,6 +537,7 @@ export type OfertaMinOrderByAggregateInput = {
   dataValidade?: Prisma.SortOrder
   categoria?: Prisma.SortOrder
   localizacao?: Prisma.SortOrder
+  imagemUrl?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   vendedorId?: Prisma.SortOrder
@@ -595,6 +617,7 @@ export type OfertaCreateWithoutVendedorInput = {
   dataValidade: Date | string
   categoria: string
   localizacao: string
+  imagemUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -609,6 +632,7 @@ export type OfertaUncheckedCreateWithoutVendedorInput = {
   dataValidade: Date | string
   categoria: string
   localizacao: string
+  imagemUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -652,6 +676,7 @@ export type OfertaScalarWhereInput = {
   dataValidade?: Prisma.DateTimeFilter<"Oferta"> | Date | string
   categoria?: Prisma.StringFilter<"Oferta"> | string
   localizacao?: Prisma.StringFilter<"Oferta"> | string
+  imagemUrl?: Prisma.StringNullableFilter<"Oferta"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Oferta"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Oferta"> | Date | string
   vendedorId?: Prisma.StringFilter<"Oferta"> | string
@@ -667,6 +692,7 @@ export type OfertaCreateManyVendedorInput = {
   dataValidade: Date | string
   categoria: string
   localizacao: string
+  imagemUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -681,6 +707,7 @@ export type OfertaUpdateWithoutVendedorInput = {
   dataValidade?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.StringFieldUpdateOperationsInput | string
   localizacao?: Prisma.StringFieldUpdateOperationsInput | string
+  imagemUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -695,6 +722,7 @@ export type OfertaUncheckedUpdateWithoutVendedorInput = {
   dataValidade?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.StringFieldUpdateOperationsInput | string
   localizacao?: Prisma.StringFieldUpdateOperationsInput | string
+  imagemUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -709,6 +737,7 @@ export type OfertaUncheckedUpdateManyWithoutVendedorInput = {
   dataValidade?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categoria?: Prisma.StringFieldUpdateOperationsInput | string
   localizacao?: Prisma.StringFieldUpdateOperationsInput | string
+  imagemUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -725,6 +754,7 @@ export type OfertaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   dataValidade?: boolean
   categoria?: boolean
   localizacao?: boolean
+  imagemUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   vendedorId?: boolean
@@ -741,6 +771,7 @@ export type OfertaSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   dataValidade?: boolean
   categoria?: boolean
   localizacao?: boolean
+  imagemUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   vendedorId?: boolean
@@ -757,6 +788,7 @@ export type OfertaSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   dataValidade?: boolean
   categoria?: boolean
   localizacao?: boolean
+  imagemUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   vendedorId?: boolean
@@ -773,12 +805,13 @@ export type OfertaSelectScalar = {
   dataValidade?: boolean
   categoria?: boolean
   localizacao?: boolean
+  imagemUrl?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   vendedorId?: boolean
 }
 
-export type OfertaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "titulo" | "descricao" | "precoOriginal" | "precoResgate" | "quantidade" | "dataValidade" | "categoria" | "localizacao" | "createdAt" | "updatedAt" | "vendedorId", ExtArgs["result"]["oferta"]>
+export type OfertaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "titulo" | "descricao" | "precoOriginal" | "precoResgate" | "quantidade" | "dataValidade" | "categoria" | "localizacao" | "imagemUrl" | "createdAt" | "updatedAt" | "vendedorId", ExtArgs["result"]["oferta"]>
 export type OfertaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   vendedor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -804,6 +837,7 @@ export type $OfertaPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     dataValidade: Date
     categoria: string
     localizacao: string
+    imagemUrl: string | null
     createdAt: Date
     updatedAt: Date
     vendedorId: string
@@ -1240,6 +1274,7 @@ export interface OfertaFieldRefs {
   readonly dataValidade: Prisma.FieldRef<"Oferta", 'DateTime'>
   readonly categoria: Prisma.FieldRef<"Oferta", 'String'>
   readonly localizacao: Prisma.FieldRef<"Oferta", 'String'>
+  readonly imagemUrl: Prisma.FieldRef<"Oferta", 'String'>
   readonly createdAt: Prisma.FieldRef<"Oferta", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Oferta", 'DateTime'>
   readonly vendedorId: Prisma.FieldRef<"Oferta", 'String'>

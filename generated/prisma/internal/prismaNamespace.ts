@@ -902,6 +902,7 @@ export const OfertaScalarFieldEnum = {
   dataValidade: 'dataValidade',
   categoria: 'categoria',
   localizacao: 'localizacao',
+  imagemUrl: 'imagemUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   vendedorId: 'vendedorId'

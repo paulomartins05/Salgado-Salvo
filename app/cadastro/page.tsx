@@ -4,22 +4,18 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image"; 
 
-import SemFotoDePerfil from "../assets/image/sem-foto-de-perfil.jpg"
-
-import { authClient } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth-client";
 import { uploadImagemPerfil } from "@/app/actions/upload";
+
+import InputForm from "../componentes/InputForm"; 
 
 import EyeOpenIcon from "../assets/icon/eye-open-login.svg";     
 import EyeClosedIcon from "../assets/icon/eye-close-login.svg"; 
-import DeleteIcon from "../assets/icon/delete-photo-profile.svg"
-
-
-
+import DeleteIcon from "../assets/icon/delete-photo-profile.svg";
 
 export default function CadastroPage() {
-  const [tipoConta, setTipoConta] = useState<"consumidor" | "parceiro">("parceiro");
-
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [tipoConta, setTipoConta] = useState<"consumidor" | "parceiro">("consumidor");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
     nome: "",
@@ -33,20 +29,17 @@ export default function CadastroPage() {
 
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
-
   const [fotoPerfil, setFotoPerfil] = useState<File | null>(null); 
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const handleRemoverFoto = () => {
-    setFotoPerfil(null)
+    setFotoPerfil(null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = ""
+      fileInputRef.current.value = "";
     }
-  }
+  };
 
-
-  // Extrai os dados
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -55,7 +48,6 @@ export default function CadastroPage() {
     }));
   };
 
-  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); 
     
@@ -64,24 +56,21 @@ export default function CadastroPage() {
       return;
     }
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
     try {
-
-      let fotoUrlCloudinary: string | undefined = undefined
+      let fotoUrlCloudinary: string | undefined = undefined;
 
       if (fotoPerfil) {
+        const uploadData = new FormData();
+        uploadData.append("imagem", fotoPerfil);
 
-        const uploadData = new FormData()
-        uploadData.append("imagem", fotoPerfil)
-
-        const url = await uploadImagemPerfil(uploadData)
-
+        const url = await uploadImagemPerfil(uploadData);
         if (url) {
-          fotoUrlCloudinary = url
+          fotoUrlCloudinary = url;
         }
       }
-      
+
       const payload = {
         name: formData.nome,
         email: formData.email,
@@ -91,31 +80,26 @@ export default function CadastroPage() {
         role: tipoConta === "parceiro" ? "PARCEIRO" : "CONSUMIDOR",
         cnpj: tipoConta === "parceiro" ? formData.cnpj : undefined,
         localizacao: tipoConta === "parceiro" ? formData.localizacao : undefined,
-  
         callbackURL: "/"
-      }
-  
-      const { data, error} = await authClient.signUp.email( payload as any, {
-        onRequest: () => { // Enquanto roda
-  
-        },
+      };
+
+      await authClient.signUp.email(payload as any, {
+        onRequest: () => {},
         onSuccess: () => { 
-          alert("SUCESSO!!!!!")
+          alert("Conta criada com sucesso! 🚀");
+          window.location.href = "/";
         }, 
         onError: (ctx) => {
-          alert("Deu erro!")
-          console.log(ctx.error.message)
+          alert("Erro ao criar conta: " + ctx.error.message);
           setIsSubmitting(false);
         }
-      })
-    } catch (error) {
-      console.error(error)
-      alert("Ocorreu um erro")
-      setIsSubmitting(false)
-      
-    }
+      });
 
-    
+    } catch (error: any) {
+      console.error(error);
+      alert("Ocorreu um erro ao processar o cadastro.");
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -157,18 +141,16 @@ export default function CadastroPage() {
 
         <form onSubmit={handleSubmit} className="p-6 md:p-8 flex flex-col gap-5">
           
-          <div className="flex flex-col gap-1">
-            <label className="text-sm text-gray-700 font-medium">Nome Completo <span className="text-[#D9774A]">*</span></label>
-            <input
-              type="text"
-              name="nome"
-              required
-              value={formData.nome}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-1 focus:ring-[#D9774A] focus:border-[#D9774A] outline-none transition-colors"
-            />
-          </div>
+          <InputForm 
+            label="Nome Completo"
+            name="nome"
+            type="text"
+            required
+            value={formData.nome}
+            onChange={handleChange}
+          />
 
+          {/* O File Upload tem uma mecânica visual muito diferente, então ele não usa o InputForm */}
           <div className="flex flex-col gap-1">
             <label className="text-sm text-gray-700 font-medium">Foto de Perfil <span className="text-gray-400 font-normal">(OPCIONAL)</span> </label>
             <div className="flex items-center gap-2">
@@ -206,21 +188,19 @@ export default function CadastroPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1">
-              <label className="text-sm text-gray-700 font-medium">Senha <span className="text-[#D9774A]">*</span></label>
-              <div className="relative">
-                <input
-                  type={mostrarSenha ? "text" : "password"}
-                  name="senha"
-                  required
-                  value={formData.senha}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 pr-10 rounded-lg border border-gray-300 focus:ring-1 focus:ring-[#D9774A] focus:border-[#D9774A] outline-none transition-colors"
-                />
+            
+            <InputForm 
+              label="Senha"
+              name="senha"
+              type={mostrarSenha ? "text" : "password"}
+              required
+              value={formData.senha}
+              onChange={handleChange}
+              rightElement={
                 <button
                   type="button"
                   onClick={() => setMostrarSenha(!mostrarSenha)}
-                  className="absolute inset-y-0 right-2 flex items-center justify-center text-gray-400"
+                  className="text-gray-400 focus:outline-none"
                 >
                   <Image 
                     src={mostrarSenha ? EyeClosedIcon : EyeOpenIcon} 
@@ -230,24 +210,21 @@ export default function CadastroPage() {
                     className="opacity-60 hover:opacity-100 transition-opacity"
                   />
                 </button>
-              </div>
-            </div>
+              }
+            />
 
-            <div className="flex flex-col gap-1">
-              <label className="text-sm text-gray-700 font-medium">Confirmar Senha <span className="text-[#D9774A]">*</span></label>
-              <div className="relative">
-                <input
-                  type={mostrarConfirmarSenha ? "text" : "password"}
-                  name="confirmarSenha"
-                  required
-                  value={formData.confirmarSenha}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 pr-10 rounded-lg border border-gray-300 focus:ring-1 focus:ring-[#D9774A] focus:border-[#D9774A] outline-none transition-colors"
-                />
+            <InputForm 
+              label="Confirmar Senha"
+              name="confirmarSenha"
+              type={mostrarConfirmarSenha ? "text" : "password"}
+              required
+              value={formData.confirmarSenha}
+              onChange={handleChange}
+              rightElement={
                 <button
                   type="button"
                   onClick={() => setMostrarConfirmarSenha(!mostrarConfirmarSenha)}
-                  className="absolute inset-y-0 right-2 flex items-center justify-center text-gray-400"
+                  className="text-gray-400 focus:outline-none"
                 >
                   <Image 
                     src={mostrarConfirmarSenha ? EyeClosedIcon : EyeOpenIcon} 
@@ -257,66 +234,58 @@ export default function CadastroPage() {
                     className="opacity-60 hover:opacity-100 transition-opacity"
                   />
                 </button>
-              </div>
-            </div>
+              }
+            />
+
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm text-gray-700 font-medium">Email <span className="text-[#D9774A]">*</span></label>
-            <input
-              type="email"
-              name="email"
-              required
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-1 focus:ring-[#D9774A] focus:border-[#D9774A] outline-none transition-colors"
-            />
-          </div>
+          <InputForm 
+            label="Email"
+            name="email"
+            type="email"
+            required
+            value={formData.email}
+            onChange={handleChange}
+          />
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm text-gray-700 font-medium">Telefone / WhatsApp <span className="text-[#D9774A]">*</span></label>
-            <input
-              type="tel"
-              name="telefone"
-              required
-              value={formData.telefone}
-              onChange={handleChange}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-1 focus:ring-[#D9774A] focus:border-[#D9774A] outline-none transition-colors"
-            />
-          </div>
+          <InputForm 
+            label="Telefone / WhatsApp"
+            name="telefone"
+            type="tel"
+            required
+            value={formData.telefone}
+            onChange={handleChange}
+          />
 
           {tipoConta === "parceiro" && (
             <>
-              <div className="flex flex-col gap-1 animate-fadeIn"> 
-                <label className="text-sm text-gray-700 font-medium">Localização Completa <span className="text-[#D9774A]">*</span></label>
-                <input
-                  type="text"
+              <div className="animate-fadeIn"> 
+                <InputForm 
+                  label="Localização Completa"
                   name="localizacao"
+                  type="text"
                   required
                   placeholder="Ex: Rua das Flores, 100 - Bairro Centro"
                   value={formData.localizacao}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-1 focus:ring-[#D9774A] focus:border-[#D9774A] outline-none transition-colors"
                 />
               </div>
 
               <div className="flex flex-col gap-1 animate-fadeIn">
-                <label className="text-sm text-gray-700 font-medium">CNPJ <span className="text-[#D9774A]">*</span></label>
-                <input
-                  type="text"
+                <InputForm 
+                  label="CNPJ"
                   name="cnpj"
+                  type="text"
                   required
                   placeholder="00.000.000/0000-00"
                   value={formData.cnpj}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-1 focus:ring-[#D9774A] focus:border-[#D9774A] outline-none transition-colors"
                 />
                 <span className="text-xs text-gray-500">(Obrigatório para Parceiros)</span>
               </div>
             </>
           )}
 
-          {/* 4. Botão bloqueado com feedback visual enquanto carrega */}
           <button
             type="submit"
             disabled={isSubmitting}

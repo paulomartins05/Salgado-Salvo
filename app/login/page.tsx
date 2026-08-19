@@ -9,23 +9,19 @@ import EyeOpenIcon from "../assets/icon/eye-open-login.svg";
 import EyeClosedIcon from "../assets/icon/eye-close-login.svg"; 
 
 import { authClient } from "@/lib/auth-client";
+import InputForm from "../componentes/InputForm";
 
 export default function LoginPage() {
 
-
-  // Para pegar os dados, formData guarda os atuais, setFormData permite alterar os dados
   const [formData, setFormData] = useState({
     email: "",
     senha: "",
     lembrarMe: false,
   });
-
   
   const [mostrarSenha, setMostrarSenha] = useState(false);
-
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Extrai os dados do campo
     const { name, value, type, checked } = e.target;
     
     setFormData((prev) => ({
@@ -34,11 +30,10 @@ export default function LoginPage() {
     }));
   };
 
-  // É Chamada Quando é Clicado em "Entrar"
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const {} = await authClient.signIn.email({
+    await authClient.signIn.email({
       email: formData.email,
       password: formData.senha,
       callbackURL: "/"
@@ -47,6 +42,7 @@ export default function LoginPage() {
       onSuccess:(ctx) => {
         alert("SUCESSO !!!!!!!!")
         console.log("logado: ", ctx)
+        window.location.href = "/";
       },
       onError: (ctx) => {
         alert("Erro ao logar")
@@ -55,8 +51,6 @@ export default function LoginPage() {
     })
   };
 
- 
-  // Mostra a senha
   const toggleMostrarSenha = () => {
     setMostrarSenha(!mostrarSenha);
   };
@@ -79,48 +73,44 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             
-            <div className="flex flex-col gap-2">
-              <label className="text-sm text-background-secondary/80 font-medium">Email ou Nome de Usuário</label>
-              <input
-                type="text"
-                name="email" 
-                required
-                value={formData.email}
-                onChange={handleChange} 
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-[#F6EFE5]/60 shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-[#D9774A] focus:border-transparent outline-none transition-all"
-              />
-            </div>
+            <InputForm 
+              label="Email ou Nome de Usuário"
+              type="text"
+              name="email"
+              required
+              value={formData.email}
+              onChange={handleChange}
+              className="bg-[#F6EFE5]/60" 
+            />
 
-            <div className="flex flex-col gap-1">
-              <label className="text-sm text-background-secondary/80 font-medium">Senha</label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-3 flex items-center">
-                  <Image src={LockIcon} alt="Ícone de Cadeado" width={20} height={20} className="opacity-50" />
-                </span>
+            <div className="flex flex-col">
+              <InputForm 
+                label="Senha"
+                type={mostrarSenha ? "text" : "password"}
+                name="senha"
+                required
+                value={formData.senha}
+                onChange={handleChange}
+                className="bg-[#F6EFE5]/60"
                 
-                <input
-                  type={mostrarSenha ? "text" : "password"} // Verifica se é para mostrar ou não a senha
-                  name="senha" 
-                  required
-                  value={formData.senha}
-                  onChange={handleChange}
-                  className="w-full pl-10 pr-12 py-3 rounded-xl border border-gray-200 bg-[#F6EFE5]/60 shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] focus:ring-2 focus:ring-[#D9774A] focus:border-transparent outline-none transition-all"
-                />
+                icon={<Image src={LockIcon} alt="Cadeado" width={20} height={20} className="opacity-50" />}
                 
-                <button
-                  type="button" 
-                  onClick={toggleMostrarSenha} // Inverte o true/false 
-                  className="absolute inset-y-0 right-3 flex items-center justify-center text-gray-400 hover:text-[#D9774A] transition-colors"
-                >
-                  <Image 
-                    src={mostrarSenha ? EyeClosedIcon : EyeOpenIcon} 
-                    alt={mostrarSenha ? "Ocultar senha" : "Mostrar senha"} 
-                    width={22} 
-                    height={22} 
-                    className="opacity-60 hover:opacity-100 transition-opacity"
-                  />
-                </button>
-              </div>
+                rightElement={
+                  <button
+                    type="button" 
+                    onClick={toggleMostrarSenha} 
+                    className="text-gray-400 hover:text-[#D9774A] transition-colors focus:outline-none"
+                  >
+                    <Image 
+                      src={mostrarSenha ? EyeClosedIcon : EyeOpenIcon} 
+                      alt={mostrarSenha ? "Ocultar senha" : "Mostrar senha"} 
+                      width={22} 
+                      height={22} 
+                      className="opacity-60 hover:opacity-100 transition-opacity"
+                    />
+                  </button>
+                }
+              />
               
               <div className="flex justify-end mt-1">
                 <Link href="/recuperar-senha" className="text-xs text-[#D9774A] font-medium hover:underline underline-offset-2">

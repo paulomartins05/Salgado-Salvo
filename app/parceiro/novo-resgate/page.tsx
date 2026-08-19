@@ -48,6 +48,11 @@ export default function CadastrarNovoResgate() {
     termosAceitos: false,
   });
 
+  const [imagemFile, setImagemFile] = useState<File | null>(null)
+  const [imagemPreview, setImagemPreview] = useState<string | null>(null)
+
+
+
   useEffect(() => {
     const enderecoDoUsuario = (session?.user as any)?.localizacao
 
@@ -113,10 +118,12 @@ export default function CadastrarNovoResgate() {
       const dataExpiraçao = new Date(Date.now() + horasEmMilissegundos)
       serverData.append("dataValidade", dataExpiraçao.toISOString())
 
-      
       serverData.append("categoria", formData.categoria)
       serverData.append("localizacao", formData.localizacao)
-      
+
+      if(imagemFile) {
+        serverData.append("imagem", imagemFile)
+      }
 
       await criarOferta(serverData)
 
@@ -172,10 +179,31 @@ export default function CadastrarNovoResgate() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm text-background-secondary/80 font-medium">Adicionar Fotos (máx 3)</label>
-                  <button type="button" className="w-full h-[50px] border-2 border-dashed border-[#D9774A]/50 text-[#D9774A] rounded-xl flex items-center justify-center gap-2 hover:bg-[#D9774A]/10 transition-colors bg-white">
-                    📷 <span>Fazer Upload</span>
-                  </button>
+                  <label className="text-sm text-background-secondary/80 font-medium">Adicionar Foto do Lanche</label>
+                  
+                  <label className="w-full h-[50px] border-2 border-dashed border-[#D9774A]/50 text-[#D9774A] rounded-xl flex items-center justify-center gap-2 hover:bg-[#D9774A]/10 transition-colors bg-white cursor-pointer relative overflow-hidden">
+                    
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      className="hidden" 
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          const file = e.target.files[0];
+                          setImagemFile(file);
+                          setImagemPreview(URL.createObjectURL(file));
+                        }
+                      }}
+                    />                    
+                    {imagemPreview ? (
+                      <span className="font-semibold truncate px-4 text-green-600">
+                        ✅ {imagemFile?.name}
+                      </span>
+                    ) : (
+                      <>📷 <span>Fazer Upload</span></>
+                    )}
+
+                  </label>
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -368,7 +396,7 @@ export default function CadastrarNovoResgate() {
                 disabled={isSubmitting}
                 className={`w-full bg-[#D9774A] hover:bg-[#c4683e] text-white font-bold text-lg py-4 rounded-xl shadow-[0_4px_14px_0_rgba(217,119,74,0.39)] hover:shadow-[0_6px_20px_rgba(217,119,74,0.23)] hover:bg-[rgba(217,119,74,0.9)] transform hover:-translate-y-0.5 transition-all duration-200
                 ${isSubmitting 
-                    ? "bg-gray-400 text-gray-200 cursor-not-allowed" // Estilo bloqueado
+                    ? "bg-gray-400 text-gray-200 cursor-not-allowed" 
                     : "bg-[#D9774A] hover:bg-[#c4683e] text-white hover:shadow-[0_6px_20px_rgba(217,119,74,0.23)] hover:bg-[rgba(217,119,74,0.9)] transform hover:-translate-y-0.5" 
                   }
                 `}

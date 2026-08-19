@@ -7,16 +7,19 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'cdn-icons-png.flaticon.com',
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
       },
     ],
   },
 
   experimental: {
     serverActions: {
-      bodySizeLimit: "5mb"
-    }
-  }
+      bodySizeLimit: "5mb",
+    },
+  },
+
 };
 
 module.exports = nextConfig;

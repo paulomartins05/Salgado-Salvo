@@ -68,12 +68,12 @@ export default async function ResgatesDisponiveis() {
             {ofertas.map((oferta) => (
               <CardProduto 
                 key={oferta.id}
-                id={oferta.id} // Se o CardProduto reclamar, certifique-se que lá ele aceita id: string ou number
+                id={oferta.id}
                 nome={oferta.titulo}
                 descricao={oferta.descricao}
                 preco={oferta.precoResgate}
                 tempoPostagem={calcularTempoPostagem(oferta.createdAt)}
-                imagemUrl="https://cdn-icons-png.flaticon.com/512/3225/3225091.png" 
+                imagemUrl={oferta.imagemUrl ||"https://cdn-icons-png.flaticon.com/512/3225/3225091.png" }
               />
             ))}
           </div>

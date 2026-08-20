@@ -26,6 +26,7 @@ const InputForm = forwardRef<HTMLInputElement, inputFormProps>(
           )}
 
           <input
+            ref={ref}
             required={required}
             className={`w-full py-2 rounded-lg border border-gray-300 focus:ring-1 focus:ring-[#D9774A] focus:border-[#D9774A] outline-none transition-colors shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)]
               ${icon ? "pl-10" : "px-3"} 
@@ -41,6 +42,8 @@ const InputForm = forwardRef<HTMLInputElement, inputFormProps>(
             </div>
           )}
         </div>
+
+        {error && <span className="text-xs text-red-500 font-medium ml-1">{error}</span>}
       </div>
     )
   }

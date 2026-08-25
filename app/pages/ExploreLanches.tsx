@@ -29,7 +29,7 @@ export default function ExploreLanches() {
               href={`/resgates?categoria=${categoria.nome}`} 
               key={categoria.id} 
               className={cn(
-                "flex flex-col items-center justify-center w-full h-[150px] rounded-[24px] cursor-pointer transition-all duration-300 shadow-sm hover:-translate-y-1 hover:shadow-md hover:bg-[#8C6C3D] hover:text-white bg-background-secondary text-white group"
+                "flex flex-col items-center justify-center w-full h-37.5 rounded-3xl cursor-pointer transition-all duration-300 shadow-sm hover:-translate-y-1 hover:shadow-md hover:bg-[#8C6C3D] hover:text-white bg-background-secondary text-white group"
               )}
             >
               <div className="text-5xl mb-3 drop-shadow-md group-hover:scale-110 transition-transform">

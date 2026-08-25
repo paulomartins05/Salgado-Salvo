@@ -2,26 +2,8 @@ import Container from "../componentes/container";
 import Text from "../componentes/text"; 
 import Link from "next/link";
 import CardProduto, { ProdutoProps } from "../componentes/CardProduto";
+import { calcularTempoPostagem } from "../../lib/utils";
 import { prisma } from "@/lib/prisma"
-
-function calcularTempoPostagem(dataCriacao: Date): string {
-  const agora = new Date()
-  const diferencaEmMilissegundos = agora.getTime() - dataCriacao.getTime();
-  const diferencaEmMinitos = Math.floor(diferencaEmMilissegundos / (1000 * 60))
-  const diferencaEmHoras = Math.floor(diferencaEmMinitos / 60)
-
-  if (diferencaEmMinitos < 60) {
-    return `${diferencaEmMinitos} min`
-  }
-
-  if (diferencaEmHoras < 24) {
-    return `${diferencaEmHoras} h`
-  }
-
-  return `${Math.floor(diferencaEmHoras / 24)} d`;
-}
-
-
 
 
 export default async function ResgatesDisponiveis() {

@@ -23,7 +23,7 @@ export default function ProdutoDetalhes({
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
 
   return (
-    <div className="bg-white rounded-[24px] p-6 md:p-8 shadow-sm border border-gray-100 flex flex-col h-full">
+    <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 flex flex-col h-full">
       
       <div className="flex items-center gap-2 mb-4">
         <span className="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full">
@@ -62,7 +62,7 @@ export default function ProdutoDetalhes({
             <button className="text-gray-500 hover:text-background-secondary text-xl font-bold">+</button>
           </div>
           
-          <Button variant="primary" size="lg" className="flex-1 w-full flex justify-center items-center gap-2 bg-[#D9774A] hover:bg-[#c4683e] rounded-[12px]">
+          <Button variant="primary" size="lg" className="flex-1 w-full flex justify-center items-center gap-2 bg-[#D9774A] hover:bg-[#c4683e] rounded-xl">
             🛒 Adicionar ao Resgate
           </Button>
         </div>

@@ -1,14 +1,13 @@
-"use client";
 import { cn } from "../../lib/utils";
+import Link from "next/link";
 
 const categorias = ["Todos", "Salgados", "Doces", "Assados", "Bolos", "Outros"];
 
 interface FiltroProps {
   categoriaAtiva: string;
-  onMudarCategoria: (categoria: string) => void;
 }
 
-export default function FiltroCategorias({ categoriaAtiva, onMudarCategoria }: FiltroProps) {
+export default function FiltroCategorias({ categoriaAtiva }: FiltroProps) {
   return (
     <div className="flex flex-col gap-2 mb-8">
       <span className="font-inter font-semibold text-background-secondary text-sm">
@@ -16,9 +15,9 @@ export default function FiltroCategorias({ categoriaAtiva, onMudarCategoria }: F
       </span>
       <div className="flex flex-wrap gap-3">
         {categorias.map((categoria) => (
-          <button
+          <Link
             key={categoria}
-            onClick={() => onMudarCategoria(categoria)} 
+            href={`/resgates?categoria=${categoria}`} 
             className={cn(
               "px-5 py-2 rounded-full font-inter text-sm font-medium transition-colors border",
               categoria === categoriaAtiva
@@ -27,7 +26,7 @@ export default function FiltroCategorias({ categoriaAtiva, onMudarCategoria }: F
             )}
           >
             {categoria}
-          </button>
+          </Link>
         ))}
       </div>
     </div>

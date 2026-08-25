@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: "https",
+        hostname: 'cdn-icons-png.flaticon.com'
+      },
+      {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
         port: '',
@@ -22,4 +26,4 @@ const nextConfig: NextConfig = {
 
 };
 
-module.exports = nextConfig;
+export default nextConfig;

@@ -26,7 +26,7 @@ export default function CardProduto({
 
   return (
     <Link href={`/resgates/${id}`} className="block h-full cursor-pointer group">
-      <div className="bg-white rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full border border-gray-100 pb-2 group-hover:-translate-y-1">
+      <div className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full border border-gray-100 pb-2 group-hover:-translate-y-1">
         
         <div className="relative bg-[#F8F9FA] h-48 w-full flex items-center justify-center p-4">
           <div className="absolute top-3 right-3 bg-white px-3 py-1 rounded-full text-xs font-bold text-background-secondary shadow-sm flex items-center gap-1 z-10">
@@ -43,7 +43,7 @@ export default function CardProduto({
           </div>
         </div>
 
-        <div className="p-5 flex flex-col flex-grow gap-3">
+        <div className="p-5 flex flex-col grow gap-3">
           <div>
             <h3 className="font-inter font-bold text-background-secondary text-sm md:text-base line-clamp-2 mb-1 group-hover:text-laranja-destaque transition-colors">
               {nome}

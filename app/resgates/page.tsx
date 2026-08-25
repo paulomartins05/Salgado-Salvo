@@ -1,76 +1,58 @@
-"use client";
 
-import { useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation"; 
+import { Suspense } from "react";
 import Container from "../componentes/container";
+import Link from "next/link";
 import Header from "../pages/header"; 
 import Text from "../componentes/text";
 import CardProduto from "../componentes/CardProduto";
 import FiltroCategorias from "../componentes/FiltroCategorias";
 import Paginacao from "../componentes/Paginacao";
+import { calcularTempoPostagem } from "@/lib/utils";
+import {prisma} from "@/lib/prisma"
 
-const todosOsProdutos = [
-  { id: 1, nome: "Coxinha", categoria: "Salgados", descricao: "Massa suave.", preco: 3.00, tempoPostagem: "15 min", imagemUrl: "https://cdn-icons-png.flaticon.com/512/3225/3225091.png" },
-  { id: 2, nome: "Pão de Queijo", categoria: "Assados", descricao: "Pão de Queijo tradicional.", preco: 2.50, tempoPostagem: "15 min", imagemUrl: "https://cdn-icons-png.flaticon.com/512/3225/3225102.png" },
-  { id: 3, nome: "Croissant", categoria: "Assados", descricao: "Croissant francês.", preco: 3.00, tempoPostagem: "15 min", imagemUrl: "https://cdn-icons-png.flaticon.com/512/3014/3014529.png" },
-  { id: 4, nome: "Bolo de Cenoura", categoria: "Bolos", descricao: "Com cobertura.", preco: 3.00, tempoPostagem: "15 min", imagemUrl: "https://cdn-icons-png.flaticon.com/512/3014/3014529.png" },
-  { id: 5, nome: "Brigadeiro", categoria: "Doces", descricao: "Tradicional.", preco: 2.50, tempoPostagem: "2 min", imagemUrl: "https://cdn-icons-png.flaticon.com/512/3014/3014529.png" },
-  { id: 6, nome: "Empada de Palmito", categoria: "Salgados", descricao: "Massa podre deliciosa.", preco: 4.00, tempoPostagem: "10 min", imagemUrl: "https://cdn-icons-png.flaticon.com/512/3225/3225091.png" },
-  { id: 7, nome: "Suco Natural", categoria: "Outros", descricao: "Laranja geladinho.", preco: 5.00, tempoPostagem: "5 min", imagemUrl: "https://cdn-icons-png.flaticon.com/512/3225/3225102.png" },
-  { id: 8, nome: "Torta de Morango", categoria: "Doces", descricao: "Com creme.", preco: 6.50, tempoPostagem: "20 min", imagemUrl: "https://cdn-icons-png.flaticon.com/512/3014/3014529.png" },
-  { id: 9, nome: "Esfiha de Carne", categoria: "Assados", descricao: "Temperada com limão.", preco: 2.00, tempoPostagem: "12 min", imagemUrl: "https://cdn-icons-png.flaticon.com/512/2819/2819183.png" },
-  { id: 10, nome: "Misto Quente", categoria: "Salgados", descricao: "Feito na chapa.", preco: 3.00, tempoPostagem: "15 min", imagemUrl: "https://cdn-icons-png.flaticon.com/512/2819/2819183.png" }
-];
 
-function ConteudoResgates() {
-  const searchParams = useSearchParams();
-  
-  const categoriaDaURL = searchParams.get("categoria") || "Todos";
-  
-  const [categoriaAtiva, setCategoriaAtiva] = useState(categoriaDaURL);
-  const [paginaAtual, setPaginaAtual] = useState(1);
-  const itensPorPagina = 10;
 
-  const produtosFiltrados = categoriaAtiva === "Todos" 
-    ? todosOsProdutos 
-    : todosOsProdutos.filter(produto => produto.categoria === categoriaAtiva);
-  
-  const totalPaginas = Math.ceil(produtosFiltrados.length / itensPorPagina);
-  const indiceInicial = (paginaAtual - 1) * itensPorPagina;
-  const indiceFinal = indiceInicial + itensPorPagina;
-  
-  const produtosDaPagina = produtosFiltrados.slice(indiceInicial, indiceFinal);
 
-  const mudarCategoria = (novaCategoria: string) => {
-    setCategoriaAtiva(novaCategoria);
-    setPaginaAtual(1);
-  };
+export default async function PaginaTodosResgates({
+  searchParams,
+}: {
+  searchParams: Promise<{categoria?: string; pagina?: string}>
+}) {
 
-  return (
-    <>
-      <FiltroCategorias 
-        categoriaAtiva={categoriaAtiva} 
-        onMudarCategoria={mudarCategoria} 
-      />
+  const params = await searchParams
+  const categoriaAtiva = params.categoria || "Todos"
+  const paginaAtual = Number(params.pagina) || 1
+  const itensPorPagina = 10
 
-      {produtosFiltrados.length === 0 ? (
-        <div className="py-12 text-center text-background-secondary font-inter">
-          Nenhum resgate disponível na categoria "{categoriaAtiva}" no momento.
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-          {produtosDaPagina.map((produto) => (
-            <CardProduto key={produto.id} {...produto} />
-          ))}
-        </div>
-      )}
+  const filtroDoBanco = categoriaAtiva === "Todos" ? {
 
-      <Paginacao paginaAtual={paginaAtual} totalPaginas={totalPaginas} onMudarPagina={setPaginaAtual} />
-    </>
-  );
-}
+  } : {
+    categoria: categoriaAtiva
+  }
 
-export default function PaginaTodosResgates() {
+  const totalDeItens = await prisma.oferta.count({
+    where: filtroDoBanco
+  })
+
+  const totalPaginas = Math.ceil(totalDeItens / itensPorPagina)
+
+  const produtosDoBanco = await prisma.oferta.findMany({
+    where: filtroDoBanco,
+    skip: (paginaAtual - 1) * itensPorPagina,
+    take: itensPorPagina,
+    orderBy: {createdAt: "desc"}
+  })
+
+  const produtosFormatados = produtosDoBanco.map((p) => ({
+    id: p.id,
+    nome: p.titulo,
+    categoria: p.categoria,
+    descricao: p.descricao,
+    preco: Number(p.precoResgate),
+    tempoPostagem: calcularTempoPostagem(p.createdAt) ,
+    imagemUrl: p.imagemUrl || "https://cdn-icons-png.flaticon.com/512/3225/3225091.png",
+  }))
+
   return (
     <div className="bg-[#F6EFE5] min-h-screen flex flex-col">
       <Header />
@@ -79,7 +61,7 @@ export default function PaginaTodosResgates() {
       <main className="py-8 flex-grow">
         <Container>
           <div className="text-sm font-inter text-[#B87042] mb-6 flex items-center gap-2">
-            <span className="hover:underline cursor-pointer">Início</span>
+            <Link href="/" className="hover:underline cursor-pointer">Início</Link>
             <span>{'>'}</span>
             <span className="text-background-secondary font-medium">Todos os Resgates</span>
           </div>
@@ -93,8 +75,29 @@ export default function PaginaTodosResgates() {
             </p>
           </div>
 
-          <Suspense fallback={<div>Carregando resgates...</div>}>
-            <ConteudoResgates />
+          <Suspense fallback={<div className="py-12 text-center">Carregando resgates quentinhos...</div>}>
+            
+            <FiltroCategorias 
+              categoriaAtiva={categoriaAtiva} 
+            />
+
+            {produtosFormatados.length === 0 ? (
+              <div className="py-12 text-center text-background-secondary font-inter">
+                Nenhum resgate disponível na categoria "{categoriaAtiva}" no momento.
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+                {produtosFormatados.map((produto) => (
+                  <CardProduto key={produto.id} {...produto} />
+                ))}
+              </div>
+            )}
+
+            <Paginacao 
+              paginaAtual={paginaAtual} 
+              totalPaginas={totalPaginas} 
+            />
+
           </Suspense>
 
         </Container>

@@ -173,7 +173,7 @@ export default function CadastroPage() {
                   type="button"
                   onClick={handleRemoverFoto}
                   title="Remover Foto Selecionada"
-                  className="flex-shrink-0 p-2 bg-red-50 hover:bg-red-100 border border-red-100 rounded-lg transition-colors flex items-center justify-center"
+                  className="shrink-0 p-2 bg-red-50 hover:bg-red-100 border border-red-100 rounded-lg transition-colors flex items-center justify-center"
                 >
                   <Image 
                     src={DeleteIcon}

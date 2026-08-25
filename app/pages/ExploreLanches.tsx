@@ -3,6 +3,7 @@ import Text from "../componentes/text";
 import { cn } from "../../lib/utils";
 import Link from "next/link"; 
 
+
 const categoriasLanches = [
   { id: 1, nome: "Salgados", itens: 25, icone: "🥟" },
   { id: 2, nome: "Doces", itens: 28, icone: "🍩" },

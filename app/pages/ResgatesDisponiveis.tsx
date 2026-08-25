@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma"
 
 function calcularTempoPostagem(dataCriacao: Date): string {
   const agora = new Date()
-  const diferencaEmMilissegundos = agora.getTime() - dataCriacao.getTime(); // verificando necessidade
+  const diferencaEmMilissegundos = agora.getTime() - dataCriacao.getTime();
   const diferencaEmMinitos = Math.floor(diferencaEmMilissegundos / (1000 * 60))
   const diferencaEmHoras = Math.floor(diferencaEmMinitos / 60)
 

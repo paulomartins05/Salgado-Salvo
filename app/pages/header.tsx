@@ -45,7 +45,7 @@ export default function Header() {
             
             <div className="hidden md:block">
               {usuario ? (
-                <Link href="/perfil">
+                <Link href={usuario.role === "PARCEIRO" ? "/parceiro/perfil" : "/perfil"}>
                   <Button 
                     variant="outline" 
                     size="icon" 

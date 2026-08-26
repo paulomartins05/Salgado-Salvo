@@ -12,6 +12,9 @@ import { authClient } from "@/lib/auth-client";
 
 export default function Header() {
   const {data:session} = authClient.useSession()
+
+  const usuario = session?.user
+
   return (
     <header className="w-full py-3 bg-background-primary relative">
       <Container>
@@ -41,10 +44,27 @@ export default function Header() {
             </Button>
             
             <div className="hidden md:block">
-              {session ? (
-                <Button variant="outline" size="icon" className="border-background-secondary" >
-                  👤
-                </Button>
+              {usuario ? (
+                <Link href="/perfil">
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    className="border-background-secondary p-0 overflow-hidden" 
+                    title="Acessar meu perfil"
+                  >
+                    {usuario.image ? (
+                      <img 
+                        src={usuario.image} 
+                        alt={`Perfil de ${usuario.name}`}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="font-bold text-background-secondary uppercase text-lg">
+                        {usuario.name ? usuario.name.charAt(0) : "👤"}
+                      </span>
+                    )}
+                  </Button>
+                </Link>
               ) : (
                 <Link href={"/login"}>
                   <Button className="bg-[#D9774A] hover:bg-[#c4683e] text-white border-transparent">

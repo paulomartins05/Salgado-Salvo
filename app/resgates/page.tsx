@@ -58,7 +58,7 @@ export default async function PaginaTodosResgates({
       <Header />
       <hr className="opacity-10 border-background-secondary" />
 
-      <main className="py-8 flex-grow">
+      <main className="py-8 grow">
         <Container>
           <div className="text-sm font-inter text-[#B87042] mb-6 flex items-center gap-2">
             <Link href="/" className="hover:underline cursor-pointer">Início</Link>

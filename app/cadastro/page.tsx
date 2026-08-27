@@ -12,7 +12,7 @@ import InputForm from "../componentes/InputForm";
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod";
-import { email, z } from "zod"
+import {  z } from "zod"
 
 import EyeOpenIcon from "../assets/icon/eye-open-login.svg";     
 import EyeClosedIcon from "../assets/icon/eye-close-login.svg"; 

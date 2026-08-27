@@ -7,25 +7,9 @@ import Text from "../componentes/text"
 import Button from "../componentes/button"
 import InputForm from "../componentes/InputForm"
 import { authClient } from "@/lib/auth-client"
+import { prisma } from "@/lib/prisma"
 
-// Dados falsos
-const historicoReceneteFalso = [
-  {
-    id: 1,
-    nome: "Coxinha",
-    data: "12/08",
-    loja: "Padaria Delicia",
-    status: "Retirado",
-  }, {
-    id: 2,
-    nome: "Croissant Frances",
-    data: "10/08",
-    loja: "Padaria Francesa",
-    status: "Retirado",
-  }
-]
-
-export default function PerfilPage() {
+export async function PerfilPage() {
   const {data: session} = authClient.useSession()
 
   const usuario = session?.user
@@ -44,6 +28,20 @@ export default function PerfilPage() {
       </div>
     )
   }
+
+  const historicoPedidos = await prisma.resgate.findMany({
+    where: {userId: usuario.id},
+    include: {
+      oferta: {
+        include: {
+          vendedor: true
+        }
+      }
+    },
+    orderBy: {
+      createdAt: "desc"
+    }
+  })
 
   return (
     <div className="bg-[#F6EFE5] min-h-screen flex flex-col font-inter text-background-secondary">
@@ -99,22 +97,22 @@ export default function PerfilPage() {
             <div>
               <h2 className="text-xl font-bold text-laranja-destaque mb-5">HISTÓRICO RECENTE</h2>
               <div className="flex flex-col gap-4">
-                {historicoReceneteFalso.map((item) => (
-                  <div key={item.id} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm flex items-center gap-4 hover:shadow-md transition-shadow">
-                    
-                    <div className="w-14 h-14 bg-[#F1E9DE] rounded-xl flex items-center justify-center shrink-0 text-3xl">
-                      📦
-                    </div>
-                    
-                    <div className="grow">
-                      <h3 className="font-bold text-sm md:text-base mb-0.5">{item.nome}</h3>
+                {historicoPedidos.map((resgate) => (
+                  <div key={resgate.id} className="flex justify-between p-3 border-b border-gray-100">
+                    <div>
+                      <p className="font-bold text-sm">{resgate.oferta.titulo}</p> 
+                      
                       <p className="text-xs opacity-70">
-                        Retirado em {item.data} • {item.loja}
+                        {resgate.oferta.vendedor?.name || "Loja Parceira"}
                       </p>
                     </div>
                     
-                    <div className="text-xs font-bold text-laranja-destaque px-3 py-1 bg-laranja-destaque/10 rounded-full border border-laranja-destaque/20">
-                      {item.status}
+                    <div className="text-right">
+                      <p className="text-sm font-semibold text-laranja-destaque">{resgate.status}</p>
+                      
+                      <p className="text-xs opacity-70">
+                        {resgate.createdAt.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
+                      </p>
                     </div>
                   </div>
                 ))}

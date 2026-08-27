@@ -55,7 +55,8 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
-  Oferta: 'Oferta'
+  Oferta: 'Oferta',
+  Resgate: 'Resgate'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -153,6 +154,19 @@ export const OfertaScalarFieldEnum = {
 } as const
 
 export type OfertaScalarFieldEnum = (typeof OfertaScalarFieldEnum)[keyof typeof OfertaScalarFieldEnum]
+
+
+export const ResgateScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  ofertaId: 'ofertaId',
+  status: 'status',
+  codigoPin: 'codigoPin',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResgateScalarFieldEnum = (typeof ResgateScalarFieldEnum)[keyof typeof ResgateScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -288,6 +288,7 @@ export type OfertaWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Oferta"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Oferta"> | Date | string
   vendedorId?: Prisma.StringFilter<"Oferta"> | string
+  resgates?: Prisma.ResgateListRelationFilter
   vendedor?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
@@ -305,6 +306,7 @@ export type OfertaOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   vendedorId?: Prisma.SortOrder
+  resgates?: Prisma.ResgateOrderByRelationAggregateInput
   vendedor?: Prisma.UserOrderByWithRelationInput
 }
 
@@ -325,6 +327,7 @@ export type OfertaWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Oferta"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Oferta"> | Date | string
   vendedorId?: Prisma.StringFilter<"Oferta"> | string
+  resgates?: Prisma.ResgateListRelationFilter
   vendedor?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
@@ -381,6 +384,7 @@ export type OfertaCreateInput = {
   imagemUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  resgates?: Prisma.ResgateCreateNestedManyWithoutOfertaInput
   vendedor: Prisma.UserCreateNestedOneWithoutOfertasInput
 }
 
@@ -398,6 +402,7 @@ export type OfertaUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   vendedorId: string
+  resgates?: Prisma.ResgateUncheckedCreateNestedManyWithoutOfertaInput
 }
 
 export type OfertaUpdateInput = {
@@ -413,6 +418,7 @@ export type OfertaUpdateInput = {
   imagemUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resgates?: Prisma.ResgateUpdateManyWithoutOfertaNestedInput
   vendedor?: Prisma.UserUpdateOneRequiredWithoutOfertasNestedInput
 }
 
@@ -430,6 +436,7 @@ export type OfertaUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vendedorId?: Prisma.StringFieldUpdateOperationsInput | string
+  resgates?: Prisma.ResgateUncheckedUpdateManyWithoutOfertaNestedInput
 }
 
 export type OfertaCreateManyInput = {
@@ -549,6 +556,11 @@ export type OfertaSumOrderByAggregateInput = {
   quantidade?: Prisma.SortOrder
 }
 
+export type OfertaScalarRelationFilter = {
+  is?: Prisma.OfertaWhereInput
+  isNot?: Prisma.OfertaWhereInput
+}
+
 export type OfertaCreateNestedManyWithoutVendedorInput = {
   create?: Prisma.XOR<Prisma.OfertaCreateWithoutVendedorInput, Prisma.OfertaUncheckedCreateWithoutVendedorInput> | Prisma.OfertaCreateWithoutVendedorInput[] | Prisma.OfertaUncheckedCreateWithoutVendedorInput[]
   connectOrCreate?: Prisma.OfertaCreateOrConnectWithoutVendedorInput | Prisma.OfertaCreateOrConnectWithoutVendedorInput[]
@@ -607,6 +619,20 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type OfertaCreateNestedOneWithoutResgatesInput = {
+  create?: Prisma.XOR<Prisma.OfertaCreateWithoutResgatesInput, Prisma.OfertaUncheckedCreateWithoutResgatesInput>
+  connectOrCreate?: Prisma.OfertaCreateOrConnectWithoutResgatesInput
+  connect?: Prisma.OfertaWhereUniqueInput
+}
+
+export type OfertaUpdateOneRequiredWithoutResgatesNestedInput = {
+  create?: Prisma.XOR<Prisma.OfertaCreateWithoutResgatesInput, Prisma.OfertaUncheckedCreateWithoutResgatesInput>
+  connectOrCreate?: Prisma.OfertaCreateOrConnectWithoutResgatesInput
+  upsert?: Prisma.OfertaUpsertWithoutResgatesInput
+  connect?: Prisma.OfertaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OfertaUpdateToOneWithWhereWithoutResgatesInput, Prisma.OfertaUpdateWithoutResgatesInput>, Prisma.OfertaUncheckedUpdateWithoutResgatesInput>
+}
+
 export type OfertaCreateWithoutVendedorInput = {
   id?: string
   titulo: string
@@ -620,6 +646,7 @@ export type OfertaCreateWithoutVendedorInput = {
   imagemUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  resgates?: Prisma.ResgateCreateNestedManyWithoutOfertaInput
 }
 
 export type OfertaUncheckedCreateWithoutVendedorInput = {
@@ -635,6 +662,7 @@ export type OfertaUncheckedCreateWithoutVendedorInput = {
   imagemUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  resgates?: Prisma.ResgateUncheckedCreateNestedManyWithoutOfertaInput
 }
 
 export type OfertaCreateOrConnectWithoutVendedorInput = {
@@ -682,6 +710,86 @@ export type OfertaScalarWhereInput = {
   vendedorId?: Prisma.StringFilter<"Oferta"> | string
 }
 
+export type OfertaCreateWithoutResgatesInput = {
+  id?: string
+  titulo: string
+  descricao: string
+  precoOriginal: number
+  precoResgate: number
+  quantidade: number
+  dataValidade: Date | string
+  categoria: string
+  localizacao: string
+  imagemUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  vendedor: Prisma.UserCreateNestedOneWithoutOfertasInput
+}
+
+export type OfertaUncheckedCreateWithoutResgatesInput = {
+  id?: string
+  titulo: string
+  descricao: string
+  precoOriginal: number
+  precoResgate: number
+  quantidade: number
+  dataValidade: Date | string
+  categoria: string
+  localizacao: string
+  imagemUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  vendedorId: string
+}
+
+export type OfertaCreateOrConnectWithoutResgatesInput = {
+  where: Prisma.OfertaWhereUniqueInput
+  create: Prisma.XOR<Prisma.OfertaCreateWithoutResgatesInput, Prisma.OfertaUncheckedCreateWithoutResgatesInput>
+}
+
+export type OfertaUpsertWithoutResgatesInput = {
+  update: Prisma.XOR<Prisma.OfertaUpdateWithoutResgatesInput, Prisma.OfertaUncheckedUpdateWithoutResgatesInput>
+  create: Prisma.XOR<Prisma.OfertaCreateWithoutResgatesInput, Prisma.OfertaUncheckedCreateWithoutResgatesInput>
+  where?: Prisma.OfertaWhereInput
+}
+
+export type OfertaUpdateToOneWithWhereWithoutResgatesInput = {
+  where?: Prisma.OfertaWhereInput
+  data: Prisma.XOR<Prisma.OfertaUpdateWithoutResgatesInput, Prisma.OfertaUncheckedUpdateWithoutResgatesInput>
+}
+
+export type OfertaUpdateWithoutResgatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  titulo?: Prisma.StringFieldUpdateOperationsInput | string
+  descricao?: Prisma.StringFieldUpdateOperationsInput | string
+  precoOriginal?: Prisma.FloatFieldUpdateOperationsInput | number
+  precoResgate?: Prisma.FloatFieldUpdateOperationsInput | number
+  quantidade?: Prisma.IntFieldUpdateOperationsInput | number
+  dataValidade?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categoria?: Prisma.StringFieldUpdateOperationsInput | string
+  localizacao?: Prisma.StringFieldUpdateOperationsInput | string
+  imagemUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  vendedor?: Prisma.UserUpdateOneRequiredWithoutOfertasNestedInput
+}
+
+export type OfertaUncheckedUpdateWithoutResgatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  titulo?: Prisma.StringFieldUpdateOperationsInput | string
+  descricao?: Prisma.StringFieldUpdateOperationsInput | string
+  precoOriginal?: Prisma.FloatFieldUpdateOperationsInput | number
+  precoResgate?: Prisma.FloatFieldUpdateOperationsInput | number
+  quantidade?: Prisma.IntFieldUpdateOperationsInput | number
+  dataValidade?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categoria?: Prisma.StringFieldUpdateOperationsInput | string
+  localizacao?: Prisma.StringFieldUpdateOperationsInput | string
+  imagemUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  vendedorId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
 export type OfertaCreateManyVendedorInput = {
   id?: string
   titulo: string
@@ -710,6 +818,7 @@ export type OfertaUpdateWithoutVendedorInput = {
   imagemUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resgates?: Prisma.ResgateUpdateManyWithoutOfertaNestedInput
 }
 
 export type OfertaUncheckedUpdateWithoutVendedorInput = {
@@ -725,6 +834,7 @@ export type OfertaUncheckedUpdateWithoutVendedorInput = {
   imagemUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resgates?: Prisma.ResgateUncheckedUpdateManyWithoutOfertaNestedInput
 }
 
 export type OfertaUncheckedUpdateManyWithoutVendedorInput = {
@@ -743,6 +853,35 @@ export type OfertaUncheckedUpdateManyWithoutVendedorInput = {
 }
 
 
+/**
+ * Count Type OfertaCountOutputType
+ */
+
+export type OfertaCountOutputType = {
+  resgates: number
+}
+
+export type OfertaCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  resgates?: boolean | OfertaCountOutputTypeCountResgatesArgs
+}
+
+/**
+ * OfertaCountOutputType without action
+ */
+export type OfertaCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OfertaCountOutputType
+   */
+  select?: Prisma.OfertaCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * OfertaCountOutputType without action
+ */
+export type OfertaCountOutputTypeCountResgatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ResgateWhereInput
+}
+
 
 export type OfertaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -758,7 +897,9 @@ export type OfertaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   createdAt?: boolean
   updatedAt?: boolean
   vendedorId?: boolean
+  resgates?: boolean | Prisma.Oferta$resgatesArgs<ExtArgs>
   vendedor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.OfertaCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["oferta"]>
 
 export type OfertaSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -813,7 +954,9 @@ export type OfertaSelectScalar = {
 
 export type OfertaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "titulo" | "descricao" | "precoOriginal" | "precoResgate" | "quantidade" | "dataValidade" | "categoria" | "localizacao" | "imagemUrl" | "createdAt" | "updatedAt" | "vendedorId", ExtArgs["result"]["oferta"]>
 export type OfertaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  resgates?: boolean | Prisma.Oferta$resgatesArgs<ExtArgs>
   vendedor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.OfertaCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OfertaIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   vendedor?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -825,6 +968,7 @@ export type OfertaIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type $OfertaPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Oferta"
   objects: {
+    resgates: Prisma.$ResgatePayload<ExtArgs>[]
     vendedor: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1235,6 +1379,7 @@ readonly fields: OfertaFieldRefs;
  */
 export interface Prisma__OfertaClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  resgates<T extends Prisma.Oferta$resgatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Oferta$resgatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResgatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   vendedor<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1676,6 +1821,30 @@ export type OfertaDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Limit how many Ofertas to delete.
    */
   limit?: number
+}
+
+/**
+ * Oferta.resgates
+ */
+export type Oferta$resgatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Resgate
+   */
+  select?: Prisma.ResgateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Resgate
+   */
+  omit?: Prisma.ResgateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ResgateInclude<ExtArgs> | null
+  where?: Prisma.ResgateWhereInput
+  orderBy?: Prisma.ResgateOrderByWithRelationInput | Prisma.ResgateOrderByWithRelationInput[]
+  cursor?: Prisma.ResgateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ResgateScalarFieldEnum | Prisma.ResgateScalarFieldEnum[]
 }
 
 /**

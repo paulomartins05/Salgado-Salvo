@@ -42,3 +42,8 @@ export type Verification = Prisma.VerificationModel
  * 
  */
 export type Oferta = Prisma.OfertaModel
+/**
+ * Model Resgate
+ * 
+ */
+export type Resgate = Prisma.ResgateModel

@@ -401,7 +401,8 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
-  Oferta: 'Oferta'
+  Oferta: 'Oferta',
+  Resgate: 'Resgate'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -417,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "oferta"
+    modelProps: "user" | "session" | "account" | "verification" | "oferta" | "resgate"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -791,6 +792,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Resgate: {
+      payload: Prisma.$ResgatePayload<ExtArgs>
+      fields: Prisma.ResgateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ResgateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResgatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ResgateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResgatePayload>
+        }
+        findFirst: {
+          args: Prisma.ResgateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResgatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ResgateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResgatePayload>
+        }
+        findMany: {
+          args: Prisma.ResgateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResgatePayload>[]
+        }
+        create: {
+          args: Prisma.ResgateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResgatePayload>
+        }
+        createMany: {
+          args: Prisma.ResgateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ResgateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResgatePayload>[]
+        }
+        delete: {
+          args: Prisma.ResgateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResgatePayload>
+        }
+        update: {
+          args: Prisma.ResgateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResgatePayload>
+        }
+        deleteMany: {
+          args: Prisma.ResgateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ResgateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ResgateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResgatePayload>[]
+        }
+        upsert: {
+          args: Prisma.ResgateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ResgatePayload>
+        }
+        aggregate: {
+          args: Prisma.ResgateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateResgate>
+        }
+        groupBy: {
+          args: Prisma.ResgateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResgateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ResgateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ResgateCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -909,6 +984,19 @@ export const OfertaScalarFieldEnum = {
 } as const
 
 export type OfertaScalarFieldEnum = (typeof OfertaScalarFieldEnum)[keyof typeof OfertaScalarFieldEnum]
+
+
+export const ResgateScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  ofertaId: 'ofertaId',
+  status: 'status',
+  codigoPin: 'codigoPin',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResgateScalarFieldEnum = (typeof ResgateScalarFieldEnum)[keyof typeof ResgateScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1159,6 +1247,7 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
   oferta?: Prisma.OfertaOmit
+  resgate?: Prisma.ResgateOmit
 }
 
 /* Types for Logging */

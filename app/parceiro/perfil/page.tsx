@@ -7,14 +7,34 @@ import Container from "@/app/componentes/container";
 import Button from "@/app/componentes/button";
 import {prisma} from "@/lib/prisma"
 import { auth } from "@/lib/auth"
+import { revalidatePath } from "next/cache"; 
 
-const pedidosPendentes = [{ 
-    id: 1, 
-    cliente: "Ana Maria",
-    item: "Bolo de Cenoura",
-    horario: "17h - 19h"
+async function validarPin(formData: FormData) {
+  "use server"
+  const resgateId  = formData.get("resgateId") as string
+  const pinDigitado = formData.get("pin") as string
+
+  const resgate = await prisma.resgate.findUnique({
+    where: {
+      id: resgateId
+    }
+  })
+
+
+  if (resgate && resgate.codigoPin == pinDigitado) {
+    await prisma.resgate.update({
+      where: {
+        id: resgateId,
+      },
+      data: {
+        status: "RETIRADO"
+      }
+    })
+    revalidatePath("/parceiro/perfil")
+  } else {
+    console.error("CODIGIN Incorreto")
   }
-]
+}
 
 export default async function Parceiro({
   searchParams
@@ -43,6 +63,38 @@ export default async function Parceiro({
     }
   })
 
+  const pedidosPendentes = await prisma.resgate.findMany({
+    where: {
+      oferta: {
+        vendedorId: usuario.id
+      },
+      status: "PENDENTE"
+    },
+
+    include: {
+      user: true,
+      oferta: true
+    },
+    orderBy: { createdAt: "asc"}
+  })
+
+  const resgatesConcluidos = await prisma.resgate.findMany({
+    where: {
+      oferta: {
+        vendedorId: usuario.id
+      },
+      status: "RETIRADO"
+    },
+    include: {
+      oferta: true
+    }
+  })
+
+  const saldo = resgatesConcluidos.reduce((total, resgate) => total + Number(resgate.oferta.precoResgate), 0)
+
+  const hoje = new Date().toLocaleDateString("pt-BR")
+  const resgatesHoje = resgatesConcluidos.filter(r => r.updatedAt.toLocaleDateString("pt-BR") === hoje).length
+  const impactoKg = (resgatesConcluidos.length * 0.3).toFixed(1) // Ainda a mudar
 
   return (
     <div className="bg-[#F6EFE5] min-h-screen flex flex-col font-inter text-background-secondary">
@@ -66,24 +118,9 @@ export default async function Parceiro({
           <div className="flex flex-col md:flex-row gap-8">
             
             <aside className="w-full md:w-64 shrink-0 flex flex-col gap-2">
-              <Link 
-                href="?aba=visao-geral"
-                className={`block px-4 py-3 rounded-xl font-medium transition-colors ${abaAtiva === "visao-geral" ? "bg-[#e8d5c4] text-background-secondary" : "hover:bg-[#fdf3ef]"}`}
-              >
-                Visão Geral
-              </Link>
-              <Link 
-                href="?aba=produtos"
-                className={`block px-4 py-3 rounded-xl font-medium transition-colors ${abaAtiva === "produtos" ? "bg-[#e8d5c4] text-background-secondary" : "hover:bg-[#fdf3ef]"}`}
-              >
-                Meus Produtos
-              </Link>
-              <Link 
-                href="?aba=financeiro"
-                className={`block px-4 py-3 rounded-xl font-medium transition-colors ${abaAtiva === "financeiro" ? "bg-[#e8d5c4] text-background-secondary" : "hover:bg-[#fdf3ef]"}`}
-              >
-                Relatórios Financeiros
-              </Link>
+              <Link href="?aba=visao-geral" className={`block px-4 py-3 rounded-xl font-medium transition-colors ${abaAtiva === "visao-geral" ? "bg-[#e8d5c4] text-background-secondary" : "hover:bg-[#fdf3ef]"}`}>Visão Geral</Link>
+              <Link href="?aba=produtos" className={`block px-4 py-3 rounded-xl font-medium transition-colors ${abaAtiva === "produtos" ? "bg-[#e8d5c4] text-background-secondary" : "hover:bg-[#fdf3ef]"}`}>Meus Produtos</Link>
+              <Link href="?aba=financeiro" className={`block px-4 py-3 rounded-xl font-medium transition-colors ${abaAtiva === "financeiro" ? "bg-[#e8d5c4] text-background-secondary" : "hover:bg-[#fdf3ef]"}`}>Relatórios Financeiros</Link>
             </aside>
 
             <div className="grow flex flex-col gap-6">
@@ -93,17 +130,17 @@ export default async function Parceiro({
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                       <p className="text-sm font-medium opacity-80 mb-2">Saldo a Receber</p>
-                      <p className="text-3xl font-bold text-[#6B705C]">R$ 1.250,80</p>
+                      <p className="text-3xl font-bold text-[#6B705C]">R$ {saldo.toFixed(2).replace('.', ',')}</p>
                     </div>
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                       <p className="text-sm font-medium opacity-80 mb-2">Resgates Hoje</p>
-                      <p className="text-3xl font-bold text-laranja-destaque">15</p>
+                      <p className="text-3xl font-bold text-laranja-destaque">{resgatesHoje}</p>
                     </div>
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                       <p className="text-sm font-medium opacity-80 mb-2 flex items-center justify-between">
                         Alimento Salvo (Kg) <span className="text-[#6B705C]">🌱</span>
                       </p>
-                      <p className="text-3xl font-bold text-[#6B705C]">250 kg</p>
+                      <p className="text-3xl font-bold text-[#6B705C]">{impactoKg} kg</p>
                     </div>
                   </div>
 
@@ -114,25 +151,36 @@ export default async function Parceiro({
                       <p className="text-sm opacity-70 mb-6">Clientes aguardando retirada hoje.</p>
                       
                       <div className="flex flex-col gap-4">
-                        {pedidosPendentes.map(pedido => (
-                          <div key={pedido.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-                            <div>
-                              <p className="font-bold text-sm">{pedido.cliente}</p>
-                              <p className="text-xs opacity-80">{pedido.item} • {pedido.horario}</p>
+                        {pedidosPendentes.length === 0 ? (
+                          <p className="text-sm text-center opacity-70 py-4">Nenhum cliente na fila.</p>
+                        ) : (
+                          pedidosPendentes.map(pedido => (
+                            <div key={pedido.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
+                              <div>
+                                <p className="font-bold text-sm">{pedido.user.name}</p>
+                                <p className="text-xs opacity-80">
+                                  {pedido.oferta.titulo} • {pedido.createdAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                                </p>
+                              </div>
+                              
+                              <form action={validarPin} className="flex items-center gap-2">
+                                <input type="hidden" name="resgateId" value={pedido.id} />
+                                <input 
+                                  type="text" 
+                                  name="pin"
+                                  placeholder="PIN" 
+                                  maxLength={4}
+                                  required
+                                  className="w-16 px-2 py-1.5 text-center border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-laranja-destaque"
+                                />
+                                <Button type="submit" className="bg-[#D9774A] hover:bg-[#c4683e] text-white py-1.5 px-3 text-xs h-auto">
+                                  VALIDAR
+                                </Button>
+                              </form>
+
                             </div>
-                            <div className="flex items-center gap-2">
-                              <input 
-                                type="text" 
-                                placeholder="PIN" 
-                                maxLength={4}
-                                className="w-16 px-2 py-1.5 text-center border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-laranja-destaque"
-                              />
-                              <Button className="bg-[#D9774A] hover:bg-[#c4683e] text-white py-1.5 px-3 text-xs h-auto">
-                                VALIDAR
-                              </Button>
-                            </div>
-                          </div>
-                        ))}
+                          ))
+                        )}
                       </div>
                     </div>
 
@@ -156,7 +204,6 @@ export default async function Parceiro({
                               <div>
                                 <p className="font-bold text-sm">{oferta.titulo}</p>
                                 <p className="text-xs text-[#6B705C] font-semibold">
-                                  {/* Formatação de moeda */}
                                   R$ {Number(oferta.precoResgate).toFixed(2).replace('.', ',')}
                                 </p>
                               </div>

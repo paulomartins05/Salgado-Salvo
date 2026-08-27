@@ -16,16 +16,14 @@ model User {
   image         String?
   createdAt     DateTime  @default(now()) 
   updatedAt     DateTime  @updatedAt
-
   role          String    @default("CONSUMIDOR")
   telefone      String?
   cnpj          String?   
   localizacao   String?   
-
   sessions      Session[]
   accounts      Account[]
-
   ofertas       Oferta[]
+  resgates    Resgate[]
 }
 
 model Session {
@@ -77,10 +75,21 @@ model Oferta {
   categoria       String
   localizacao     String
   imagemUrl       String?
-  
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-
+  resgates    Resgate[]
   vendedorId      String
   vendedor        User     @relation(fields: [vendedorId], references: [id], onDelete: Cascade)
+}
+
+model Resgate {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  ofertaId    String
+  oferta      Oferta   @relation(fields: [ofertaId], references: [id])
+  status      String   @default("PENDENTE") 
+  codigoPin   String   
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

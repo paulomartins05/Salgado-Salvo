@@ -1,8 +1,3 @@
-/*
-
-Utilizando o Middleware, para garantir que o usuario esta logado antes de conseguir acessar as paginas
-
-*/
 
 import { NextRequest, NextResponse} from "next/server"
 
@@ -19,6 +14,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!login|cadastro|api|_next/static|_next/image|favicon.ico).*)',
+    "/parceiro/:path",
+    "/perfil/:path"
     ]
 }

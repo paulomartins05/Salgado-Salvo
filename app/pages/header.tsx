@@ -7,6 +7,7 @@ import NavLink from "../componentes/navLink";
 import Logo from "../assets/image/logo-salgado-salvo.svg";
 import Button from "../componentes/button";
 import MenuMobile from "../componentes/MenuMobile";
+import MenuUsuario from "../componentes/menu-usuario";
 
 import { authClient } from "@/lib/auth-client";
 
@@ -45,26 +46,7 @@ export default function Header() {
             
             <div className="hidden md:block">
               {usuario ? (
-                <Link href={usuario.role === "PARCEIRO" ? "/parceiro/perfil" : "/perfil"}>
-                  <Button 
-                    variant="outline" 
-                    size="icon" 
-                    className="border-background-secondary p-0 overflow-hidden" 
-                    title="Acessar meu perfil"
-                  >
-                    {usuario.image ? (
-                      <img 
-                        src={usuario.image} 
-                        alt={`Perfil de ${usuario.name}`}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span className="font-bold text-background-secondary uppercase text-lg">
-                        {usuario.name ? usuario.name.charAt(0) : "👤"}
-                      </span>
-                    )}
-                  </Button>
-                </Link>
+                <MenuUsuario usuario={usuario} />
               ) : (
                 <Link href={"/login"}>
                   <Button className="bg-[#D9774A] hover:bg-[#c4683e] text-white border-transparent">

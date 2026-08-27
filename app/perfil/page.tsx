@@ -1,5 +1,3 @@
-"use client"
-
 import Link from "next/link"
 import Header from "../pages/header"
 import Container from "../componentes/container"
@@ -8,26 +6,24 @@ import Button from "../componentes/button"
 import InputForm from "../componentes/InputForm"
 import { authClient } from "@/lib/auth-client"
 import { prisma } from "@/lib/prisma"
+import {auth} from "@/lib/auth"
+import { headers } from "next/headers"
+import { redirect } from "next/navigation"
 
-export async function PerfilPage() {
-  const {data: session} = authClient.useSession()
+export default async function PerfilPage() {
+  
+  
+  const reqHeaders = await headers()
+  const session = await auth.api.getSession({
+    headers: reqHeaders
+  })
 
   const usuario = session?.user
 
   if(!usuario) {
-    return (
-      <div className="bg-[#F6EFE5] min-h-screen flex flex-col font-inter">
-        <Header />
-        <main className="py-10 grow">
-          <Container>
-            <div className="text-center py-20 text-background-secondary/70">
-              Carregando Dados do perfil
-            </div>
-          </Container>
-        </main>
-      </div>
-    )
+    redirect("/login")
   }
+
 
   const historicoPedidos = await prisma.resgate.findMany({
     where: {userId: usuario.id},
@@ -42,6 +38,12 @@ export async function PerfilPage() {
       createdAt: "desc"
     }
   })
+
+  const totalResgates = historicoPedidos.length
+  const valorEconomizado = historicoPedidos.reduce((total, resgate) => {
+    const economia = Number(resgate.oferta.precoOriginal) - Number(resgate.oferta.precoResgate)
+    return total + (isNaN(economia) ? 0 : economia)
+  }, 0)
 
   return (
     <div className="bg-[#F6EFE5] min-h-screen flex flex-col font-inter text-background-secondary">
@@ -81,13 +83,13 @@ export async function PerfilPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               
               <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col items-center justify-center text-center">
-                <span className="font-bold text-5xl mb-1 text-laranja-destaque">12</span>
+                <span className="font-bold text-5xl mb-1 text-laranja-destaque">{totalResgates}</span>
                 <span className="text-xs uppercase font-medium tracking-wider opacity-70">RESGATES</span>
               </div>
               
               <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col items-center justify-center text-center">
                 <span className="font-bold text-5xl mb-1 text-background-secondary">
-                  <span className="text-2xl font-semibold">R$</span> 68
+                  <span className="text-2xl font-semibold">R$</span> {valorEconomizado.toFixed(2).replace('.', ',')}
                 </span>
                 <span className="text-xs uppercase font-medium tracking-wider opacity-70">ECONOMIZADO</span>
               </div>
@@ -97,53 +99,37 @@ export async function PerfilPage() {
             <div>
               <h2 className="text-xl font-bold text-laranja-destaque mb-5">HISTÓRICO RECENTE</h2>
               <div className="flex flex-col gap-4">
-                {historicoPedidos.map((resgate) => (
-                  <div key={resgate.id} className="flex justify-between p-3 border-b border-gray-100">
-                    <div>
-                      <p className="font-bold text-sm">{resgate.oferta.titulo}</p> 
+                {historicoPedidos.length === 0 ? (
+                  <p className="text-sm opacity-70">Você ainda não realizou nenhum resgate.</p>
+                ) : (
+                  historicoPedidos.map((resgate) => (
+                    <div key={resgate.id} className="flex justify-between p-3 border-b border-gray-100">
+                      <div>
+                        <p className="font-bold text-sm">{resgate.oferta.titulo}</p> 
+                        <p className="text-xs opacity-70">
+                          {resgate.oferta.vendedor?.name || "Loja Parceira"}
+                        </p>
+                      </div>
                       
-                      <p className="text-xs opacity-70">
-                        {resgate.oferta.vendedor?.name || "Loja Parceira"}
-                      </p>
+                      <div className="text-right">
+                        <p className="text-sm font-semibold text-laranja-destaque">{resgate.status}</p>
+                        <p className="text-xs opacity-70">
+                          {resgate.createdAt.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
+                        </p>
+                      </div>
                     </div>
-                    
-                    <div className="text-right">
-                      <p className="text-sm font-semibold text-laranja-destaque">{resgate.status}</p>
-                      
-                      <p className="text-xs opacity-70">
-                        {resgate.createdAt.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
 
             <div className="pt-8 border-t border-gray-200 mt-4 relative">
               <h2 className="text-lg font-bold text-laranja-destaque mb-6">EDITAR PERFIL</h2>
-              
               <form className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
-                <InputForm 
-                  label="Nome"
-                  name="nome"
-                  type="text"
-                  defaultValue={usuario.name}
-                  className="bg-white"
-                />
-                
-                <InputForm 
-                  label="E-mail"
-                  name="email"
-                  type="email"
-                  defaultValue={usuario.email}
-                  className="bg-white text-gray-500 cursor-not-allowed"
-                  disabled
-                />
-
+                <InputForm label="Nome" name="nome" type="text" defaultValue={usuario.name} className="bg-white" />
+                <InputForm label="E-mail" name="email" type="email" defaultValue={usuario.email} className="bg-white text-gray-500 cursor-not-allowed" disabled />
                 <div className="md:col-span-2 flex justify-end mt-4">
-                  <Button type="submit" className="bg-[#D9774A] hover:bg-[#c4683e] text-white">
-                    SALVAR ALTERAÇÕES
-                  </Button>
+                  <Button type="submit" className="bg-[#D9774A] hover:bg-[#c4683e] text-white">SALVAR ALTERAÇÕES</Button>
                 </div>
               </form>
             </div>
@@ -152,5 +138,5 @@ export async function PerfilPage() {
         </Container>
       </main>
     </div>
-  );
+  )
 }

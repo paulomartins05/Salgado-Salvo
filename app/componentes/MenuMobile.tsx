@@ -21,7 +21,7 @@ export default function MenuMobile() {
       </button>
 
       {aberto && (
-        <div className="absolute top-[80px] left-0 w-full bg-background-primary shadow-xl flex flex-col py-6 px-8 gap-6 z-50 border-t border-laranja-destaque/20">
+        <div className="absolute top-20 left-0 w-full bg-background-primary shadow-xl flex flex-col py-6 px-8 gap-6 z-50 border-t border-laranja-destaque/20">
           
           <NavLink href="/" onClick={fecharMenu}>
             Início

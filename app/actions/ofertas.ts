@@ -108,3 +108,26 @@ export async function criarOferta(formData: FormData) {
     return { success: false, erroGeral: "Erro interno ao salvar a oferta no banco de dados." };
   }
 }
+
+export async function alterarStatusOferta(ofertaId: string, novoStatus: boolean) {
+  try {
+    await prisma.oferta.update({
+      where: {
+        id: ofertaId,
+      },
+      data: {
+        ativo: novoStatus,
+      }
+    })
+
+    revalidatePath("/parceiro/perfil")
+
+    return { success: true };
+
+
+  } catch(error) {
+    console.error("Erro ao alterar status", error)
+    throw new Error("Não foi possivel alterar o status da oferta")
+  }
+
+}

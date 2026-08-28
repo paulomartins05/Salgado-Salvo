@@ -1065,6 +1065,20 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'RoleUsuario'
+ */
+export type EnumRoleUsuarioFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoleUsuario'>
+    
+
+
+/**
+ * Reference to a field of type 'RoleUsuario[]'
+ */
+export type ListEnumRoleUsuarioFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoleUsuario[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1089,6 +1103,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'StatusResgate'
+ */
+export type EnumStatusResgateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusResgate'>
+    
+
+
+/**
+ * Reference to a field of type 'StatusResgate[]'
+ */
+export type ListEnumStatusResgateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusResgate[]'>
     
 
 /**

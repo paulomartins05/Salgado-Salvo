@@ -32,7 +32,7 @@ export type UserMinAggregateOutputType = {
   image: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  role: string | null
+  role: $Enums.RoleUsuario | null
   telefone: string | null
   cnpj: string | null
   localizacao: string | null
@@ -46,7 +46,7 @@ export type UserMaxAggregateOutputType = {
   image: string | null
   createdAt: Date | null
   updatedAt: Date | null
-  role: string | null
+  role: $Enums.RoleUsuario | null
   telefone: string | null
   cnpj: string | null
   localizacao: string | null
@@ -191,7 +191,7 @@ export type UserGroupByOutputType = {
   image: string | null
   createdAt: Date
   updatedAt: Date
-  role: string
+  role: $Enums.RoleUsuario
   telefone: string | null
   cnpj: string | null
   localizacao: string | null
@@ -226,7 +226,7 @@ export type UserWhereInput = {
   image?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  role?: Prisma.StringFilter<"User"> | string
+  role?: Prisma.EnumRoleUsuarioFilter<"User"> | $Enums.RoleUsuario
   telefone?: Prisma.StringNullableFilter<"User"> | string | null
   cnpj?: Prisma.StringNullableFilter<"User"> | string | null
   localizacao?: Prisma.StringNullableFilter<"User"> | string | null
@@ -265,7 +265,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   image?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  role?: Prisma.StringFilter<"User"> | string
+  role?: Prisma.EnumRoleUsuarioFilter<"User"> | $Enums.RoleUsuario
   telefone?: Prisma.StringNullableFilter<"User"> | string | null
   cnpj?: Prisma.StringNullableFilter<"User"> | string | null
   localizacao?: Prisma.StringNullableFilter<"User"> | string | null
@@ -303,7 +303,7 @@ export type UserScalarWhereWithAggregatesInput = {
   image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
-  role?: Prisma.StringWithAggregatesFilter<"User"> | string
+  role?: Prisma.EnumRoleUsuarioWithAggregatesFilter<"User"> | $Enums.RoleUsuario
   telefone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   cnpj?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   localizacao?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -317,7 +317,7 @@ export type UserCreateInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  role?: string
+  role?: $Enums.RoleUsuario
   telefone?: string | null
   cnpj?: string | null
   localizacao?: string | null
@@ -335,7 +335,7 @@ export type UserUncheckedCreateInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  role?: string
+  role?: $Enums.RoleUsuario
   telefone?: string | null
   cnpj?: string | null
   localizacao?: string | null
@@ -353,7 +353,7 @@ export type UserUpdateInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleUsuarioFieldUpdateOperationsInput | $Enums.RoleUsuario
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   localizacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -371,7 +371,7 @@ export type UserUncheckedUpdateInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleUsuarioFieldUpdateOperationsInput | $Enums.RoleUsuario
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   localizacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -389,7 +389,7 @@ export type UserCreateManyInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  role?: string
+  role?: $Enums.RoleUsuario
   telefone?: string | null
   cnpj?: string | null
   localizacao?: string | null
@@ -403,7 +403,7 @@ export type UserUpdateManyMutationInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleUsuarioFieldUpdateOperationsInput | $Enums.RoleUsuario
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   localizacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -417,7 +417,7 @@ export type UserUncheckedUpdateManyInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleUsuarioFieldUpdateOperationsInput | $Enums.RoleUsuario
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   localizacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -486,6 +486,10 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
+export type EnumRoleUsuarioFieldUpdateOperationsInput = {
+  set?: $Enums.RoleUsuario
+}
+
 export type UserCreateNestedOneWithoutSessionsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutSessionsInput, Prisma.UserUncheckedCreateWithoutSessionsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutSessionsInput
@@ -550,7 +554,7 @@ export type UserCreateWithoutSessionsInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  role?: string
+  role?: $Enums.RoleUsuario
   telefone?: string | null
   cnpj?: string | null
   localizacao?: string | null
@@ -567,7 +571,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  role?: string
+  role?: $Enums.RoleUsuario
   telefone?: string | null
   cnpj?: string | null
   localizacao?: string | null
@@ -600,7 +604,7 @@ export type UserUpdateWithoutSessionsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleUsuarioFieldUpdateOperationsInput | $Enums.RoleUsuario
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   localizacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -617,7 +621,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleUsuarioFieldUpdateOperationsInput | $Enums.RoleUsuario
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   localizacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -634,7 +638,7 @@ export type UserCreateWithoutAccountsInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  role?: string
+  role?: $Enums.RoleUsuario
   telefone?: string | null
   cnpj?: string | null
   localizacao?: string | null
@@ -651,7 +655,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  role?: string
+  role?: $Enums.RoleUsuario
   telefone?: string | null
   cnpj?: string | null
   localizacao?: string | null
@@ -684,7 +688,7 @@ export type UserUpdateWithoutAccountsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleUsuarioFieldUpdateOperationsInput | $Enums.RoleUsuario
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   localizacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -701,7 +705,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleUsuarioFieldUpdateOperationsInput | $Enums.RoleUsuario
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   localizacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -718,7 +722,7 @@ export type UserCreateWithoutOfertasInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  role?: string
+  role?: $Enums.RoleUsuario
   telefone?: string | null
   cnpj?: string | null
   localizacao?: string | null
@@ -735,7 +739,7 @@ export type UserUncheckedCreateWithoutOfertasInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  role?: string
+  role?: $Enums.RoleUsuario
   telefone?: string | null
   cnpj?: string | null
   localizacao?: string | null
@@ -768,7 +772,7 @@ export type UserUpdateWithoutOfertasInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleUsuarioFieldUpdateOperationsInput | $Enums.RoleUsuario
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   localizacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -785,7 +789,7 @@ export type UserUncheckedUpdateWithoutOfertasInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleUsuarioFieldUpdateOperationsInput | $Enums.RoleUsuario
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   localizacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -802,7 +806,7 @@ export type UserCreateWithoutResgatesInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  role?: string
+  role?: $Enums.RoleUsuario
   telefone?: string | null
   cnpj?: string | null
   localizacao?: string | null
@@ -819,7 +823,7 @@ export type UserUncheckedCreateWithoutResgatesInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  role?: string
+  role?: $Enums.RoleUsuario
   telefone?: string | null
   cnpj?: string | null
   localizacao?: string | null
@@ -852,7 +856,7 @@ export type UserUpdateWithoutResgatesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleUsuarioFieldUpdateOperationsInput | $Enums.RoleUsuario
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   localizacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -869,7 +873,7 @@ export type UserUncheckedUpdateWithoutResgatesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  role?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleUsuarioFieldUpdateOperationsInput | $Enums.RoleUsuario
   telefone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   localizacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1024,7 +1028,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     image: string | null
     createdAt: Date
     updatedAt: Date
-    role: string
+    role: $Enums.RoleUsuario
     telefone: string | null
     cnpj: string | null
     localizacao: string | null
@@ -1462,7 +1466,7 @@ export interface UserFieldRefs {
   readonly image: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
-  readonly role: Prisma.FieldRef<"User", 'String'>
+  readonly role: Prisma.FieldRef<"User", 'RoleUsuario'>
   readonly telefone: Prisma.FieldRef<"User", 'String'>
   readonly cnpj: Prisma.FieldRef<"User", 'String'>
   readonly localizacao: Prisma.FieldRef<"User", 'String'>

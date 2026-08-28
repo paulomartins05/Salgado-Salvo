@@ -8,6 +8,18 @@ datasource db {
   provider = "postgresql"
 }
 
+enum RoleUsuario {
+  CONSUMIDOR
+  PARCEIRO
+}
+
+enum StatusResgate {
+  PENDENTE
+  RETIRADO
+  CANCELADO
+  EXPIRADO
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String
@@ -16,7 +28,7 @@ model User {
   image         String?
   createdAt     DateTime  @default(now()) 
   updatedAt     DateTime  @updatedAt
-  role          String    @default("CONSUMIDOR")
+  role          RoleUsuario    @default(CONSUMIDOR)
   telefone      String?
   cnpj          String?   
   localizacao   String?   
@@ -80,16 +92,20 @@ model Oferta {
   resgates    Resgate[]
   vendedorId      String
   vendedor        User     @relation(fields: [vendedorId], references: [id], onDelete: Cascade)
+  @@index([vendedorId])
 }
 
 model Resgate {
   id          String   @id @default(cuid())
   userId      String
-  user        User     @relation(fields: [userId], references: [id])
   ofertaId    String
-  oferta      Oferta   @relation(fields: [ofertaId], references: [id])
-  status      String   @default("PENDENTE") 
+  status      StatusResgate   @default(PENDENTE) 
   codigoPin   String   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  oferta    Oferta @relation(fields: [ofertaId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@index([ofertaId])
+  @@index([status])
 }

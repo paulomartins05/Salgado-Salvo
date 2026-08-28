@@ -34,7 +34,8 @@ export default async function Parceiro({
   const ofertasDoBanco = await prisma.oferta.findMany({
     where: {
       vendedorId: usuario.id,
-      quantidade: { gt: 0 }
+      quantidade: { gt: 0 },
+      dataValidade: { gt: new Date() }
     },
 
     orderBy: {
@@ -250,6 +251,13 @@ export default async function Parceiro({
                               {oferta.titulo}
                               {!oferta.ativo && <span className="ml-2 text-xs text-red-500 font-normal">(Inativo)</span>}
                               {oferta.quantidade === 0 && <span className="ml-2 text-xs text-gray-500 font-normal">(Esgotado)</span>}
+
+                              {new Date() > new Date(oferta.dataValidade) && (
+                                <span className="ml-2 text-xs text-red-500 font-normal">(EXPIRADO)</span>
+                              )
+
+                              }
+
                             </p>
                             <p className="text-sm opacity-70 mb-1">{oferta.categoria}</p>
                             <p className="text-sm text-[#6B705C] font-semibold">

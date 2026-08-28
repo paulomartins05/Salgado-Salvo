@@ -37,7 +37,7 @@ export default async function PaginaTodosResgates({
   const totalPaginas = Math.ceil(totalDeItens / itensPorPagina)
 
   const produtosDoBanco = await prisma.oferta.findMany({
-    where: { ...filtroDoBanco, ativo: true, quantidade: { gt: 0 } },
+    where: { ...filtroDoBanco, ativo: true, quantidade: { gt: 0 }, dataValidade: { gt: new Date() } },
     skip: (paginaAtual - 1) * itensPorPagina,
     take: itensPorPagina,
     orderBy: { createdAt: "desc" }

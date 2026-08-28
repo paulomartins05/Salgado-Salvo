@@ -19,6 +19,9 @@ export default async function EditarProduto({
         redirect("/parceiro/perfil?aba=produtos");
 
     }
+
+    const dataValidadeFormatada = new Date(oferta.dataValidade.getTime() - (oferta.dataValidade.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+
     return (
         <div className="bg-[#F6EFE5] min-h-screen flex flex-col font-inter text-background-secondary">
             <Header />
@@ -68,6 +71,10 @@ export default async function EditarProduto({
                                     <label className="block text-sm font-medium mb-1">Preço Resgate (R$)</label>
                                     <input type="number" step="0.01" name="precoResgate" defaultValue={oferta.precoResgate} required className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
                                 </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">Data e Hora de Validade</label>
+                                <input type="datetime-local" name="dataValidade" defaultValue={dataValidadeFormatada} required className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white" />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1">Imagem do Produto (Opcional)</label>

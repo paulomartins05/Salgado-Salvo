@@ -117,7 +117,7 @@ export async function editarOferta(formData: FormData) {
   const precoOriginal = parseFloat(formData.get("precoOriginal") as string);
   const precoResgate = parseFloat(formData.get("precoResgate") as string);
   const quantidade = parseInt(formData.get("quantidade") as string, 10);
-  
+
   const imagem = formData.get("imagem") as File | null;
   const urlImagemNova = await uploadImagemProduto(imagem);
 
@@ -132,6 +132,7 @@ export async function editarOferta(formData: FormData) {
       precoOriginal: precoOriginal,
       precoResgate: precoResgate,
       quantidade: quantidade,
+      dataValidade: new Date(formData.get("dataValidade") as string),
       ...(urlImagemNova && { imagemUrl: urlImagemNova }),
     }
   })

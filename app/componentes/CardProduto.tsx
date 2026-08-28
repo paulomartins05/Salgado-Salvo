@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link"; 
 
+
 export interface ProdutoProps {
   id: number | string;
   nome: string;

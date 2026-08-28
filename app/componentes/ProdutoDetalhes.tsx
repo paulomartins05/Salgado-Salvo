@@ -1,5 +1,5 @@
-"use client";
 import Button from "./button";
+
 
 interface DetalhesProps {
   nome: string;
@@ -8,6 +8,8 @@ interface DetalhesProps {
   precoOriginal: number;
   precoAtual: number;
   tempoPostagem: string;
+  ofertaId: string;
+  usuarioId?: string;
 }
 
 export default function ProdutoDetalhes({
@@ -16,15 +18,17 @@ export default function ProdutoDetalhes({
   descricao,
   precoOriginal,
   precoAtual,
-  tempoPostagem
+  tempoPostagem,
+  ofertaId,
+  usuarioId
 }: DetalhesProps) {
-  
-  const formatarPreco = (valor: number) => 
+
+  const formatarPreco = (valor: number) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
 
   return (
     <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 flex flex-col h-full">
-      
+
       <div className="flex items-center gap-2 mb-4">
         <span className="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full">
           🕒 Postado há {tempoPostagem}
@@ -34,7 +38,7 @@ export default function ProdutoDetalhes({
       <h1 className="font-playfair text-3xl md:text-4xl font-bold text-background-secondary mb-2 leading-tight">
         {nome}
       </h1>
-      
+
       <p className="font-inter text-sm text-background-secondary/70 mb-4">
         Do "{loja}"
       </p>
@@ -61,10 +65,21 @@ export default function ProdutoDetalhes({
             <span className="font-inter font-semibold">1</span>
             <button className="text-gray-500 hover:text-background-secondary text-xl font-bold">+</button>
           </div>
-          
-          <Button variant="primary" size="lg" className="flex-1 w-full flex justify-center items-center gap-2 bg-[#D9774A] hover:bg-[#c4683e] rounded-xl">
-            🛒 Adicionar ao Resgate
-          </Button>
+
+          <form action={async () => {
+            "use server";
+            if (!usuarioId) {
+              throw new Error("Usuário não identificado");
+            }
+            const criarResgate = (await import("@/app/actions/resgate")).default;
+            await criarResgate(usuarioId, ofertaId);
+            const { redirect } = await import("next/navigation");
+            redirect("/perfil");
+          }} className="flex-1 w-full">
+            <Button type="submit" variant="primary" size="lg" className="w-full flex justify-center items-center gap-2 bg-[#D9774A] hover:bg-[#c4683e] rounded-xl">
+              🛒 Adicionar ao Resgate
+            </Button>
+          </form>
         </div>
       </div>
 

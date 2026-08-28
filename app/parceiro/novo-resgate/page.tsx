@@ -352,7 +352,7 @@ export default function CadastrarNovoResgate() {
                 ${isSubmitting ? "bg-gray-400 text-gray-200 cursor-not-allowed transform-none" : ""}
                 `}
               >
-                {isSubmitting ? "ENVIANDO AO SERVIDOR..." : "PUBLICAR NOVO RESGATE 🚀"}
+                {isSubmitting ? "ENVIANDO AO SERVIDOR..." : "PUBLICAR NOVO RESGATE "}
               </button>
             </div>
 

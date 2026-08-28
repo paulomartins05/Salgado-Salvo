@@ -94,8 +94,7 @@ export default async function Parceiro({
 
   const hoje = new Date().toLocaleDateString("pt-BR")
   const resgatesHoje = resgatesConcluidos.filter(r => r.updatedAt.toLocaleDateString("pt-BR") === hoje).length
-  const impactoKg = (resgatesConcluidos.length * 0.3).toFixed(1) // Ainda a mudar
-
+  const impactoKg = (resgatesConcluidos.length * 0.3).toFixed(1) 
   return (
     <div className="bg-[#F6EFE5] min-h-screen flex flex-col font-inter text-background-secondary">
       <Header />

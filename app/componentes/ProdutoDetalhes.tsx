@@ -69,15 +69,25 @@ export default function ProdutoDetalhes({
           <form action={async () => {
             "use server";
             if (!usuarioId) {
-              throw new Error("Usuário não identificado");
+              const {redirect} = await import("next/navigation")
+              redirect("/login")
+              return;
             }
+
+
             const criarResgate = (await import("@/app/actions/resgate")).default;
             await criarResgate(usuarioId, ofertaId);
-            const { redirect } = await import("next/navigation");
-            redirect("/perfil");
+            const { redirect: redirectFinal } = await import("next/navigation");
+            redirectFinal("/perfil");
+
+
           }} className="flex-1 w-full">
             <Button type="submit" variant="primary" size="lg" className="w-full flex justify-center items-center gap-2 bg-[#D9774A] hover:bg-[#c4683e] rounded-xl">
-              🛒 Adicionar ao Resgate
+              {usuarioId ? (
+                <>🛒 Adicionar ao Resgate</>
+              ) : (
+                <>Faça Login para Resgastar</>
+              )}
             </Button>
           </form>
         </div>

@@ -75,7 +75,7 @@ export default function ProdutoDetalhes({
             }
 
 
-            const criarResgate = (await import("@/app/actions/resgate")).default;
+            const {criarResgate} = (await import("@/app/actions/resgate"));
             await criarResgate(usuarioId, ofertaId);
             const { redirect: redirectFinal } = await import("next/navigation");
             redirectFinal("/perfil");

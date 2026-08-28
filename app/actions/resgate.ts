@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 
-export default async function criarResgate(userId: string, ofertaId: string) {
+export async function criarResgate(userId: string, ofertaId: string) {
 
   const codigoPinGerado = Math.floor(1000 + Math.random() * 9000).toString()
 

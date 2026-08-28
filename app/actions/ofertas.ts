@@ -1,17 +1,12 @@
 "use server";
 
-import {z} from "zod"
-import {prisma} from "@/lib/prisma";
+import { z } from "zod"
+import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { v2 as cloudinary} from "cloudinary"
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-})
+import { redirect } from "next/navigation";
+import { uploadImagemProduto } from "./upload";
 
 const ofertaSchema = z.object({
   titulo: z.string().min(3, "Precisa de 3 caracteres"),
@@ -34,10 +29,10 @@ export async function criarOferta(formData: FormData) {
     headers: await headers(),
   })
 
-  if(!session || session.user.role !== "PARCEIRO") {
-    return   {
-      success: false, 
-      erroGeral: "Acesso negado. Apenas parceiros podem criar ofertas." 
+  if (!session || session.user.role !== "PARCEIRO") {
+    return {
+      success: false,
+      erroGeral: "Acesso negado. Apenas parceiros podem criar ofertas."
     };
   }
 
@@ -55,33 +50,15 @@ export async function criarOferta(formData: FormData) {
 
   const validacao = ofertaSchema.safeParse(dadosBrutos)
 
-  if(!validacao.success) {
+  if (!validacao.success) {
     return {
       success: false,
       erros: validacao.error.flatten().fieldErrors
     }
   }
 
-  const imagem = formData.get("imagem") as File | null
-  let urlImagemSalva = null
-
-  if (imagem) {
-    const bytes = await imagem.arrayBuffer()
-    const buffer = Buffer.from(bytes)
-
-    urlImagemSalva = await new Promise<string>((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream({
-        folder: "salgado_salvo",
-        format: "webp",
-        quality: "auto"
-      }, (error, result) => {
-        if (error) {reject(error)}
-        else {resolve(result?.secure_url || "")}
-      }
-    )
-    uploadStream.end(buffer)
-    })
-  }
+  const imagem = formData.get("imagem") as File | null;
+  const urlImagemSalva = await uploadImagemProduto(imagem);
 
   try {
     const novaOferta = await prisma.oferta.create({
@@ -101,10 +78,10 @@ export async function criarOferta(formData: FormData) {
 
     revalidatePath("/")
 
-    return {success: true, oferta: novaOferta}
-    
+    return { success: true, oferta: novaOferta }
+
   } catch (error) {
-    console.error("Erro no Prisma:", error); 
+    console.error("Erro no Prisma:", error);
     return { success: false, erroGeral: "Erro interno ao salvar a oferta no banco de dados." };
   }
 }
@@ -125,9 +102,41 @@ export async function alterarStatusOferta(ofertaId: string, novoStatus: boolean)
     return { success: true };
 
 
-  } catch(error) {
+  } catch (error) {
     console.error("Erro ao alterar status", error)
     throw new Error("Não foi possivel alterar o status da oferta")
   }
 
+}
+
+export async function editarOferta(formData: FormData) {
+  const id = formData.get("id") as string;
+  const titulo = formData.get("titulo") as string;
+  const descricao = formData.get("descricao") as string;
+  const categoria = formData.get("categoria") as string;
+  const precoOriginal = parseFloat(formData.get("precoOriginal") as string);
+  const precoResgate = parseFloat(formData.get("precoResgate") as string);
+  const quantidade = parseInt(formData.get("quantidade") as string, 10);
+  
+  const imagem = formData.get("imagem") as File | null;
+  const urlImagemNova = await uploadImagemProduto(imagem);
+
+  await prisma.oferta.update({
+    where: {
+      id: id
+    },
+    data: {
+      titulo: titulo,
+      descricao: descricao,
+      categoria: categoria,
+      precoOriginal: precoOriginal,
+      precoResgate: precoResgate,
+      quantidade: quantidade,
+      ...(urlImagemNova && { imagemUrl: urlImagemNova }),
+    }
+  })
+
+
+  revalidatePath("/parceiro/perfil")
+  redirect("/parceiro/perfil?aba=produtos")
 }

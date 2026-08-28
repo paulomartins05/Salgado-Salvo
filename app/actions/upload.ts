@@ -44,3 +44,30 @@ export async function uploadImagemPerfil(formData: FormData) {
   return url
 
 }
+
+export async function uploadImagemProduto(imagem: File | null): Promise<string | null> {
+  if (!imagem || imagem.size === 0) {
+    return null;
+  }
+
+  const bytes = await imagem.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+
+  return new Promise<string>((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: "salgado_salvo",
+        format: "webp",
+        quality: "auto",
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result?.secure_url || "");
+        }
+      }
+    );
+    uploadStream.end(buffer);
+  });
+}

@@ -34,6 +34,17 @@ export default async function Parceiro({
   const ofertasDoBanco = await prisma.oferta.findMany({
     where: {
       vendedorId: usuario.id,
+      quantidade: { gt: 0 }
+    },
+
+    orderBy: {
+      createdAt: "desc"
+    }
+  })
+
+  const todasAsOfertas = await prisma.oferta.findMany({
+    where: {
+      vendedorId: usuario.id,
     },
     orderBy: {
       createdAt: "desc"
@@ -217,13 +228,47 @@ export default async function Parceiro({
                 </>
               )}
 
-              {abaAtiva !== "visao-geral" && (
-                <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-100 text-center flex flex-col items-center justify-center h-full">
-                  <span className="text-4xl mb-4">🚧</span>
-                  <h2 className="text-xl font-bold mb-2">Página em Construção</h2>
-                  <p className="opacity-70 text-sm">A tela de "{abaAtiva}" será implementada em breve.</p>
+              {abaAtiva === "produtos" && (
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-bold">Todos os Meus Produtos</h2>
+                    <Link href="/parceiro/novo-resgate">
+                      <Button className="bg-[#D9774A] hover:bg-[#c4683e] text-white py-1 px-3 text-xs h-auto">
+                        + Novo Produto
+                      </Button>
+                    </Link>
+                  </div>
+
+                  <div className="flex flex-col gap-4">
+                    {todasAsOfertas.length === 0 ? (
+                      <p className="text-sm text-center opacity-70 py-4">Você ainda não cadastrou produtos.</p>
+                    ) : (
+                      todasAsOfertas.map(oferta => (
+                        <div key={oferta.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border border-gray-100 rounded-xl bg-gray-50">
+                          <div>
+                            <p className="font-bold text-base">
+                              {oferta.titulo}
+                              {!oferta.ativo && <span className="ml-2 text-xs text-red-500 font-normal">(Inativo)</span>}
+                              {oferta.quantidade === 0 && <span className="ml-2 text-xs text-gray-500 font-normal">(Esgotado)</span>}
+                            </p>
+                            <p className="text-sm opacity-70 mb-1">{oferta.categoria}</p>
+                            <p className="text-sm text-[#6B705C] font-semibold">
+                              R$ {Number(oferta.precoResgate).toFixed(2).replace('.', ',')} • {oferta.quantidade} disponíveis
+                            </p>
+                          </div>
+
+                          <Link href={`/parceiro/editar-produto/${oferta.id}`} className="mt-3 sm:mt-0">
+                            <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white py-1.5 px-4 text-xs h-auto w-full sm:w-auto">
+                              ✏️ EDITAR
+                            </Button>
+                          </Link>
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
               )}
+
 
             </div>
           </div>

@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 
 export async function criarResgate(userId: string, ofertaId: string) {
 
@@ -11,7 +12,7 @@ export async function criarResgate(userId: string, ofertaId: string) {
     const ofertaAtualizada = await tx.oferta.update({
       where: {
         id: ofertaId,
-        quantidade: {gt: 0}
+        quantidade: { gt: 0 }
       },
       data: {
         quantidade: { decrement: 1 }
@@ -19,8 +20,8 @@ export async function criarResgate(userId: string, ofertaId: string) {
     }).catch(() => null)
 
 
-    if(!ofertaAtualizada) {
-      throw new Error("Oferta esgotada")
+    if (!ofertaAtualizada) {
+      redirect("/resgates?erro=esgotado")
     }
 
     return tx.resgate.create({
@@ -42,11 +43,11 @@ export async function validarResgate(resgateId: string, pinDigitado: string) {
     where: { id: resgateId }
   })
 
-  if(!resgate) {
+  if (!resgate) {
     throw new Error("Resgate não Encontrado")
   }
 
-  if(resgate.codigoPin !== pinDigitado) {
+  if (resgate.codigoPin !== pinDigitado) {
     throw new Error("PIN incorreto")
   }
 

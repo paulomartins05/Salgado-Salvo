@@ -1,5 +1,5 @@
 import Container from "../componentes/container";
-import Text from "../componentes/text"; 
+import Text from "../componentes/text";
 import Link from "next/link";
 import CardProduto, { ProdutoProps } from "../componentes/CardProduto";
 import { calcularTempoPostagem } from "../../lib/utils";
@@ -20,21 +20,22 @@ export default async function ResgatesDisponiveis() {
 
       quantidade: {
         gt: 0
-      }
+      },
+      ativo: true,
     }
   })
 
   return (
     <section className="py-12 bg-background-primary w-full">
       <Container>
-        
+
         <div className="flex items-end justify-between mb-8">
           <Text variant="playfair" as="h2" className="text-3xl md:text-4xl text-background-secondary font-bold">
             Resgates <span className="text-laranja-destaque">Disponíveis</span> Agora
           </Text>
-          
-          <Link 
-            href="/resgates" 
+
+          <Link
+            href="/resgates"
             className="text-sm font-bold text-background-secondary uppercase border-b-2 border-background-secondary pb-0.5 transition-colors hover:text-laranja-destaque hover:border-laranja-destaque shrink-0 hidden md:block"
           >
             Ver todos os resgates
@@ -48,22 +49,22 @@ export default async function ResgatesDisponiveis() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {ofertas.map((oferta) => (
-              <CardProduto 
+              <CardProduto
                 key={oferta.id}
                 id={oferta.id}
                 nome={oferta.titulo}
                 descricao={oferta.descricao}
                 preco={oferta.precoResgate}
                 tempoPostagem={calcularTempoPostagem(oferta.createdAt)}
-                imagemUrl={oferta.imagemUrl ||"https://cdn-icons-png.flaticon.com/512/3225/3225091.png" }
+                imagemUrl={oferta.imagemUrl || "https://cdn-icons-png.flaticon.com/512/3225/3225091.png"}
               />
             ))}
           </div>
         )}
-        
+
         <div className="mt-8 flex justify-center md:hidden">
-          <Link 
-            href="/resgates" 
+          <Link
+            href="/resgates"
             className="text-sm font-bold text-background-secondary uppercase border-b-2 border-background-secondary pb-0.5"
           >
             Ver todos os resgates

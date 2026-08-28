@@ -9,6 +9,7 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { revalidatePath } from "next/cache";
 import { validarResgate } from "@/app/actions/resgate";
+import { alterarStatusOferta } from "@/app/actions/ofertas";
 
 
 
@@ -32,7 +33,7 @@ export default async function Parceiro({
   const usuario = session.user
   const ofertasDoBanco = await prisma.oferta.findMany({
     where: {
-      vendedorId: usuario.id
+      vendedorId: usuario.id,
     },
     orderBy: {
       createdAt: "desc"
@@ -183,14 +184,29 @@ export default async function Parceiro({
                           ofertasDoBanco.map(oferta => (
                             <div key={oferta.id} className="flex items-center justify-between p-3 border-b border-gray-100 last:border-0">
                               <div>
-                                <p className="font-bold text-sm">{oferta.titulo}</p>
+                                <p className="font-bold text-sm">
+                                  {oferta.titulo}
+                                  {!oferta.ativo && <span className="ml-2 text-xs text-red-500 font-normal">(Inativo)</span>}
+                                </p>
                                 <p className="text-xs text-[#6B705C] font-semibold">
                                   R$ {Number(oferta.precoResgate).toFixed(2).replace('.', ',')}
                                 </p>
                               </div>
-                              <Button variant="outline" className="border-laranja-destaque text-laranja-destaque hover:bg-laranja-destaque hover:text-white py-1 px-3 text-xs h-auto">
-                                INATIVAR
-                              </Button>
+                              <form action={async () => {
+                                "use server";
+                                await alterarStatusOferta(oferta.id, !oferta.ativo);
+                              }}>
+                                <Button
+                                  type="submit"
+                                  variant="outline"
+                                  className={`py-1 px-3 text-xs h-auto border ${oferta.ativo
+                                    ? "border-laranja-destaque text-laranja-destaque hover:bg-laranja-destaque hover:text-white"
+                                    : "border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
+                                    }`}
+                                >
+                                  {oferta.ativo ? "INATIVAR" : "ATIVAR"}
+                                </Button>
+                              </form>
                             </div>
                           ))
                         )}

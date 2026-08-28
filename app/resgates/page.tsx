@@ -2,13 +2,13 @@
 import { Suspense } from "react";
 import Container from "../componentes/container";
 import Link from "next/link";
-import Header from "../pages/header"; 
+import Header from "../pages/header";
 import Text from "../componentes/text";
 import CardProduto from "../componentes/CardProduto";
 import FiltroCategorias from "../componentes/FiltroCategorias";
 import Paginacao from "../componentes/Paginacao";
 import { calcularTempoPostagem } from "@/lib/utils";
-import {prisma} from "@/lib/prisma"
+import { prisma } from "@/lib/prisma"
 
 
 
@@ -16,7 +16,7 @@ import {prisma} from "@/lib/prisma"
 export default async function PaginaTodosResgates({
   searchParams,
 }: {
-  searchParams: Promise<{categoria?: string; pagina?: string}>
+  searchParams: Promise<{ categoria?: string; pagina?: string }>
 }) {
 
   const params = await searchParams
@@ -37,10 +37,10 @@ export default async function PaginaTodosResgates({
   const totalPaginas = Math.ceil(totalDeItens / itensPorPagina)
 
   const produtosDoBanco = await prisma.oferta.findMany({
-    where: filtroDoBanco,
+    where: { ...filtroDoBanco, ativo: true },
     skip: (paginaAtual - 1) * itensPorPagina,
     take: itensPorPagina,
-    orderBy: {createdAt: "desc"}
+    orderBy: { createdAt: "desc" }
   })
 
   const produtosFormatados = produtosDoBanco.map((p) => ({
@@ -49,7 +49,7 @@ export default async function PaginaTodosResgates({
     categoria: p.categoria,
     descricao: p.descricao,
     preco: Number(p.precoResgate),
-    tempoPostagem: calcularTempoPostagem(p.createdAt) ,
+    tempoPostagem: calcularTempoPostagem(p.createdAt),
     imagemUrl: p.imagemUrl || "https://cdn-icons-png.flaticon.com/512/3225/3225091.png",
   }))
 
@@ -76,9 +76,9 @@ export default async function PaginaTodosResgates({
           </div>
 
           <Suspense fallback={<div className="py-12 text-center">Carregando resgates quentinhos...</div>}>
-            
-            <FiltroCategorias 
-              categoriaAtiva={categoriaAtiva} 
+
+            <FiltroCategorias
+              categoriaAtiva={categoriaAtiva}
             />
 
             {produtosFormatados.length === 0 ? (
@@ -93,9 +93,9 @@ export default async function PaginaTodosResgates({
               </div>
             )}
 
-            <Paginacao 
-              paginaAtual={paginaAtual} 
-              totalPaginas={totalPaginas} 
+            <Paginacao
+              paginaAtual={paginaAtual}
+              totalPaginas={totalPaginas}
             />
 
           </Suspense>

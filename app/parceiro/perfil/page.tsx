@@ -8,53 +8,9 @@ import Button from "@/app/componentes/button";
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { revalidatePath } from "next/cache";
+import { validarResgate } from "@/app/actions/resgate";
 
-async function validarPin(formData: FormData) {
-  "use server"
 
-  const reqHeaders = await headers()
-  const session = await auth.api.getSession({
-    headers: reqHeaders
-  })
-
-  if (!session?.user || session.user.role != "PARCEIRO") {
-    throw new Error("Usuario nao autorizado")
-  }
-
-  const resgateId = formData.get("resgateId") as string
-  const pinDigitado = formData.get("pin") as string
-
-  const resgate = await prisma.resgate.findUnique({
-    where: {
-      id: resgateId
-    },
-    include: {
-      oferta: true
-    }
-  })
-
-  if (!resgate) {
-    throw new Error("Resgate nao encontrado")
-  }
-
-  if (resgate.oferta.vendedorId != session.user.id) {
-    throw new Error("Você não tem permissão para validar este resgate")
-  }
-
-  if (resgate.codigoPin == pinDigitado) {
-    await prisma.resgate.update({
-      where: {
-        id: resgateId,
-      },
-      data: {
-        status: "RETIRADO"
-      }
-    })
-    revalidatePath("/parceiro/perfil")
-  } else {
-    console.error("CODIGIN Incorreto")
-  }
-}
 
 export default async function Parceiro({
   searchParams
@@ -182,7 +138,13 @@ export default async function Parceiro({
                                 </p>
                               </div>
 
-                              <form action={validarPin} className="flex items-center gap-2">
+                              <form action={async (formData) => {
+                                "use server"
+                                const resgateId = formData.get("resgateId") as string
+                                const pin = formData.get("pin") as string
+
+                                await validarResgate(resgateId, pin)
+                              }} className="flex items-center gap-2">
                                 <input type="hidden" name="resgateId" value={pedido.id} />
                                 <input
                                   type="text"

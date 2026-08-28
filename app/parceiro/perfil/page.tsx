@@ -5,23 +5,43 @@ import { headers } from "next/headers";
 import Header from "@/app/pages/header";
 import Container from "@/app/componentes/container";
 import Button from "@/app/componentes/button";
-import {prisma} from "@/lib/prisma"
+import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
-import { revalidatePath } from "next/cache"; 
+import { revalidatePath } from "next/cache";
 
 async function validarPin(formData: FormData) {
   "use server"
-  const resgateId  = formData.get("resgateId") as string
+
+  const reqHeaders = await headers()
+  const session = await auth.api.getSession({
+    headers: reqHeaders
+  })
+
+  if (!session?.user || session.user.role != "PARCEIRO") {
+    throw new Error("Usuario nao autorizado")
+  }
+
+  const resgateId = formData.get("resgateId") as string
   const pinDigitado = formData.get("pin") as string
 
   const resgate = await prisma.resgate.findUnique({
     where: {
       id: resgateId
+    },
+    include: {
+      oferta: true
     }
   })
 
+  if (!resgate) {
+    throw new Error("Resgate nao encontrado")
+  }
 
-  if (resgate && resgate.codigoPin == pinDigitado) {
+  if (resgate.oferta.vendedorId != session.user.id) {
+    throw new Error("Você não tem permissão para validar este resgate")
+  }
+
+  if (resgate.codigoPin == pinDigitado) {
     await prisma.resgate.update({
       where: {
         id: resgateId,
@@ -39,7 +59,7 @@ async function validarPin(formData: FormData) {
 export default async function Parceiro({
   searchParams
 }: {
-  searchParams: Promise<{aba?: string}>
+  searchParams: Promise<{ aba?: string }>
 }) {
   const params = await searchParams
   const abaAtiva = params.aba || "visao-geral"
@@ -49,7 +69,7 @@ export default async function Parceiro({
     headers: reqHeaders
   })
 
-  if(!session?.user || session.user.role != "PARCEIRO") {
+  if (!session?.user || session.user.role != "PARCEIRO") {
     redirect("/")
   }
 
@@ -75,7 +95,7 @@ export default async function Parceiro({
       user: true,
       oferta: true
     },
-    orderBy: { createdAt: "asc"}
+    orderBy: { createdAt: "asc" }
   })
 
   const resgatesConcluidos = await prisma.resgate.findMany({
@@ -94,7 +114,7 @@ export default async function Parceiro({
 
   const hoje = new Date().toLocaleDateString("pt-BR")
   const resgatesHoje = resgatesConcluidos.filter(r => r.updatedAt.toLocaleDateString("pt-BR") === hoje).length
-  const impactoKg = (resgatesConcluidos.length * 0.3).toFixed(1) 
+  const impactoKg = (resgatesConcluidos.length * 0.3).toFixed(1)
   return (
     <div className="bg-[#F6EFE5] min-h-screen flex flex-col font-inter text-background-secondary">
       <Header />
@@ -102,7 +122,7 @@ export default async function Parceiro({
 
       <main className="py-8 grow">
         <Container>
-          
+
           <div className="mb-8">
             <div className="text-sm text-[#B87042] mb-4 flex items-center gap-2">
               <Link href="/" className="hover:underline">Início</Link>
@@ -115,7 +135,7 @@ export default async function Parceiro({
           </div>
 
           <div className="flex flex-col md:flex-row gap-8">
-            
+
             <aside className="w-full md:w-64 shrink-0 flex flex-col gap-2">
               <Link href="?aba=visao-geral" className={`block px-4 py-3 rounded-xl font-medium transition-colors ${abaAtiva === "visao-geral" ? "bg-[#e8d5c4] text-background-secondary" : "hover:bg-[#fdf3ef]"}`}>Visão Geral</Link>
               <Link href="?aba=produtos" className={`block px-4 py-3 rounded-xl font-medium transition-colors ${abaAtiva === "produtos" ? "bg-[#e8d5c4] text-background-secondary" : "hover:bg-[#fdf3ef]"}`}>Meus Produtos</Link>
@@ -123,7 +143,7 @@ export default async function Parceiro({
             </aside>
 
             <div className="grow flex flex-col gap-6">
-              
+
               {abaAtiva === "visao-geral" && (
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -144,11 +164,11 @@ export default async function Parceiro({
                   </div>
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
-                    
+
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
                       <h2 className="text-xl font-bold mb-1">Validar Resgates Pendentes</h2>
                       <p className="text-sm opacity-70 mb-6">Clientes aguardando retirada hoje.</p>
-                      
+
                       <div className="flex flex-col gap-4">
                         {pedidosPendentes.length === 0 ? (
                           <p className="text-sm text-center opacity-70 py-4">Nenhum cliente na fila.</p>
@@ -161,13 +181,13 @@ export default async function Parceiro({
                                   {pedido.oferta.titulo} • {pedido.createdAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                                 </p>
                               </div>
-                              
+
                               <form action={validarPin} className="flex items-center gap-2">
                                 <input type="hidden" name="resgateId" value={pedido.id} />
-                                <input 
-                                  type="text" 
+                                <input
+                                  type="text"
                                   name="pin"
-                                  placeholder="PIN" 
+                                  placeholder="PIN"
                                   maxLength={4}
                                   required
                                   className="w-16 px-2 py-1.5 text-center border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-laranja-destaque"
@@ -193,7 +213,7 @@ export default async function Parceiro({
                         </Link>
                       </div>
                       <p className="text-sm opacity-70 mb-6">Controle em tempo real de estoque.</p>
-                      
+
                       <div className="flex flex-col gap-4 max-h-75 overflow-y-auto pr-2">
                         {ofertasDoBanco.length === 0 ? (
                           <p className="text-sm text-center opacity-70 py-4">Nenhuma oferta ativa no momento.</p>

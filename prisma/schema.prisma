@@ -92,6 +92,7 @@ model Oferta {
   resgates    Resgate[]
   vendedorId      String
   vendedor        User     @relation(fields: [vendedorId], references: [id], onDelete: Cascade)
+  ativo Boolean @default(true)
   @@index([vendedorId])
 }
 

@@ -11,8 +11,7 @@
 
 export const RoleUsuario = {
   CONSUMIDOR: 'CONSUMIDOR',
-  PARCEIRO: 'PARCEIRO',
-  ADMIN: 'ADMIN'
+  PARCEIRO: 'PARCEIRO'
 } as const
 
 export type RoleUsuario = (typeof RoleUsuario)[keyof typeof RoleUsuario]

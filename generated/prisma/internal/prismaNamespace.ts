@@ -980,7 +980,8 @@ export const OfertaScalarFieldEnum = {
   imagemUrl: 'imagemUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  vendedorId: 'vendedorId'
+  vendedorId: 'vendedorId',
+  ativo: 'ativo'
 } as const
 
 export type OfertaScalarFieldEnum = (typeof OfertaScalarFieldEnum)[keyof typeof OfertaScalarFieldEnum]

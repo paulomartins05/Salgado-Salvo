@@ -226,3 +226,29 @@ export async function editarOferta(formData: FormData) {
   revalidatePath("/parceiro/perfil")
   redirect("/parceiro/perfil?aba=produtos")
 }
+
+export async function excluirOferta(id: string) {
+  const reqHeaders = await headers()
+  const session = await auth.api.getSession({
+    headers: reqHeaders,
+  })
+
+  if (!session || session.user.role !== "PARCEIRO") {
+    throw new Error("Acesso negado.")
+  }
+
+  const ofertaExistente = await prisma.oferta.findUnique({
+    where: { id }
+  })
+
+  if (!ofertaExistente || ofertaExistente.vendedorId !== session.user.id) {
+    throw new Error("Oferta não encontrada ou sem permissão.")
+  }
+
+  await prisma.oferta.delete({
+    where: { id }
+  })
+
+  revalidatePath("/parceiro/perfil")
+  redirect("/parceiro/perfil?aba=produtos")
+}

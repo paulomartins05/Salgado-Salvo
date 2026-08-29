@@ -106,6 +106,18 @@ export default async function EditarProduto({
                                 Salvar Alterações
                             </Button>
                         </form>
+
+                        <div className="mt-6 pt-6 border-t border-gray-200">
+                            <form action={async () => {
+                                "use server";
+                                const { excluirOferta } = await import("@/app/actions/ofertas");
+                                await excluirOferta(oferta.id);
+                            }}>
+                                <Button type="submit" variant="outline" className="w-full border-red-500 text-red-500 hover:bg-red-50 hover:text-red-600 py-3 rounded-xl font-bold">
+                                    🗑️ Excluir Produto Definitivamente
+                                </Button>
+                            </form>
+                        </div>
                     </div>
                 </Container>
             </main>

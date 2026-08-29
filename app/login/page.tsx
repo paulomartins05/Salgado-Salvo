@@ -44,6 +44,7 @@ export default function LoginPage() {
     await authClient.signIn.email({
       email: data.email,
       password: data.senha,
+      rememberMe: data.lembrarMe,
       callbackURL: "/"
 
     }, {

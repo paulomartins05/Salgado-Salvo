@@ -98,9 +98,16 @@ export default async function Parceiro({
               <span>{'>'}</span>
               <span className="font-medium">Área do Parceiro</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-playfair font-bold">
-              Painel do Parceiro: {usuario.name || "Minha Loja"}
-            </h1>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <h1 className="text-3xl md:text-4xl font-playfair font-bold">
+                Painel do Parceiro: {usuario.name || "Minha Loja"}
+              </h1>
+              <Link href="/parceiro/editar">
+                <Button variant="outline" className="border-[#D9774A] text-[#D9774A] hover:bg-[#D9774A] hover:text-white">
+                  ✏️ Editar Perfil da Loja
+                </Button>
+              </Link>
+            </div>
           </div>
 
           <div className="flex flex-col md:flex-row gap-8">

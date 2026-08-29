@@ -8,15 +8,15 @@ import Button from "@/app/componentes/button";
 import Link from "next/link";
 import { alterarSenha, atualizarPerfilUsuario } from "@/app/actions/usuario";
 
-export default async function EditarPerfil() {
+export default async function EditarPerfilParceiro() {
 
     const reqHeaders = await headers()
     const session = await auth.api.getSession({
         headers: reqHeaders
     })
 
-    if (!session) {
-        redirect('/login')
+    if (!session || session.user.role !== "PARCEIRO") {
+        redirect("/")
     }
 
     const usuarioDB = await prisma.user.findUnique({
@@ -26,7 +26,7 @@ export default async function EditarPerfil() {
     })
 
     if (!usuarioDB) {
-        redirect('/login')
+        redirect("/")
     }
 
     return (
@@ -35,47 +35,61 @@ export default async function EditarPerfil() {
             <hr className="opacity-10 border-background-secondary" />
             <main className="py-8 grow">
                 <Container>
+                    <div className="mb-8">
+                        <div className="text-sm text-[#B87042] mb-4 flex items-center gap-2">
+                            <Link href="/" className="hover:underline">Início</Link>
+                            <span>{'>'}</span>
+                            <Link href="/parceiro/perfil" className="hover:underline">Área do Parceiro</Link>
+                            <span>{'>'}</span>
+                            <span className="font-medium">Editar Loja</span>
+                        </div>
+                    </div>
                     <div className="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                         <div className="flex items-center justify-between mb-6">
-                            <h1 className="text-2xl font-playfair font-bold">Editar Perfil</h1>
-                            <Link href="/perfil" className="text-sm text-gray-500 hover:underline">
+                            <h1 className="text-2xl font-playfair font-bold">Editar Dados da Loja</h1>
+                            <Link href="/parceiro/perfil" className="text-sm text-gray-500 hover:underline">
                                 Cancelar
                             </Link>
                         </div>
+                        {/* Chama a exata mesma action do usuário comum */}
                         <form action={atualizarPerfilUsuario} className="flex flex-col gap-5">
-
                             <div className="flex flex-col items-center p-4 border border-dashed border-gray-300 rounded-xl bg-gray-50">
                                 <img
                                     src={usuarioDB.image || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"}
                                     alt="Sua foto atual"
                                     className="w-24 h-24 rounded-full object-cover mb-3 shadow-md"
                                 />
-                                <label className="text-sm font-medium mb-1">Alterar Foto de Perfil</label>
+                                <label className="text-sm font-medium mb-1">Alterar Logo da Loja</label>
+                                {/* Input já corrigido sem o max={3} */}
                                 <input type="file" name="imagem" accept="image/png, image/jpeg, image/webp" className="text-sm" />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Nome Completo</label>
+                                <label className="block text-sm font-medium mb-1">Nome da Loja</label>
                                 <input type="text" name="nome" defaultValue={usuarioDB.name} required className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">E-mail</label>
+                                <label className="block text-sm font-medium mb-1">E-mail Corporativo</label>
                                 <input type="email" name="email" defaultValue={usuarioDB.email} required className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1">Telefone / WhatsApp</label>
                                 <input type="tel" name="telefone" defaultValue={usuarioDB.telefone || ""} className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
                             </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">CNPJ</label>
+                                <input type="text" name="cnpj" defaultValue={usuarioDB.cnpj || ""} className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">Endereço da Loja (Localização)</label>
+                                <input type="text" name="localizacao" defaultValue={usuarioDB.localizacao || ""} className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+                            </div>
                             <Button type="submit" className="mt-4 bg-[#D9774A] hover:bg-[#c4683e] text-white py-3 rounded-xl w-full font-bold">
                                 Salvar Alterações
                             </Button>
                         </form>
-
-
                         <div className="mt-10 pt-8 border-t border-gray-200">
                             <h2 className="text-xl font-bold mb-6 text-laranja-destaque">Alterar Senha</h2>
-
                             <form action={alterarSenha} className="flex flex-col gap-4">
-
                                 <div>
                                     <label className="block text-sm font-medium mb-1">Senha Atual</label>
                                     <input

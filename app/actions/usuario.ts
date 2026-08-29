@@ -20,6 +20,8 @@ export async function atualizarPerfilUsuario(formData: FormData) {
     const nome = formData.get("nome") as string;
     const email = formData.get("email") as string;
     const telefone = formData.get("telefone") as string;
+    const cnpj = formData.get("cnpj") as string | null;
+    const localizacao = formData.get("localizacao") as string | null;
     const imagem = formData.get("imagem") as File | null;
 
 
@@ -41,26 +43,22 @@ export async function atualizarPerfilUsuario(formData: FormData) {
         }
     })
 
-    if (email !== session.user.email) {
-        await auth.api.changeEmail({
-            headers: reqHeaders,
-            body: {
-                newEmail: email,
-            }
-        })
-    }
-
     await prisma.user.update({
         where: {
             id: session.user.id
         },
         data: {
+            email: email,
             telefone: telefone,
+            ...(cnpj && { cnpj }),
+            ...(localizacao && { localizacao })
         }
     })
 
-    revalidatePath("/perfil")
-    redirect("/perfil")
+    const isParceiro = session.user.role === "PARCEIRO"
+
+    revalidatePath(isParceiro ? "/parceiro/perfil" : "/perfil")
+    redirect(isParceiro ? "/parceiro/perfil" : "/perfil")
 }
 
 

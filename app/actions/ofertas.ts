@@ -1,12 +1,13 @@
 "use server";
 
-import { z } from "zod"
+import { success, z } from "zod"
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { uploadImagemProduto, uploadMultiplasImagens } from "./upload";
+import { fallbackModeToFallbackField } from "next/dist/lib/fallback";
 
 const ofertaSchema = z.object({
   titulo: z.string().min(3, "Precisa de 3 caracteres"),
@@ -61,7 +62,10 @@ export async function criarOferta(formData: FormData) {
   const arquivosValidos = imagem.filter(file => file.size > 0);
 
   if (arquivosValidos.length > 3) {
-    throw new Error("Você só pode enviar no máximo 3 imagens.");
+    return {
+      success: false,
+      erroGeral: "Você só pode enviar no máximo 3 imagens."
+    }
   }
 
   let urlsDasImagens: string[] = [];
@@ -194,7 +198,10 @@ export async function editarOferta(formData: FormData) {
   let novasUrls: string[] | undefined = undefined;
   if (arquivosValidos.length > 0) {
     if (arquivosValidos.length > 3) {
-      throw new Error("Você só pode enviar no máximo 3 imagens.");
+      return {
+        success: false,
+        erroGeral: "Você só pode enviar no máximo 3 imagens"
+      }
     }
     novasUrls = await uploadMultiplasImagens(arquivosValidos);
   }

@@ -8,35 +8,52 @@ import { headers } from "next/headers"
 
 export async function criarResgate(userId: string, ofertaId: string) {
 
-  const codigoPinGerado = Math.floor(1000 + Math.random() * 9000).toString()
+  let redirecionarEsgotado = false
+  let novoResgateId = null
 
-  const novoResgate = await prisma.$transaction(async (tx) => {
-    const ofertaAtualizada = await tx.oferta.update({
-      where: {
-        id: ofertaId,
-        quantidade: { gt: 0 }
-      },
-      data: {
-        quantidade: { decrement: 1 }
+  try {
+    const codigoPinGerado = Math.floor(1000 + Math.random() * 9000).toString()
+
+    const novoResgate = await prisma.$transaction(async (tx) => {
+      const ofertaAtualizada = await tx.oferta.update({
+        where: {
+          id: ofertaId,
+          quantidade: { gt: 0 }
+        },
+        data: {
+          quantidade: { decrement: 1 }
+        }
+      }).catch(() => null)
+
+
+      if (!ofertaAtualizada) {
+        throw new Error("OFERTA_ESGOTADA")
       }
-    }).catch(() => null)
 
+      const resgateGerado = await tx.resgate.create({
+        data: {
+          userId: userId,
+          ofertaId: ofertaId,
+          codigoPin: codigoPinGerado,
+          status: "PENDENTE"
+        }
+      })
 
-    if (!ofertaAtualizada) {
-      redirect("/resgates?erro=esgotado")
-    }
-
-    return tx.resgate.create({
-      data: {
-        userId: userId,
-        ofertaId: ofertaId,
-        codigoPin: codigoPinGerado,
-        status: "PENDENTE"
-      }
+      return resgateGerado
     })
-  })
-  revalidatePath("/perfil")
-  return novoResgate
+    revalidatePath("/perfil")
+    return novoResgate
+  }
+  catch (error: any) {
+    if (error.message === "OFERTA_ESGOTADA") {
+      redirecionarEsgotado = true;
+    } else {
+      throw error;
+    }
+  }
+  if (redirecionarEsgotado) {
+    redirect("/resgates?erro=esgotado");
+  }
 }
 
 export async function validarResgate(resgateId: string, pinDigitado: string) {

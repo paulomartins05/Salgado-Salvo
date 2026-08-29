@@ -1,5 +1,9 @@
-import Button from "./button";
+"use client"
 
+import Button from "./button";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { criarResgate } from "@/app/actions/resgate";
 
 interface DetalhesProps {
   nome: string;
@@ -10,6 +14,7 @@ interface DetalhesProps {
   tempoPostagem: string;
   ofertaId: string;
   usuarioId?: string;
+  estoqueDisponivel: number;
 }
 
 export default function ProdutoDetalhes({
@@ -20,8 +25,30 @@ export default function ProdutoDetalhes({
   precoAtual,
   tempoPostagem,
   ofertaId,
-  usuarioId
+  usuarioId,
+  estoqueDisponivel
 }: DetalhesProps) {
+
+  const router = useRouter()
+
+  const [quantidade, setQuantidade] = useState(1)
+  const [erroEstoque, setErroEstoque] = useState("")
+
+  const diminuir = () => {
+    if (quantidade > 1) {
+      setQuantidade(quantidade - 1)
+      setErroEstoque("")
+    }
+  }
+
+  const aumentar = () => {
+    if (quantidade < estoqueDisponivel) {
+      setQuantidade(quantidade + 1)
+      setErroEstoque("")
+    } else {
+      setErroEstoque(`Temos apenas ${estoqueDisponivel} itens em estoque no momento!`)
+    }
+  }
 
   const formatarPreco = (valor: number) =>
     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
@@ -59,37 +86,34 @@ export default function ProdutoDetalhes({
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex items-center justify-between border border-gray-300 rounded-xl px-4 py-2 sm:w-1/3">
-            <button className="text-gray-500 hover:text-background-secondary text-xl font-bold">−</button>
-            <span className="font-inter font-semibold">1</span>
-            <button className="text-gray-500 hover:text-background-secondary text-xl font-bold">+</button>
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex items-center justify-between border border-gray-300 rounded-xl px-4 py-2 sm:w-1/3">
+              <button type="button" onClick={diminuir} className="text-gray-500 hover:text-background-secondary text-xl font-bold">−</button>
+              <span className="font-inter font-semibold">{quantidade}</span>
+              <button type="button" onClick={aumentar} className="text-gray-500 hover:text-background-secondary text-xl font-bold">+</button>
+            </div>
+
+            <form action={async () => {
+              if (!usuarioId) {
+                router.push("/login");
+                return;
+              }
+              await criarResgate(usuarioId, ofertaId, quantidade);
+              router.push("/perfil");
+            }} className="flex-1 w-full">
+              <Button type="submit" variant="primary" size="lg" className="w-full flex justify-center items-center gap-2 bg-[#D9774A] hover:bg-[#c4683e] rounded-xl">
+                {usuarioId ? (
+                  <>🛒 Adicionar {quantidade > 1 ? `${quantidade} itens` : 'ao Resgate'}</>
+                ) : (
+                  <>Faça Login para Resgatar</>
+                )}
+              </Button>
+            </form>
           </div>
-
-          <form action={async () => {
-            "use server";
-            if (!usuarioId) {
-              const {redirect} = await import("next/navigation")
-              redirect("/login")
-              return;
-            }
-
-
-            const {criarResgate} = (await import("@/app/actions/resgate"));
-            await criarResgate(usuarioId, ofertaId);
-            const { redirect: redirectFinal } = await import("next/navigation");
-            redirectFinal("/perfil");
-
-
-          }} className="flex-1 w-full">
-            <Button type="submit" variant="primary" size="lg" className="w-full flex justify-center items-center gap-2 bg-[#D9774A] hover:bg-[#c4683e] rounded-xl">
-              {usuarioId ? (
-                <>🛒 Adicionar ao Resgate</>
-              ) : (
-                <>Faça Login para Resgastar</>
-              )}
-            </Button>
-          </form>
+          {erroEstoque && (
+            <span className="text-red-500 text-sm font-medium pl-2">{erroEstoque}</span>
+          )}
         </div>
       </div>
 

@@ -100,7 +100,8 @@ model Resgate {
   id          String   @id @default(cuid())
   userId      String
   ofertaId    String
-  status      StatusResgate   @default(PENDENTE) 
+  status      StatusResgate   @default(PENDENTE)
+  quantidade  Int      @default(1)
   codigoPin   String   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

@@ -163,6 +163,7 @@ export const ResgateScalarFieldEnum = {
   ofertaId: 'ofertaId',
   status: 'status',
   codigoPin: 'codigoPin',
+  quantidade: 'quantidade',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

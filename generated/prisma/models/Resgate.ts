@@ -20,8 +20,18 @@ export type ResgateModel = runtime.Types.Result.DefaultSelection<Prisma.$Resgate
 
 export type AggregateResgate = {
   _count: ResgateCountAggregateOutputType | null
+  _avg: ResgateAvgAggregateOutputType | null
+  _sum: ResgateSumAggregateOutputType | null
   _min: ResgateMinAggregateOutputType | null
   _max: ResgateMaxAggregateOutputType | null
+}
+
+export type ResgateAvgAggregateOutputType = {
+  quantidade: number | null
+}
+
+export type ResgateSumAggregateOutputType = {
+  quantidade: number | null
 }
 
 export type ResgateMinAggregateOutputType = {
@@ -30,6 +40,7 @@ export type ResgateMinAggregateOutputType = {
   ofertaId: string | null
   status: $Enums.StatusResgate | null
   codigoPin: string | null
+  quantidade: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -40,6 +51,7 @@ export type ResgateMaxAggregateOutputType = {
   ofertaId: string | null
   status: $Enums.StatusResgate | null
   codigoPin: string | null
+  quantidade: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,11 +62,20 @@ export type ResgateCountAggregateOutputType = {
   ofertaId: number
   status: number
   codigoPin: number
+  quantidade: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type ResgateAvgAggregateInputType = {
+  quantidade?: true
+}
+
+export type ResgateSumAggregateInputType = {
+  quantidade?: true
+}
 
 export type ResgateMinAggregateInputType = {
   id?: true
@@ -62,6 +83,7 @@ export type ResgateMinAggregateInputType = {
   ofertaId?: true
   status?: true
   codigoPin?: true
+  quantidade?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -72,6 +94,7 @@ export type ResgateMaxAggregateInputType = {
   ofertaId?: true
   status?: true
   codigoPin?: true
+  quantidade?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,6 +105,7 @@ export type ResgateCountAggregateInputType = {
   ofertaId?: true
   status?: true
   codigoPin?: true
+  quantidade?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -125,6 +149,18 @@ export type ResgateAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: ResgateAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: ResgateSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: ResgateMinAggregateInputType
@@ -155,6 +191,8 @@ export type ResgateGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: ResgateCountAggregateInputType | true
+  _avg?: ResgateAvgAggregateInputType
+  _sum?: ResgateSumAggregateInputType
   _min?: ResgateMinAggregateInputType
   _max?: ResgateMaxAggregateInputType
 }
@@ -165,9 +203,12 @@ export type ResgateGroupByOutputType = {
   ofertaId: string
   status: $Enums.StatusResgate
   codigoPin: string
+  quantidade: number
   createdAt: Date
   updatedAt: Date
   _count: ResgateCountAggregateOutputType | null
+  _avg: ResgateAvgAggregateOutputType | null
+  _sum: ResgateSumAggregateOutputType | null
   _min: ResgateMinAggregateOutputType | null
   _max: ResgateMaxAggregateOutputType | null
 }
@@ -196,6 +237,7 @@ export type ResgateWhereInput = {
   ofertaId?: Prisma.StringFilter<"Resgate"> | string
   status?: Prisma.EnumStatusResgateFilter<"Resgate"> | $Enums.StatusResgate
   codigoPin?: Prisma.StringFilter<"Resgate"> | string
+  quantidade?: Prisma.IntFilter<"Resgate"> | number
   createdAt?: Prisma.DateTimeFilter<"Resgate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Resgate"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -208,6 +250,7 @@ export type ResgateOrderByWithRelationInput = {
   ofertaId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   codigoPin?: Prisma.SortOrder
+  quantidade?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -223,6 +266,7 @@ export type ResgateWhereUniqueInput = Prisma.AtLeast<{
   ofertaId?: Prisma.StringFilter<"Resgate"> | string
   status?: Prisma.EnumStatusResgateFilter<"Resgate"> | $Enums.StatusResgate
   codigoPin?: Prisma.StringFilter<"Resgate"> | string
+  quantidade?: Prisma.IntFilter<"Resgate"> | number
   createdAt?: Prisma.DateTimeFilter<"Resgate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Resgate"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -235,11 +279,14 @@ export type ResgateOrderByWithAggregationInput = {
   ofertaId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   codigoPin?: Prisma.SortOrder
+  quantidade?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ResgateCountOrderByAggregateInput
+  _avg?: Prisma.ResgateAvgOrderByAggregateInput
   _max?: Prisma.ResgateMaxOrderByAggregateInput
   _min?: Prisma.ResgateMinOrderByAggregateInput
+  _sum?: Prisma.ResgateSumOrderByAggregateInput
 }
 
 export type ResgateScalarWhereWithAggregatesInput = {
@@ -251,6 +298,7 @@ export type ResgateScalarWhereWithAggregatesInput = {
   ofertaId?: Prisma.StringWithAggregatesFilter<"Resgate"> | string
   status?: Prisma.EnumStatusResgateWithAggregatesFilter<"Resgate"> | $Enums.StatusResgate
   codigoPin?: Prisma.StringWithAggregatesFilter<"Resgate"> | string
+  quantidade?: Prisma.IntWithAggregatesFilter<"Resgate"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Resgate"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Resgate"> | Date | string
 }
@@ -259,6 +307,7 @@ export type ResgateCreateInput = {
   id?: string
   status?: $Enums.StatusResgate
   codigoPin: string
+  quantidade?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutResgatesInput
@@ -271,6 +320,7 @@ export type ResgateUncheckedCreateInput = {
   ofertaId: string
   status?: $Enums.StatusResgate
   codigoPin: string
+  quantidade?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -279,6 +329,7 @@ export type ResgateUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
   codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
+  quantidade?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutResgatesNestedInput
@@ -291,6 +342,7 @@ export type ResgateUncheckedUpdateInput = {
   ofertaId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
   codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
+  quantidade?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -301,6 +353,7 @@ export type ResgateCreateManyInput = {
   ofertaId: string
   status?: $Enums.StatusResgate
   codigoPin: string
+  quantidade?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -309,6 +362,7 @@ export type ResgateUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
   codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
+  quantidade?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -319,6 +373,7 @@ export type ResgateUncheckedUpdateManyInput = {
   ofertaId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
   codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
+  quantidade?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -339,8 +394,13 @@ export type ResgateCountOrderByAggregateInput = {
   ofertaId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   codigoPin?: Prisma.SortOrder
+  quantidade?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ResgateAvgOrderByAggregateInput = {
+  quantidade?: Prisma.SortOrder
 }
 
 export type ResgateMaxOrderByAggregateInput = {
@@ -349,6 +409,7 @@ export type ResgateMaxOrderByAggregateInput = {
   ofertaId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   codigoPin?: Prisma.SortOrder
+  quantidade?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -359,8 +420,13 @@ export type ResgateMinOrderByAggregateInput = {
   ofertaId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   codigoPin?: Prisma.SortOrder
+  quantidade?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ResgateSumOrderByAggregateInput = {
+  quantidade?: Prisma.SortOrder
 }
 
 export type ResgateCreateNestedManyWithoutUserInput = {
@@ -455,6 +521,7 @@ export type ResgateCreateWithoutUserInput = {
   id?: string
   status?: $Enums.StatusResgate
   codigoPin: string
+  quantidade?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   oferta: Prisma.OfertaCreateNestedOneWithoutResgatesInput
@@ -465,6 +532,7 @@ export type ResgateUncheckedCreateWithoutUserInput = {
   ofertaId: string
   status?: $Enums.StatusResgate
   codigoPin: string
+  quantidade?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -504,6 +572,7 @@ export type ResgateScalarWhereInput = {
   ofertaId?: Prisma.StringFilter<"Resgate"> | string
   status?: Prisma.EnumStatusResgateFilter<"Resgate"> | $Enums.StatusResgate
   codigoPin?: Prisma.StringFilter<"Resgate"> | string
+  quantidade?: Prisma.IntFilter<"Resgate"> | number
   createdAt?: Prisma.DateTimeFilter<"Resgate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Resgate"> | Date | string
 }
@@ -512,6 +581,7 @@ export type ResgateCreateWithoutOfertaInput = {
   id?: string
   status?: $Enums.StatusResgate
   codigoPin: string
+  quantidade?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutResgatesInput
@@ -522,6 +592,7 @@ export type ResgateUncheckedCreateWithoutOfertaInput = {
   userId: string
   status?: $Enums.StatusResgate
   codigoPin: string
+  quantidade?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -557,6 +628,7 @@ export type ResgateCreateManyUserInput = {
   ofertaId: string
   status?: $Enums.StatusResgate
   codigoPin: string
+  quantidade?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -565,6 +637,7 @@ export type ResgateUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
   codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
+  quantidade?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   oferta?: Prisma.OfertaUpdateOneRequiredWithoutResgatesNestedInput
@@ -575,6 +648,7 @@ export type ResgateUncheckedUpdateWithoutUserInput = {
   ofertaId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
   codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
+  quantidade?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -584,6 +658,7 @@ export type ResgateUncheckedUpdateManyWithoutUserInput = {
   ofertaId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
   codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
+  quantidade?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -593,6 +668,7 @@ export type ResgateCreateManyOfertaInput = {
   userId: string
   status?: $Enums.StatusResgate
   codigoPin: string
+  quantidade?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -601,6 +677,7 @@ export type ResgateUpdateWithoutOfertaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
   codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
+  quantidade?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutResgatesNestedInput
@@ -611,6 +688,7 @@ export type ResgateUncheckedUpdateWithoutOfertaInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
   codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
+  quantidade?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -620,6 +698,7 @@ export type ResgateUncheckedUpdateManyWithoutOfertaInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
   codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
+  quantidade?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -632,6 +711,7 @@ export type ResgateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   ofertaId?: boolean
   status?: boolean
   codigoPin?: boolean
+  quantidade?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -644,6 +724,7 @@ export type ResgateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   ofertaId?: boolean
   status?: boolean
   codigoPin?: boolean
+  quantidade?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -656,6 +737,7 @@ export type ResgateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   ofertaId?: boolean
   status?: boolean
   codigoPin?: boolean
+  quantidade?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -668,11 +750,12 @@ export type ResgateSelectScalar = {
   ofertaId?: boolean
   status?: boolean
   codigoPin?: boolean
+  quantidade?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ResgateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "ofertaId" | "status" | "codigoPin" | "createdAt" | "updatedAt", ExtArgs["result"]["resgate"]>
+export type ResgateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "ofertaId" | "status" | "codigoPin" | "quantidade" | "createdAt" | "updatedAt", ExtArgs["result"]["resgate"]>
 export type ResgateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   oferta?: boolean | Prisma.OfertaDefaultArgs<ExtArgs>
@@ -698,6 +781,7 @@ export type $ResgatePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     ofertaId: string
     status: $Enums.StatusResgate
     codigoPin: string
+    quantidade: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["resgate"]>
@@ -1130,6 +1214,7 @@ export interface ResgateFieldRefs {
   readonly ofertaId: Prisma.FieldRef<"Resgate", 'String'>
   readonly status: Prisma.FieldRef<"Resgate", 'StatusResgate'>
   readonly codigoPin: Prisma.FieldRef<"Resgate", 'String'>
+  readonly quantidade: Prisma.FieldRef<"Resgate", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Resgate", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Resgate", 'DateTime'>
 }

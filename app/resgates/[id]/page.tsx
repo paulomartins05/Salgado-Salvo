@@ -77,6 +77,7 @@ export default async function PaginaProdutoUnico({
                 tempoPostagem={calcularTempoPostagem(produto.createdAt)}
                 ofertaId={produto.id}
                 usuarioId={usuario?.id}
+                estoqueDisponivel={produto.quantidade}
               />
             </div>
 

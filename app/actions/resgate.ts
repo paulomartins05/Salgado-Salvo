@@ -6,7 +6,7 @@ import { redirect } from "next/navigation"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 
-export async function criarResgate(userId: string, ofertaId: string) {
+export async function criarResgate(userId: string, ofertaId: string, quantidadePedida: number = 1) {
 
   let redirecionarEsgotado = false
   let novoResgateId = null
@@ -18,10 +18,10 @@ export async function criarResgate(userId: string, ofertaId: string) {
       const ofertaAtualizada = await tx.oferta.update({
         where: {
           id: ofertaId,
-          quantidade: { gt: 0 }
+          quantidade: { gte: quantidadePedida }
         },
         data: {
-          quantidade: { decrement: 1 }
+          quantidade: { decrement: quantidadePedida }
         }
       }).catch(() => null)
 
@@ -35,6 +35,7 @@ export async function criarResgate(userId: string, ofertaId: string) {
           userId: userId,
           ofertaId: ofertaId,
           codigoPin: codigoPinGerado,
+          quantidade: quantidadePedida,
           status: "PENDENTE"
         }
       })

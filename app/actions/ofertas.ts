@@ -118,13 +118,47 @@ export async function alterarStatusOferta(ofertaId: string, novoStatus: boolean)
 }
 
 export async function editarOferta(formData: FormData) {
-  const id = formData.get("id") as string;
-  const titulo = formData.get("titulo") as string;
-  const descricao = formData.get("descricao") as string;
-  const categoria = formData.get("categoria") as string;
-  const precoOriginal = parseFloat(formData.get("precoOriginal") as string);
-  const precoResgate = parseFloat(formData.get("precoResgate") as string);
-  const quantidade = parseInt(formData.get("quantidade") as string, 10);
+
+  const reqHeaders = await headers()
+  const session = await auth.api.getSession({
+    headers: reqHeaders,
+  })
+
+  if (!session || session.user.role !== "PARCEIRO") {
+    throw new Error("Acesso negado. apenas parceiros podem editar")
+  }
+
+  const id = formData.get("id") as string
+
+  const ofertaExistente = await prisma.oferta.findUnique({
+    where: {
+      id: id
+    }
+  })
+
+  if (!ofertaExistente || ofertaExistente.vendedorId !== session.user.id) {
+    throw new Error("Oferta não encontrada ou sem permissão.")
+  }
+
+  const dadosBrutos = {
+    titulo: formData.get("titulo") as string,
+    descricao: formData.get("descricao") as string,
+    categoria: formData.get("categoria") as string,
+    localizacao: formData.get("localizacao") as string,
+    precoOriginal: parseFloat(formData.get("precoOriginal") as string),
+    precoResgate: parseFloat(formData.get("precoResgate") as string),
+    quantidade: parseInt(formData.get("quantidade") as string, 10),
+    dataValidade: new Date(formData.get("dataValidade") as string),
+  }
+
+  const validacao = ofertaSchema.safeParse(dadosBrutos)
+
+  if (!validacao.success) {
+    return {
+      success: false,
+      erros: validacao.error.flatten().fieldErrors
+    }
+  }
 
   const imagens = formData.getAll("imagem") as File[];
   const arquivosValidos = imagens.filter(file => file.size > 0);
@@ -142,13 +176,13 @@ export async function editarOferta(formData: FormData) {
       id: id
     },
     data: {
-      titulo: titulo,
-      descricao: descricao,
-      categoria: categoria,
-      precoOriginal: precoOriginal,
-      precoResgate: precoResgate,
-      quantidade: quantidade,
-      dataValidade: new Date(formData.get("dataValidade") as string),
+      titulo: validacao.data.titulo,
+      descricao: validacao.data.descricao,
+      categoria: validacao.data.categoria,
+      precoOriginal: validacao.data.precoOriginal,
+      precoResgate: validacao.data.precoResgate,
+      quantidade: validacao.data.quantidade,
+      dataValidade: validacao.data.dataValidade,
       ...(novasUrls && { imagemUrl: novasUrls }),
     }
   })

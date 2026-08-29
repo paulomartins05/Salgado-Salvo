@@ -5,17 +5,29 @@ import Header from "@/app/pages/header";
 import Button from "@/app/componentes/button";
 import Link from "next/link";
 import { editarOferta } from "@/app/actions/ofertas";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 export default async function EditarProduto({
     params
 }: {
     params: Promise<{ id: string }>
 }) {
+
+    const reqHeaders = await headers()
+    const session = await auth.api.getSession({
+        headers: reqHeaders,
+    })
+
+    if (!session || session.user.role !== "PARCEIRO") {
+        redirect("/")
+    }
+
     const id = (await params).id;
     const oferta = await prisma.oferta.findUnique({
         where: { id }
     });
-    if (!oferta) {
+    if (!oferta || oferta.vendedorId !== session.user.id) {
         redirect("/parceiro/perfil?aba=produtos");
 
     }
@@ -35,7 +47,10 @@ export default async function EditarProduto({
                                 Cancelar
                             </Link>
                         </div>
-                        <form action={editarOferta} className="flex flex-col gap-4">
+                        <form action={async (formData) => {
+                            "use server";
+                            await editarOferta(formData);
+                        }} className="flex flex-col gap-4">
                             <input type="hidden" name="id" value={oferta.id} />
                             <div>
                                 <label className="block text-sm font-medium mb-1">Nome do Produto</label>

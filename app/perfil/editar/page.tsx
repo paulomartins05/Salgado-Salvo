@@ -51,7 +51,7 @@ export default async function EditarPerfil() {
                                     className="w-24 h-24 rounded-full object-cover mb-3 shadow-md"
                                 />
                                 <label className="text-sm font-medium mb-1">Alterar Foto de Perfil</label>
-                                <input type="file" name="imagem" accept="image/png, image/jpeg, image/webp" className="text-sm" />
+                                <input type="file" name="imagem" accept="image/png, image/jpeg, image/webp" multiple max={3} className="text-sm" />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1">Nome Completo</label>

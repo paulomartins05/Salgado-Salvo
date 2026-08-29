@@ -7,6 +7,7 @@ import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { uploadImagemProduto } from "./upload";
+import { uploadMultiplasImagens } from "./upload";
 
 const ofertaSchema = z.object({
   titulo: z.string().min(3, "Precisa de 3 caracteres"),
@@ -57,9 +58,17 @@ export async function criarOferta(formData: FormData) {
     }
   }
 
-  const imagem = formData.get("imagem") as File | null;
-  const urlImagemSalva = await uploadImagemProduto(imagem);
+  const imagem = formData.getAll("imagem") as File[];
+  const arquivosValidos = imagem.filter(file => file.size > 0);
 
+  if (arquivosValidos.length > 3) {
+    throw new Error("Você só pode enviar no máximo 3 imagens.");
+  }
+
+  let urlsDasImagens: string[] = [];
+  if (arquivosValidos.length > 0) {
+    urlsDasImagens = await uploadMultiplasImagens(arquivosValidos);
+  }
   try {
     const novaOferta = await prisma.oferta.create({
       data: {
@@ -71,7 +80,7 @@ export async function criarOferta(formData: FormData) {
         precoResgate: validacao.data.precoResgate,
         quantidade: validacao.data.quantidade,
         dataValidade: validacao.data.dataValidade,
-        imagemUrl: urlImagemSalva,
+        imagemUrl: urlsDasImagens,
         vendedorId: session.user.id,
       }
     })

@@ -86,7 +86,7 @@ model Oferta {
   dataValidade    DateTime 
   categoria       String
   localizacao     String
-  imagemUrl       String?
+  imagemUrl       String[]
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   resgates    Resgate[]

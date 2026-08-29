@@ -9,7 +9,7 @@ cloudinary.config({
 })
 
 export async function uploadImagemPerfil(formData: FormData) {
-  
+
   const imagem = formData.get("imagem") as File | null
 
   if (!imagem) {
@@ -20,13 +20,13 @@ export async function uploadImagemPerfil(formData: FormData) {
   const buffer = Buffer.from(bytes)
 
   const url = await new Promise<string>((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream( {
+    const uploadStream = cloudinary.uploader.upload_stream({
       folder: "salgado_salvo_avatares",
       format: "webp",
       quality: "auto",
 
       transformation: [
-        { width: 400, height: 400, crop: "fill", gravity: "face"}
+        { width: 400, height: 400, crop: "fill", gravity: "face" }
       ]
     }, (
       error, result
@@ -37,8 +37,8 @@ export async function uploadImagemPerfil(formData: FormData) {
         resolve(result?.secure_url || "")
       }
     }
-  )
-  uploadStream.end(buffer)
+    )
+    uploadStream.end(buffer)
   })
 
   return url
@@ -70,4 +70,23 @@ export async function uploadImagemProduto(imagem: File | null): Promise<string |
     );
     uploadStream.end(buffer);
   });
+}
+
+export async function uploadMultiplasImagens(arquivos: File[]): Promise<string[]> {
+  const promessasDeUpload = arquivos.map(async (file) => {
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    return new Promise<string>((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: "salgado_salvo" },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result?.secure_url || "");
+        }
+      );
+      uploadStream.end(buffer);
+    });
+  });
+  const urls = await Promise.all(promessasDeUpload);
+  return urls;
 }

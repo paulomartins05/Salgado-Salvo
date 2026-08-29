@@ -53,7 +53,7 @@ export default async function carrinhoPage() {
                                     <div key={resgate.id} className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm flex flex-col sm:flex-row items-center gap-6 border border-gray-100">
 
                                         <img
-                                            src={resgate.oferta.imagemUrl || "https://cdn-icons-png.flaticon.com/512/3225/3225091.png"}
+                                            src={resgate.oferta.imagemUrl?.[0] || "https://cdn-icons-png.flaticon.com/512/3225/3225091.png"}
                                             alt={resgate.oferta.titulo}
                                             className="w-24 h-24 object-cover rounded-xl"
                                         />

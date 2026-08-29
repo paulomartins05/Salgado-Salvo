@@ -50,7 +50,7 @@ export default async function PaginaTodosResgates({
     descricao: p.descricao,
     preco: Number(p.precoResgate),
     tempoPostagem: calcularTempoPostagem(p.createdAt),
-    imagemUrl: p.imagemUrl || "https://cdn-icons-png.flaticon.com/512/3225/3225091.png",
+    imagemUrl: p.imagemUrl?.[0] || "https://cdn-icons-png.flaticon.com/512/3225/3225091.png",
   }))
 
   return (

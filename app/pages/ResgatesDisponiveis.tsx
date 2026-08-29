@@ -56,7 +56,7 @@ export default async function ResgatesDisponiveis() {
                 descricao={oferta.descricao}
                 preco={oferta.precoResgate}
                 tempoPostagem={calcularTempoPostagem(oferta.createdAt)}
-                imagemUrl={oferta.imagemUrl || "https://cdn-icons-png.flaticon.com/512/3225/3225091.png"}
+                imagemUrl={oferta.imagemUrl?.[0] || "https://cdn-icons-png.flaticon.com/512/3225/3225091.png"}
               />
             ))}
           </div>

@@ -58,8 +58,8 @@ export default function CadastrarNovoResgate() {
   const router = useRouter();
   const { data: session } = authClient.useSession();
 
-  const [imagemFile, setImagemFile] = useState<File | null>(null);
-  const [imagemPreview, setImagemPreview] = useState<string | null>(null);
+  const [imagemFiles, setImagemFiles] = useState<File[]>([]);
+  const [imagemPreviews, setImagemPreviews] = useState<string[]>([]);
 
   const {
     register,
@@ -85,8 +85,8 @@ export default function CadastrarNovoResgate() {
   }, [session, setValue]); 
 
   const onSubmit = async (data: ProdutoFormInputs) => {
-    if (!imagemFile) {
-      alert("Por favor, adicione uma foto do lanche.");
+    if (imagemFiles.length === 0) {
+      alert("Por favor, adicione pelo menos uma foto do lanche.");
       return;
     }
 
@@ -107,7 +107,9 @@ export default function CadastrarNovoResgate() {
 
       serverData.append("categoria", data.categoria);
       serverData.append("localizacao", data.localizacao);
-      serverData.append("imagem", imagemFile);
+      imagemFiles.forEach(file => {
+        serverData.append("imagem", file);
+      });
 
       await criarOferta(serverData);
 
@@ -161,21 +163,23 @@ export default function CadastrarNovoResgate() {
                     <input 
                       type="file" 
                       accept="image/*" 
+                      multiple
                       className="hidden" 
                       onChange={(e) => {
-                        if (e.target.files && e.target.files[0]) {
-                          const file = e.target.files[0];
-                          setImagemFile(file);
-                          setImagemPreview(URL.createObjectURL(file));
+                        if (e.target.files) {
+                          const files = Array.from(e.target.files).slice(0, 3);
+                          setImagemFiles(files);
+                          const previews = files.map(f => URL.createObjectURL(f));
+                          setImagemPreviews(previews);
                         }
                       }}
                     />                    
-                    {imagemPreview ? (
-                      <span className="font-semibold truncate px-4 text-green-600">
-                        ✅ {imagemFile?.name}
+                    {imagemPreviews.length > 0 ? (
+                      <span className="font-semibold truncate px-4 text-green-600 text-xs">
+                        ✅ {imagemFiles.length} foto(s) adicionada(s)
                       </span>
                     ) : (
-                      <>📷 <span>Fazer Upload</span></>
+                      <>📷 <span>Fazer Upload (Até 3)</span></>
                     )}
                   </label>
                 </div>

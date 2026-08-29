@@ -3,6 +3,7 @@ import Link from "next/link";
 import Header from "../../pages/header";
 import Container from "../../componentes/container";
 import ProdutoDetalhes from "../../componentes/ProdutoDetalhes";
+import GaleriaImagens from "../../componentes/GaleriaImagens";
 
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation";
@@ -39,7 +40,7 @@ export default async function PaginaProdutoUnico({
     notFound()
   }
 
-  const imagemOficial = produto.imagemUrl || "https://cdn-icons-png.flaticon.com/512/3225/3225091.png"
+  const imagemOficial = produto.imagemUrl?.[0] || "https://cdn-icons-png.flaticon.com/512/3225/3225091.png"
 
   const nomeDaLoja = produto.vendedor.name || "Parceiro Salgado Salvo";
 
@@ -64,24 +65,7 @@ export default async function PaginaProdutoUnico({
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
 
-            <div className="flex flex-col gap-4">
-              <div className="bg-[#EBECEE] rounded-3xl w-full h-75 md:h-125 relative flex items-center justify-center p-8 overflow-hidden">
-                <Image
-                  src={imagemOficial}
-                  alt={produto.titulo}
-                  fill
-                  className="object-contain drop-shadow-xl p-8"
-                />
-              </div>
-
-              <div className="flex gap-4">
-                {[1, 2, 3].map((item) => (
-                  <div key={item} className="bg-[#EBECEE] border-2 border-transparent hover:border-[#D9774A] rounded-xl w-20 h-20 relative cursor-pointer transition-colors overflow-hidden">
-                    <Image src={imagemOficial} alt="Miniatura" fill className="object-cover" />
-                  </div>
-                ))}
-              </div>
-            </div>
+            <GaleriaImagens imagens={produto.imagemUrl || []} titulo={produto.titulo} />
 
             <div>
               <ProdutoDetalhes

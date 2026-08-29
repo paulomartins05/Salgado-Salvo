@@ -78,14 +78,14 @@ export default async function EditarProduto({
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-1">Imagem do Produto (Opcional)</label>
-                                {oferta.imagemUrl && (
+                                {oferta.imagemUrl && oferta.imagemUrl.length > 0 && (
                                     <div className="mb-3">
                                         <p className="text-xs text-gray-500 mb-1">Imagem atual:</p>
-                                        <img src={oferta.imagemUrl} alt="Imagem atual" className="h-24 w-24 object-cover rounded-lg border border-gray-200" />
+                                        <img src={oferta.imagemUrl[0]} alt="Imagem atual" className="h-24 w-24 object-cover rounded-lg border border-gray-200" />
                                     </div>
                                 )}
-                                <input type="file" name="imagem" accept="image/png, image/jpeg, image/webp" className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white" />
-                                <p className="text-xs text-gray-500 mt-1">Envie um novo arquivo caso queira trocar a imagem atual.</p>
+                                <input type="file" name="imagem" multiple accept="image/png, image/jpeg, image/webp" className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white" />
+                                <p className="text-xs text-gray-500 mt-1">Envie até 3 novos arquivos caso queira trocar as imagens atuais.</p>
                             </div>
                             <Button type="submit" className="mt-4 bg-[#D9774A] hover:bg-[#c4683e] text-white py-3 rounded-xl w-full">
                                 Salvar Alterações

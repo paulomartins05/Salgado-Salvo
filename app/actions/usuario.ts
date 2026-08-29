@@ -54,3 +54,43 @@ export async function atualizarPerfilUsuario(formData: FormData) {
     revalidatePath("/perfil")
     redirect("/perfil")
 }
+
+
+export async function alterarSenha(formData: FormData) {
+
+    const reqHeaders = await headers()
+    const session = await auth.api.getSession({
+        headers: reqHeaders
+    })
+
+    if (!session) {
+        throw new Error("Você precisa estar logado para realizar essa ação")
+    }
+
+    const senhaAtual = formData.get("senhaAtual") as string
+    const novaSenha = formData.get("novaSenha") as string
+    const confirmarNovaSenha = formData.get("confirmarSenha") as string
+
+    if (novaSenha !== confirmarNovaSenha) {
+        throw new Error("As senhas não coincidem")
+    }
+
+    try {
+
+        await auth.api.changePassword({
+            headers: reqHeaders,
+            body: {
+                newPassword: novaSenha,
+                currentPassword: senhaAtual,
+                revokeOtherSessions: true
+            }
+        })
+        revalidatePath("/perfil")
+        redirect("/perfil")
+
+    } catch (error) {
+        console.error("Erro ao trocar senha")
+        throw new Error("Erro ao trocar senha")
+    }
+
+}

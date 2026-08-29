@@ -12,7 +12,7 @@ import MenuUsuario from "../componentes/menu-usuario";
 import { authClient } from "@/lib/auth-client";
 
 export default function Header() {
-  const {data:session} = authClient.useSession()
+  const { data: session } = authClient.useSession()
 
   const usuario = session?.user
 
@@ -20,30 +20,30 @@ export default function Header() {
     <header className="w-full py-3 bg-background-primary relative">
       <Container>
         <div className="flex items-center justify-between">
-          
+
           <Link href="/">
-            <Image 
-              src={Logo} 
-              alt="Logo Salgado Salvo" 
-              className="h-10 md:h-20 w-auto" 
+            <Image
+              src={Logo}
+              alt="Logo Salgado Salvo"
+              className="h-10 md:h-20 w-auto"
             />
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
             <NavLink href="/">Início</NavLink>
-            
+
             <NavLink href="/resgates">Resgates do Dia</NavLink>
-            
+
             <NavLink href="/parceiro/novo-resgate">Cadastrar Resgate</NavLink>
             <NavLink href="/contato">Contato</NavLink>
           </nav>
 
           <div className="flex items-center gap-4">
-            
-            <Button variant="outline" size="icon">
+
+            <Link href="/carrinho" className="hover:opacity-70 transition-opacity">
               🛒
-            </Button>
-            
+            </Link>
+
             <div className="hidden md:block">
               {usuario ? (
                 <MenuUsuario usuario={usuario} />

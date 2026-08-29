@@ -8,85 +8,67 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
-export async function uploadImagemPerfil(formData: FormData) {
-
-  const imagem = formData.get("imagem") as File | null
-
-  if (!imagem) {
-    return null
-  }
-
-  const bytes = await imagem.arrayBuffer()
-  const buffer = Buffer.from(bytes)
-
-  const url = await new Promise<string>((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream({
-      folder: "salgado_salvo_avatares",
-      format: "webp",
-      quality: "auto",
-
-      transformation: [
-        { width: 400, height: 400, crop: "fill", gravity: "face" }
-      ]
-    }, (
-      error, result
-    ) => {
-      if (error) {
-        reject(error)
-      } else {
-        resolve(result?.secure_url || "")
+async function executarUploadClodinary(
+  buffer: Buffer,
+  opcoesCustomizadas: Record<string, any>
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        format: "webp",
+        quality: "auto",
+        ...opcoesCustomizadas
+      },
+      (error, result) => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve(result?.secure_url || "")
+        }
       }
-    }
     )
     uploadStream.end(buffer)
   })
 
-  return url
+}
 
+export async function uploadImagemPerfil(formData: FormData) {
+  const imagem = formData.get("imagem") as File | null
+  if (!imagem || imagem.size === 0) return null
+
+  const bytes = await imagem.arrayBuffer()
+  const buffer = Buffer.from(bytes)
+
+  return executarUploadClodinary(buffer, {
+    folder: "salgado_salvo_avatares",
+    transformation: [
+      { width: 400, height: 400, crop: "fill", gravity: "face" }
+    ]
+  })
 }
 
 export async function uploadImagemProduto(imagem: File | null): Promise<string | null> {
-  if (!imagem || imagem.size === 0) {
-    return null;
-  }
+  if (!imagem || imagem.size === 0) return null;
 
   const bytes = await imagem.arrayBuffer();
   const buffer = Buffer.from(bytes);
 
-  return new Promise<string>((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        folder: "salgado_salvo",
-        format: "webp",
-        quality: "auto",
-      },
-      (error, result) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(result?.secure_url || "");
-        }
-      }
-    );
-    uploadStream.end(buffer);
+  return executarUploadClodinary(buffer, {
+    folder: "salgado_salvo",
   });
 }
 
 export async function uploadMultiplasImagens(arquivos: File[]): Promise<string[]> {
   const promessasDeUpload = arquivos.map(async (file) => {
+    if (!file || file.size === 0) return "";
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    return new Promise<string>((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        { folder: "salgado_salvo" },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result?.secure_url || "");
-        }
-      );
-      uploadStream.end(buffer);
+    
+    return executarUploadClodinary(buffer, {
+      folder: "salgado_salvo",
     });
   });
+  
   const urls = await Promise.all(promessasDeUpload);
-  return urls;
+  return urls.filter(url => url !== "");
 }

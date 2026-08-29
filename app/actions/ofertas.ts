@@ -6,8 +6,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { uploadImagemProduto } from "./upload";
-import { uploadMultiplasImagens } from "./upload";
+import { uploadImagemProduto, uploadMultiplasImagens } from "./upload";
 
 const ofertaSchema = z.object({
   titulo: z.string().min(3, "Precisa de 3 caracteres"),
@@ -142,7 +141,7 @@ export async function editarOferta(formData: FormData) {
       precoResgate: precoResgate,
       quantidade: quantidade,
       dataValidade: new Date(formData.get("dataValidade") as string),
-      ...(urlImagemNova && { imagemUrl: urlImagemNova }),
+      ...(urlImagemNova && { imagemUrl: [urlImagemNova] }),
     }
   })
 

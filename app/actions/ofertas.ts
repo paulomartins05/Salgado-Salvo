@@ -96,6 +96,31 @@ export async function criarOferta(formData: FormData) {
 
 export async function alterarStatusOferta(ofertaId: string, novoStatus: boolean) {
   try {
+
+
+    const reqHeaders = await headers()
+    const session = await auth.api.getSession({
+      headers: reqHeaders
+    })
+
+    if (!session || session.user.role !== "PARCEIRO") {
+      throw new Error("Acesso negado. apenas parceiros podem alterar status")
+    }
+
+    const ofertaExistente = await prisma.oferta.findUnique({
+      where: {
+        id: ofertaId,
+      }
+    })
+
+    if (!ofertaExistente) {
+      throw new Error("Oferta não encontrada")
+    }
+
+    if (ofertaExistente.vendedorId !== session.user.id) {
+      throw new Error("Você não tem permissão para alterar o status desta oferta.");
+    }
+
     await prisma.oferta.update({
       where: {
         id: ofertaId,
@@ -112,6 +137,9 @@ export async function alterarStatusOferta(ofertaId: string, novoStatus: boolean)
 
   } catch (error) {
     console.error("Erro ao alterar status", error)
+    if (error instanceof Error) {
+      throw error;
+    }
     throw new Error("Não foi possivel alterar o status da oferta")
   }
 

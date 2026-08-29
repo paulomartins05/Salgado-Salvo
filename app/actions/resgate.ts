@@ -3,6 +3,8 @@
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
 
 export async function criarResgate(userId: string, ofertaId: string) {
 
@@ -39,12 +41,30 @@ export async function criarResgate(userId: string, ofertaId: string) {
 
 export async function validarResgate(resgateId: string, pinDigitado: string) {
 
+  const reqHeaders = await headers()
+  const session = await auth.api.getSession({
+    headers: reqHeaders
+  })
+
+  if (!session || session.user.role !== "PARCEIRO") {
+    throw new Error("Acesso negado. apenas parceiros podem validar resgates")
+  }
+
   const resgate = await prisma.resgate.findUnique({
-    where: { id: resgateId }
+    where: {
+      id: resgateId
+    },
+    include: {
+      oferta: true
+    }
   })
 
   if (!resgate) {
     throw new Error("Resgate não Encontrado")
+  }
+
+  if (resgate.oferta.vendedorId !== session.user.id) {
+    throw new Error("Você não pode validar esse resgate")
   }
 
   if (resgate.codigoPin !== pinDigitado) {

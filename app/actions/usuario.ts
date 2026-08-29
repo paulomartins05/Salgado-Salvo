@@ -32,15 +32,22 @@ export async function atualizarPerfilUsuario(formData: FormData) {
         }
     }
 
+    await auth.api.updateUser({
+        headers: reqHeaders,
+
+        body: {
+            name: nome,
+            ...(novaImagemUrl && { image: novaImagemUrl })
+        }
+    })
+
     await prisma.user.update({
         where: {
             id: session.user.id
         },
         data: {
-            name: nome,
             email: email,
             telefone: telefone,
-            ...(novaImagemUrl && { image: novaImagemUrl })
         }
     })
 

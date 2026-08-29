@@ -12,6 +12,7 @@ import MenuUsuario from "../componentes/menu-usuario";
 import { authClient } from "@/lib/auth-client";
 
 export default function Header() {
+
   const { data: session } = authClient.useSession()
 
   const usuario = session?.user

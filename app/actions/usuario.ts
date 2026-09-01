@@ -43,12 +43,20 @@ export async function atualizarPerfilUsuario(formData: FormData) {
         }
     })
 
+    if (email && email != session.user.email) {
+        await auth.api.changeEmail({
+            headers: reqHeaders,
+            body: {
+                newEmail: email,
+            }
+        })
+    }
+
     await prisma.user.update({
         where: {
             id: session.user.id
         },
         data: {
-            email: email,
             telefone: telefone,
             ...(cnpj && { cnpj }),
             ...(localizacao && { localizacao })

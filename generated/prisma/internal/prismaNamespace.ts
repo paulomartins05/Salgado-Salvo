@@ -992,10 +992,12 @@ export const ResgateScalarFieldEnum = {
   userId: 'userId',
   ofertaId: 'ofertaId',
   status: 'status',
-  codigoPin: 'codigoPin',
   quantidade: 'quantidade',
+  codigoPin: 'codigoPin',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  tentativasPin: 'tentativasPin',
+  bloqueadoAte: 'bloqueadoAte'
 } as const
 
 export type ResgateScalarFieldEnum = (typeof ResgateScalarFieldEnum)[keyof typeof ResgateScalarFieldEnum]

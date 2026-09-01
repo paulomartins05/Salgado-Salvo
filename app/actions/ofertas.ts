@@ -42,8 +42,8 @@ export async function criarOferta(formData: FormData) {
     descricao: formData.get("descricao") as string,
     categoria: formData.get("categoria") as string,
     localizacao: formData.get("localizacao") as string,
-    precoOriginal: parseFloat(formData.get("precoOriginal") as string),
-    precoResgate: parseFloat(formData.get("precoResgate") as string),
+    precoOriginal: parseFloat((formData.get("precoOriginal") as string).replace(",", ".")),
+    precoResgate: parseFloat((formData.get("precoResgate") as string).replace(",", ".")),
     quantidade: parseInt(formData.get("quantidade") as string),
     dataValidade: new Date(formData.get("dataValidade") as string),
   }
@@ -177,8 +177,8 @@ export async function editarOferta(formData: FormData) {
     descricao: formData.get("descricao") as string,
     categoria: formData.get("categoria") as string,
     localizacao: formData.get("localizacao") as string,
-    precoOriginal: parseFloat(formData.get("precoOriginal") as string),
-    precoResgate: parseFloat(formData.get("precoResgate") as string),
+    precoOriginal: parseFloat((formData.get("precoOriginal") as string).replace(",", ".")),
+    precoResgate: parseFloat((formData.get("precoResgate") as string).replace(",", ".")),
     quantidade: parseInt(formData.get("quantidade") as string, 10),
     dataValidade: new Date(formData.get("dataValidade") as string),
   }

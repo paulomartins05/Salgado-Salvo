@@ -28,10 +28,12 @@ export type AggregateResgate = {
 
 export type ResgateAvgAggregateOutputType = {
   quantidade: number | null
+  tentativasPin: number | null
 }
 
 export type ResgateSumAggregateOutputType = {
   quantidade: number | null
+  tentativasPin: number | null
 }
 
 export type ResgateMinAggregateOutputType = {
@@ -39,10 +41,12 @@ export type ResgateMinAggregateOutputType = {
   userId: string | null
   ofertaId: string | null
   status: $Enums.StatusResgate | null
-  codigoPin: string | null
   quantidade: number | null
+  codigoPin: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  tentativasPin: number | null
+  bloqueadoAte: Date | null
 }
 
 export type ResgateMaxAggregateOutputType = {
@@ -50,10 +54,12 @@ export type ResgateMaxAggregateOutputType = {
   userId: string | null
   ofertaId: string | null
   status: $Enums.StatusResgate | null
-  codigoPin: string | null
   quantidade: number | null
+  codigoPin: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  tentativasPin: number | null
+  bloqueadoAte: Date | null
 }
 
 export type ResgateCountAggregateOutputType = {
@@ -61,20 +67,24 @@ export type ResgateCountAggregateOutputType = {
   userId: number
   ofertaId: number
   status: number
-  codigoPin: number
   quantidade: number
+  codigoPin: number
   createdAt: number
   updatedAt: number
+  tentativasPin: number
+  bloqueadoAte: number
   _all: number
 }
 
 
 export type ResgateAvgAggregateInputType = {
   quantidade?: true
+  tentativasPin?: true
 }
 
 export type ResgateSumAggregateInputType = {
   quantidade?: true
+  tentativasPin?: true
 }
 
 export type ResgateMinAggregateInputType = {
@@ -82,10 +92,12 @@ export type ResgateMinAggregateInputType = {
   userId?: true
   ofertaId?: true
   status?: true
-  codigoPin?: true
   quantidade?: true
+  codigoPin?: true
   createdAt?: true
   updatedAt?: true
+  tentativasPin?: true
+  bloqueadoAte?: true
 }
 
 export type ResgateMaxAggregateInputType = {
@@ -93,10 +105,12 @@ export type ResgateMaxAggregateInputType = {
   userId?: true
   ofertaId?: true
   status?: true
-  codigoPin?: true
   quantidade?: true
+  codigoPin?: true
   createdAt?: true
   updatedAt?: true
+  tentativasPin?: true
+  bloqueadoAte?: true
 }
 
 export type ResgateCountAggregateInputType = {
@@ -104,10 +118,12 @@ export type ResgateCountAggregateInputType = {
   userId?: true
   ofertaId?: true
   status?: true
-  codigoPin?: true
   quantidade?: true
+  codigoPin?: true
   createdAt?: true
   updatedAt?: true
+  tentativasPin?: true
+  bloqueadoAte?: true
   _all?: true
 }
 
@@ -202,10 +218,12 @@ export type ResgateGroupByOutputType = {
   userId: string
   ofertaId: string
   status: $Enums.StatusResgate
-  codigoPin: string
   quantidade: number
+  codigoPin: string
   createdAt: Date
   updatedAt: Date
+  tentativasPin: number
+  bloqueadoAte: Date | null
   _count: ResgateCountAggregateOutputType | null
   _avg: ResgateAvgAggregateOutputType | null
   _sum: ResgateSumAggregateOutputType | null
@@ -236,10 +254,12 @@ export type ResgateWhereInput = {
   userId?: Prisma.StringFilter<"Resgate"> | string
   ofertaId?: Prisma.StringFilter<"Resgate"> | string
   status?: Prisma.EnumStatusResgateFilter<"Resgate"> | $Enums.StatusResgate
-  codigoPin?: Prisma.StringFilter<"Resgate"> | string
   quantidade?: Prisma.IntFilter<"Resgate"> | number
+  codigoPin?: Prisma.StringFilter<"Resgate"> | string
   createdAt?: Prisma.DateTimeFilter<"Resgate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Resgate"> | Date | string
+  tentativasPin?: Prisma.IntFilter<"Resgate"> | number
+  bloqueadoAte?: Prisma.DateTimeNullableFilter<"Resgate"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   oferta?: Prisma.XOR<Prisma.OfertaScalarRelationFilter, Prisma.OfertaWhereInput>
 }
@@ -249,10 +269,12 @@ export type ResgateOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   ofertaId?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  codigoPin?: Prisma.SortOrder
   quantidade?: Prisma.SortOrder
+  codigoPin?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  tentativasPin?: Prisma.SortOrder
+  bloqueadoAte?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   oferta?: Prisma.OfertaOrderByWithRelationInput
 }
@@ -265,10 +287,12 @@ export type ResgateWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.StringFilter<"Resgate"> | string
   ofertaId?: Prisma.StringFilter<"Resgate"> | string
   status?: Prisma.EnumStatusResgateFilter<"Resgate"> | $Enums.StatusResgate
-  codigoPin?: Prisma.StringFilter<"Resgate"> | string
   quantidade?: Prisma.IntFilter<"Resgate"> | number
+  codigoPin?: Prisma.StringFilter<"Resgate"> | string
   createdAt?: Prisma.DateTimeFilter<"Resgate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Resgate"> | Date | string
+  tentativasPin?: Prisma.IntFilter<"Resgate"> | number
+  bloqueadoAte?: Prisma.DateTimeNullableFilter<"Resgate"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   oferta?: Prisma.XOR<Prisma.OfertaScalarRelationFilter, Prisma.OfertaWhereInput>
 }, "id">
@@ -278,10 +302,12 @@ export type ResgateOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   ofertaId?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  codigoPin?: Prisma.SortOrder
   quantidade?: Prisma.SortOrder
+  codigoPin?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  tentativasPin?: Prisma.SortOrder
+  bloqueadoAte?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ResgateCountOrderByAggregateInput
   _avg?: Prisma.ResgateAvgOrderByAggregateInput
   _max?: Prisma.ResgateMaxOrderByAggregateInput
@@ -297,19 +323,23 @@ export type ResgateScalarWhereWithAggregatesInput = {
   userId?: Prisma.StringWithAggregatesFilter<"Resgate"> | string
   ofertaId?: Prisma.StringWithAggregatesFilter<"Resgate"> | string
   status?: Prisma.EnumStatusResgateWithAggregatesFilter<"Resgate"> | $Enums.StatusResgate
-  codigoPin?: Prisma.StringWithAggregatesFilter<"Resgate"> | string
   quantidade?: Prisma.IntWithAggregatesFilter<"Resgate"> | number
+  codigoPin?: Prisma.StringWithAggregatesFilter<"Resgate"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Resgate"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Resgate"> | Date | string
+  tentativasPin?: Prisma.IntWithAggregatesFilter<"Resgate"> | number
+  bloqueadoAte?: Prisma.DateTimeNullableWithAggregatesFilter<"Resgate"> | Date | string | null
 }
 
 export type ResgateCreateInput = {
   id?: string
   status?: $Enums.StatusResgate
-  codigoPin: string
   quantidade?: number
+  codigoPin: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  tentativasPin?: number
+  bloqueadoAte?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutResgatesInput
   oferta: Prisma.OfertaCreateNestedOneWithoutResgatesInput
 }
@@ -319,19 +349,23 @@ export type ResgateUncheckedCreateInput = {
   userId: string
   ofertaId: string
   status?: $Enums.StatusResgate
-  codigoPin: string
   quantidade?: number
+  codigoPin: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  tentativasPin?: number
+  bloqueadoAte?: Date | string | null
 }
 
 export type ResgateUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
-  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   quantidade?: Prisma.IntFieldUpdateOperationsInput | number
+  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tentativasPin?: Prisma.IntFieldUpdateOperationsInput | number
+  bloqueadoAte?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutResgatesNestedInput
   oferta?: Prisma.OfertaUpdateOneRequiredWithoutResgatesNestedInput
 }
@@ -341,10 +375,12 @@ export type ResgateUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   ofertaId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
-  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   quantidade?: Prisma.IntFieldUpdateOperationsInput | number
+  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tentativasPin?: Prisma.IntFieldUpdateOperationsInput | number
+  bloqueadoAte?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ResgateCreateManyInput = {
@@ -352,19 +388,23 @@ export type ResgateCreateManyInput = {
   userId: string
   ofertaId: string
   status?: $Enums.StatusResgate
-  codigoPin: string
   quantidade?: number
+  codigoPin: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  tentativasPin?: number
+  bloqueadoAte?: Date | string | null
 }
 
 export type ResgateUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
-  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   quantidade?: Prisma.IntFieldUpdateOperationsInput | number
+  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tentativasPin?: Prisma.IntFieldUpdateOperationsInput | number
+  bloqueadoAte?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ResgateUncheckedUpdateManyInput = {
@@ -372,10 +412,12 @@ export type ResgateUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   ofertaId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
-  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   quantidade?: Prisma.IntFieldUpdateOperationsInput | number
+  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tentativasPin?: Prisma.IntFieldUpdateOperationsInput | number
+  bloqueadoAte?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ResgateListRelationFilter = {
@@ -393,14 +435,17 @@ export type ResgateCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   ofertaId?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  codigoPin?: Prisma.SortOrder
   quantidade?: Prisma.SortOrder
+  codigoPin?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  tentativasPin?: Prisma.SortOrder
+  bloqueadoAte?: Prisma.SortOrder
 }
 
 export type ResgateAvgOrderByAggregateInput = {
   quantidade?: Prisma.SortOrder
+  tentativasPin?: Prisma.SortOrder
 }
 
 export type ResgateMaxOrderByAggregateInput = {
@@ -408,10 +453,12 @@ export type ResgateMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   ofertaId?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  codigoPin?: Prisma.SortOrder
   quantidade?: Prisma.SortOrder
+  codigoPin?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  tentativasPin?: Prisma.SortOrder
+  bloqueadoAte?: Prisma.SortOrder
 }
 
 export type ResgateMinOrderByAggregateInput = {
@@ -419,14 +466,17 @@ export type ResgateMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   ofertaId?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  codigoPin?: Prisma.SortOrder
   quantidade?: Prisma.SortOrder
+  codigoPin?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  tentativasPin?: Prisma.SortOrder
+  bloqueadoAte?: Prisma.SortOrder
 }
 
 export type ResgateSumOrderByAggregateInput = {
   quantidade?: Prisma.SortOrder
+  tentativasPin?: Prisma.SortOrder
 }
 
 export type ResgateCreateNestedManyWithoutUserInput = {
@@ -520,10 +570,12 @@ export type EnumStatusResgateFieldUpdateOperationsInput = {
 export type ResgateCreateWithoutUserInput = {
   id?: string
   status?: $Enums.StatusResgate
-  codigoPin: string
   quantidade?: number
+  codigoPin: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  tentativasPin?: number
+  bloqueadoAte?: Date | string | null
   oferta: Prisma.OfertaCreateNestedOneWithoutResgatesInput
 }
 
@@ -531,10 +583,12 @@ export type ResgateUncheckedCreateWithoutUserInput = {
   id?: string
   ofertaId: string
   status?: $Enums.StatusResgate
-  codigoPin: string
   quantidade?: number
+  codigoPin: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  tentativasPin?: number
+  bloqueadoAte?: Date | string | null
 }
 
 export type ResgateCreateOrConnectWithoutUserInput = {
@@ -571,19 +625,23 @@ export type ResgateScalarWhereInput = {
   userId?: Prisma.StringFilter<"Resgate"> | string
   ofertaId?: Prisma.StringFilter<"Resgate"> | string
   status?: Prisma.EnumStatusResgateFilter<"Resgate"> | $Enums.StatusResgate
-  codigoPin?: Prisma.StringFilter<"Resgate"> | string
   quantidade?: Prisma.IntFilter<"Resgate"> | number
+  codigoPin?: Prisma.StringFilter<"Resgate"> | string
   createdAt?: Prisma.DateTimeFilter<"Resgate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Resgate"> | Date | string
+  tentativasPin?: Prisma.IntFilter<"Resgate"> | number
+  bloqueadoAte?: Prisma.DateTimeNullableFilter<"Resgate"> | Date | string | null
 }
 
 export type ResgateCreateWithoutOfertaInput = {
   id?: string
   status?: $Enums.StatusResgate
-  codigoPin: string
   quantidade?: number
+  codigoPin: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  tentativasPin?: number
+  bloqueadoAte?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutResgatesInput
 }
 
@@ -591,10 +649,12 @@ export type ResgateUncheckedCreateWithoutOfertaInput = {
   id?: string
   userId: string
   status?: $Enums.StatusResgate
-  codigoPin: string
   quantidade?: number
+  codigoPin: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  tentativasPin?: number
+  bloqueadoAte?: Date | string | null
 }
 
 export type ResgateCreateOrConnectWithoutOfertaInput = {
@@ -627,19 +687,23 @@ export type ResgateCreateManyUserInput = {
   id?: string
   ofertaId: string
   status?: $Enums.StatusResgate
-  codigoPin: string
   quantidade?: number
+  codigoPin: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  tentativasPin?: number
+  bloqueadoAte?: Date | string | null
 }
 
 export type ResgateUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
-  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   quantidade?: Prisma.IntFieldUpdateOperationsInput | number
+  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tentativasPin?: Prisma.IntFieldUpdateOperationsInput | number
+  bloqueadoAte?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   oferta?: Prisma.OfertaUpdateOneRequiredWithoutResgatesNestedInput
 }
 
@@ -647,39 +711,47 @@ export type ResgateUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ofertaId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
-  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   quantidade?: Prisma.IntFieldUpdateOperationsInput | number
+  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tentativasPin?: Prisma.IntFieldUpdateOperationsInput | number
+  bloqueadoAte?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ResgateUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ofertaId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
-  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   quantidade?: Prisma.IntFieldUpdateOperationsInput | number
+  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tentativasPin?: Prisma.IntFieldUpdateOperationsInput | number
+  bloqueadoAte?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ResgateCreateManyOfertaInput = {
   id?: string
   userId: string
   status?: $Enums.StatusResgate
-  codigoPin: string
   quantidade?: number
+  codigoPin: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  tentativasPin?: number
+  bloqueadoAte?: Date | string | null
 }
 
 export type ResgateUpdateWithoutOfertaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
-  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   quantidade?: Prisma.IntFieldUpdateOperationsInput | number
+  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tentativasPin?: Prisma.IntFieldUpdateOperationsInput | number
+  bloqueadoAte?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutResgatesNestedInput
 }
 
@@ -687,20 +759,24 @@ export type ResgateUncheckedUpdateWithoutOfertaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
-  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   quantidade?: Prisma.IntFieldUpdateOperationsInput | number
+  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tentativasPin?: Prisma.IntFieldUpdateOperationsInput | number
+  bloqueadoAte?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ResgateUncheckedUpdateManyWithoutOfertaInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumStatusResgateFieldUpdateOperationsInput | $Enums.StatusResgate
-  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   quantidade?: Prisma.IntFieldUpdateOperationsInput | number
+  codigoPin?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tentativasPin?: Prisma.IntFieldUpdateOperationsInput | number
+  bloqueadoAte?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -710,10 +786,12 @@ export type ResgateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   userId?: boolean
   ofertaId?: boolean
   status?: boolean
-  codigoPin?: boolean
   quantidade?: boolean
+  codigoPin?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  tentativasPin?: boolean
+  bloqueadoAte?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   oferta?: boolean | Prisma.OfertaDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["resgate"]>
@@ -723,10 +801,12 @@ export type ResgateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   userId?: boolean
   ofertaId?: boolean
   status?: boolean
-  codigoPin?: boolean
   quantidade?: boolean
+  codigoPin?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  tentativasPin?: boolean
+  bloqueadoAte?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   oferta?: boolean | Prisma.OfertaDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["resgate"]>
@@ -736,10 +816,12 @@ export type ResgateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   userId?: boolean
   ofertaId?: boolean
   status?: boolean
-  codigoPin?: boolean
   quantidade?: boolean
+  codigoPin?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  tentativasPin?: boolean
+  bloqueadoAte?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   oferta?: boolean | Prisma.OfertaDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["resgate"]>
@@ -749,13 +831,15 @@ export type ResgateSelectScalar = {
   userId?: boolean
   ofertaId?: boolean
   status?: boolean
-  codigoPin?: boolean
   quantidade?: boolean
+  codigoPin?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  tentativasPin?: boolean
+  bloqueadoAte?: boolean
 }
 
-export type ResgateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "ofertaId" | "status" | "codigoPin" | "quantidade" | "createdAt" | "updatedAt", ExtArgs["result"]["resgate"]>
+export type ResgateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "ofertaId" | "status" | "quantidade" | "codigoPin" | "createdAt" | "updatedAt" | "tentativasPin" | "bloqueadoAte", ExtArgs["result"]["resgate"]>
 export type ResgateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   oferta?: boolean | Prisma.OfertaDefaultArgs<ExtArgs>
@@ -780,10 +864,12 @@ export type $ResgatePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     userId: string
     ofertaId: string
     status: $Enums.StatusResgate
-    codigoPin: string
     quantidade: number
+    codigoPin: string
     createdAt: Date
     updatedAt: Date
+    tentativasPin: number
+    bloqueadoAte: Date | null
   }, ExtArgs["result"]["resgate"]>
   composites: {}
 }
@@ -1213,10 +1299,12 @@ export interface ResgateFieldRefs {
   readonly userId: Prisma.FieldRef<"Resgate", 'String'>
   readonly ofertaId: Prisma.FieldRef<"Resgate", 'String'>
   readonly status: Prisma.FieldRef<"Resgate", 'StatusResgate'>
-  readonly codigoPin: Prisma.FieldRef<"Resgate", 'String'>
   readonly quantidade: Prisma.FieldRef<"Resgate", 'Int'>
+  readonly codigoPin: Prisma.FieldRef<"Resgate", 'String'>
   readonly createdAt: Prisma.FieldRef<"Resgate", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Resgate", 'DateTime'>
+  readonly tentativasPin: Prisma.FieldRef<"Resgate", 'Int'>
+  readonly bloqueadoAte: Prisma.FieldRef<"Resgate", 'DateTime'>
 }
     
 

@@ -105,6 +105,8 @@ model Resgate {
   codigoPin   String   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  tentativasPin Int             @default(0)
+  bloqueadoAte  DateTime?
   user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   oferta    Oferta @relation(fields: [ofertaId], references: [id], onDelete: Cascade)
   @@index([userId])

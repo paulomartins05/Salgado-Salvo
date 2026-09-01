@@ -52,6 +52,7 @@ export default async function EditarProduto({
                             await editarOferta(formData);
                         }} className="flex flex-col gap-4">
                             <input type="hidden" name="id" value={oferta.id} />
+                            <input type="hidden" name="localizacao" value={oferta.localizacao || ""} />
                             <div>
                                 <label className="block text-sm font-medium mb-1">Nome do Produto</label>
                                 <input type="text" name="titulo" defaultValue={oferta.titulo} required className="w-full px-3 py-2 border border-gray-300 rounded-lg" />

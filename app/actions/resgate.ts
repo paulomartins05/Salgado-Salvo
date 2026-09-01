@@ -85,14 +85,37 @@ export async function validarResgate(resgateId: string, pinDigitado: string) {
     throw new Error("Você não pode validar esse resgate")
   }
 
+
+  if (resgate.tentativasPin >= 3) {
+    throw new Error("PIN bloqueado após 3 tentativas incorretas. Contate o suporte.")
+  }
+
   if (resgate.codigoPin !== pinDigitado) {
-    throw new Error("PIN incorreto")
+    await prisma.resgate.update({
+      where: {
+        id: resgateId
+      },
+      data: {
+        tentativasPin: { increment: 1 }
+      }
+    })
   }
 
 
+  const tentativasRestantes = 2 - resgate.tentativasPin
+
+  if (tentativasRestantes > 0) {
+    throw new Error(`PIN Incorreto. Você tem mais ${tentativasRestantes} tentativa(s)`)
+  } else {
+    throw new Error("Pin incorreto. Resgate bloqueado por excesso de tentativas")
+  }
+
   await prisma.resgate.update({
     where: { id: resgateId },
-    data: { status: "RETIRADO" }
+    data: {
+      status: "RETIRADO",
+      tentativasPin: 0
+    }
   })
 
   revalidatePath("/parceiro/perfil")

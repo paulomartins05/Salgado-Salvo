@@ -60,15 +60,20 @@ export async function uploadImagemProduto(imagem: File | null): Promise<string |
 
 export async function uploadMultiplasImagens(arquivos: File[]): Promise<string[]> {
   const promessasDeUpload = arquivos.map(async (file) => {
-    if (!file || file.size === 0) return "";
+    if (!file || file.size === 0) {
+      return ""
+    };
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    
+
     return executarUploadClodinary(buffer, {
       folder: "salgado_salvo",
+      format: "webp",
+      quality: "auto",
     });
   });
-  
+
   const urls = await Promise.all(promessasDeUpload);
   return urls.filter(url => url !== "");
 }

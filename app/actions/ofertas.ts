@@ -195,7 +195,9 @@ export async function editarOferta(formData: FormData) {
   const imagens = formData.getAll("imagem") as File[];
   const arquivosValidos = imagens.filter(file => file.size > 0);
 
-  let novasUrls: string[] | undefined = undefined;
+  let urlsFinais = ofertaExistente.imagemUrl;
+
+
   if (arquivosValidos.length > 0) {
     if (arquivosValidos.length > 3) {
       return {
@@ -203,7 +205,9 @@ export async function editarOferta(formData: FormData) {
         erroGeral: "Você só pode enviar no máximo 3 imagens"
       }
     }
-    novasUrls = await uploadMultiplasImagens(arquivosValidos);
+    const novasUrls = await uploadMultiplasImagens(arquivosValidos);
+
+    urlsFinais = [...urlsFinais, ...novasUrls]
   }
 
   await prisma.oferta.update({
@@ -218,7 +222,7 @@ export async function editarOferta(formData: FormData) {
       precoResgate: validacao.data.precoResgate,
       quantidade: validacao.data.quantidade,
       dataValidade: validacao.data.dataValidade,
-      ...(novasUrls && { imagemUrl: novasUrls }),
+      imagemUrl: urlsFinais,
     }
   })
 

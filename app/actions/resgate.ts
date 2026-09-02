@@ -8,13 +8,35 @@ import { headers } from "next/headers"
 
 export async function criarResgate(userId: string, ofertaId: string, quantidadePedida: number = 1) {
 
+  if (quantidadePedida <= 0) {
+    throw new Error("A quantidade pedioda deve ser de pelo menos 1 item")
+  }
+
   let redirecionarEsgotado = false
-  let novoResgateId = null
 
   try {
     const codigoPinGerado = Math.floor(1000 + Math.random() * 9000).toString()
 
     const novoResgate = await prisma.$transaction(async (tx) => {
+
+      const ofertaAtual = await prisma.oferta.findUnique({
+        where: {
+          id: ofertaId
+        },
+        select: {
+          quantidade: true
+        }
+      })
+
+      if (!ofertaAtual) {
+        throw new Error("A oferta não existe mais")
+      }
+
+      if (ofertaAtual.quantidade < quantidadePedida) {
+        throw new Error("Estoque insuficiente")
+      }
+
+
       const ofertaAtualizada = await tx.oferta.update({
         where: {
           id: ofertaId,

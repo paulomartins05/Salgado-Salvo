@@ -44,6 +44,17 @@ export async function atualizarPerfilUsuario(formData: FormData) {
     })
 
     if (email && email != session.user.email) {
+
+        const emailExistente = await prisma.user.findUnique({
+            where: {
+                email
+            }
+        })
+
+        if (emailExistente) {
+            throw new Error("Email já cadastrado")
+        }
+
         await auth.api.changeEmail({
             headers: reqHeaders,
             body: {

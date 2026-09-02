@@ -97,7 +97,11 @@ export default async function EditarProduto({
                                 {oferta.imagemUrl && oferta.imagemUrl.length > 0 && (
                                     <div className="mb-3">
                                         <p className="text-xs text-gray-500 mb-1">Imagem atual:</p>
-                                        <img src={oferta.imagemUrl[0]} alt="Imagem atual" className="h-24 w-24 object-cover rounded-lg border border-gray-200" />
+                                        <img
+                                            src={oferta.imagemUrl[0] || "https://placehold.co/100x100/eeeeee/999999?text=Sem+Foto"}
+                                            alt="Imagem atual"
+                                            className="h-24 w-24 object-cover rounded-lg border border-gray-200"
+                                        />
                                     </div>
                                 )}
                                 <input type="file" name="imagem" multiple accept="image/png, image/jpeg, image/webp" className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white" />

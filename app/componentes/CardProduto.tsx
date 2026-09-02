@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link"; 
+import Link from "next/link";
 
 
 export interface ProdutoProps {
@@ -8,35 +8,45 @@ export interface ProdutoProps {
   descricao: string;
   preco: number;
   tempoPostagem: string;
-  imagemUrl: string;
+  imagemUrl: string | string[];
 }
 
-export default function CardProduto({ 
-  id, 
-  nome, 
-  descricao, 
-  preco, 
-  tempoPostagem, 
-  imagemUrl 
+export default function CardProduto({
+  id,
+  nome,
+  descricao,
+  preco,
+  tempoPostagem,
+  imagemUrl
 }: ProdutoProps) {
-  
+
   const precoFormatado = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL'
   }).format(preco);
 
+  const IMAGEM_PADRAO = "https://placehold.co/400x400/eeeeee/999999?text=Sem+Imagem";
+  let imagemFinal = IMAGEM_PADRAO;
+
+  if (Array.isArray(imagemUrl) && imagemUrl.length > 0) {
+    imagemFinal = imagemUrl[0];
+  } else if (typeof imagemUrl === "string" && imagemUrl.trim() !== "") {
+    imagemFinal = imagemUrl;
+  }
+
+
   return (
     <Link href={`/resgates/${id}`} className="block h-full cursor-pointer group">
       <div className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full border border-gray-100 pb-2 group-hover:-translate-y-1">
-        
+
         <div className="relative bg-[#F8F9FA] h-48 w-full flex items-center justify-center p-4">
           <div className="absolute top-3 right-3 bg-white px-3 py-1 rounded-full text-xs font-bold text-background-secondary shadow-sm flex items-center gap-1 z-10">
             📍 Postado há {tempoPostagem}
           </div>
           <div className="relative w-full h-full">
-            <Image 
-              src={imagemUrl} 
-              alt={nome} 
+            <Image
+              src={imagemFinal}
+              alt={nome}
               fill
               className="object-contain mix-blend-multiply drop-shadow-md"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"

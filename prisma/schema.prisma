@@ -11,6 +11,7 @@ datasource db {
 enum RoleUsuario {
   CONSUMIDOR
   PARCEIRO
+  ADMIN
 }
 
 enum StatusResgate {

@@ -4,12 +4,13 @@ import ExploreLanches from "./pages/ExploreLanches";
 import ResgatesDisponiveis from "./pages/ResgatesDisponiveis";
 
 export default function Home() {
+
   return (
     <>
       <Header />
-      <hr className="opacity-10"/>
+      <hr className="opacity-10" />
       <HeroSection />
-      
+
       <ExploreLanches />
       <ResgatesDisponiveis />
     </>

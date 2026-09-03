@@ -199,7 +199,7 @@ export async function editarOferta(formData: FormData) {
 
 
   if (arquivosValidos.length > 0) {
-    if (arquivosValidos.length > 3) {
+    if ((urlsFinais.length + arquivosValidos.length) > 3) {
       return {
         success: false,
         erroGeral: "Você só pode enviar no máximo 3 imagens"

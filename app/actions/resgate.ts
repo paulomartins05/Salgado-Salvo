@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
+import { notificarParceiroNovoResgate } from "@/lib/emails"
 
 export async function criarResgate(userId: string, ofertaId: string, quantidadePedida: number = 1) {
 
@@ -17,15 +18,24 @@ export async function criarResgate(userId: string, ofertaId: string, quantidadeP
   try {
     const codigoPinGerado = Math.floor(1000 + Math.random() * 9000).toString()
 
-    const novoResgate = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx) => {
 
-      const ofertaAtual = await prisma.oferta.findUnique({
+      const ofertaAtual = await tx.oferta.findUnique({
         where: {
           id: ofertaId
         },
         select: {
-          quantidade: true
+          quantidade: true,
+          titulo: true,
+          vendedor: {
+            select: { email: true }
+          }
         }
+      })
+
+      const consumidor = await tx.user.findUnique({
+        where: { id: userId },
+        select: { name: true }
       })
 
       if (!ofertaAtual) {
@@ -62,10 +72,19 @@ export async function criarResgate(userId: string, ofertaId: string, quantidadeP
         }
       })
 
-      return resgateGerado
+      return { resgateGerado, ofertaAtual, consumidor }
     })
+
+    // Dispara a notificação de forma assíncrona (fire-and-forget)
+    notificarParceiroNovoResgate(
+      result.ofertaAtual.vendedor.email,
+      result.consumidor?.name || "Cliente",
+      result.ofertaAtual.titulo,
+      result.resgateGerado.codigoPin
+    )
+
     revalidatePath("/perfil")
-    return novoResgate
+    return result.resgateGerado
   }
   catch (error: any) {
     if (error.message === "OFERTA_ESGOTADA") {

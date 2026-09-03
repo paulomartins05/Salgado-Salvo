@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Button from "../componentes/button";
+import { enviarMensagemContato } from "../actions/contato";
 
 export default async function Contato() {
   const reqHeaders = await headers();
@@ -26,7 +27,10 @@ export default async function Contato() {
             Dúvida, sugestão ou problema com um resgate? Manda pra gente.
           </p>
 
-          <form className="flex flex-col gap-4">
+          <form action={async (formData) => {
+            "use server";
+            await enviarMensagemContato(formData);
+          }} className="flex flex-col gap-4">
             <div>
               <label htmlFor="assunto" className="block text-sm font-medium mb-1">Assunto</label>
               <input
@@ -51,7 +55,7 @@ export default async function Contato() {
               ></textarea>
             </div>
 
-            <Button type="button" className="mt-2 bg-[#D9774A] hover:bg-[#c4683e] text-white py-3 rounded-xl w-full font-bold">
+            <Button type="submit" className="mt-2 bg-[#D9774A] hover:bg-[#c4683e] text-white py-3 rounded-xl w-full font-bold">
               Enviar Mensagem
             </Button>
           </form>

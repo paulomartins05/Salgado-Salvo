@@ -140,16 +140,16 @@ export async function validarResgate(resgateId: string, pinDigitado: string) {
         tentativasPin: { increment: 1 }
       }
     })
+    const tentativasRestantes = 2 - resgate.tentativasPin
+
+    if (tentativasRestantes > 0) {
+      throw new Error(`PIN Incorreto. Você tem mais ${tentativasRestantes} tentativa(s)`)
+    } else {
+      throw new Error("Pin incorreto. Resgate bloqueado por excesso de tentativas")
+    }
   }
 
 
-  const tentativasRestantes = 2 - resgate.tentativasPin
-
-  if (tentativasRestantes > 0) {
-    throw new Error(`PIN Incorreto. Você tem mais ${tentativasRestantes} tentativa(s)`)
-  } else {
-    throw new Error("Pin incorreto. Resgate bloqueado por excesso de tentativas")
-  }
 
   await prisma.resgate.update({
     where: { id: resgateId },

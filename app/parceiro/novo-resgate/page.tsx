@@ -79,7 +79,10 @@ export default function CadastrarNovoResgate() {
   const categoriaSelecionada = watch("categoria");
 
   useEffect(() => {
-    const enderecoDoUsuario = (session?.user as any)?.localizacao;
+    type UsuarioComLocalizacao = {
+      localizacao?: string | null;
+    };
+    const enderecoDoUsuario = (session?.user as UsuarioComLocalizacao)?.localizacao;
     if (enderecoDoUsuario) {
       setValue("localizacao", enderecoDoUsuario);
     }

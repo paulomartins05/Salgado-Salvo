@@ -4,9 +4,18 @@ import { useState } from "react"
 import Link from "next/link"
 import BotaoLogout from "./BotaoLogout"
 
+type MenuUsuarioProps = {
+  usuario: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    role?: string | null;
+  }
+}
+
 export default function MenuUsuario({
   usuario
-} : { usuario: any}) {
+} : MenuUsuarioProps) {
   const [ menuAberto, setMenuAberto ] = useState(false)
 
   return (

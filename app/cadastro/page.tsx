@@ -76,7 +76,19 @@ export default function CadastroPage() {
         }
       }
 
-      const payload = {
+      interface CadastroPayload {
+        name: string;
+        email: string;
+        password: string;
+        image?: string;
+        telefone?: string;
+        role?: string;
+        cnpj?: string;
+        localizacao?: string;
+        callbackURL?: string;
+      }
+
+      const payload: CadastroPayload = {
         name: data.nome,
         email: data.email,
         password: data.senha,
@@ -88,7 +100,7 @@ export default function CadastroPage() {
         callbackURL: "/"
       };
 
-      const { error } = await authClient.signUp.email(payload as any) 
+      const { error } = await authClient.signUp.email(payload) 
       
       if (error) {
         appToast.cadastroError(error.message);

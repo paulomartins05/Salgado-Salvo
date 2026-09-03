@@ -16,6 +16,7 @@ import EyeClosedIcon from "../assets/icon/eye-close-login.svg";
 
 import { authClient } from "@/lib/auth-client";
 import InputForm from "../componentes/InputForm";
+import { appToast } from "@/lib/toast";
 
 const loginSchema = z.object ( {
   email: z.string().min(1, "O Email é obrigatorio").email("Digite um email valido"),
@@ -53,10 +54,10 @@ export default function LoginPage() {
       },
       onSuccess: () => {
         console.log("Foi")
-        alert("Sucesso!")
+        appToast.loginSuccess()
       },
       onError: (ctx) => {
-        alert("Erro ao logar: " + ctx.error.message)
+        appToast.loginError(ctx.error.message)
       }
     })
   }

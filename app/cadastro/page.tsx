@@ -9,6 +9,7 @@ import { authClient } from "@/lib/auth-client";
 import { uploadImagemPerfil } from "@/app/actions/upload";
 
 import InputForm from "../componentes/InputForm"; 
+import { appToast } from "@/lib/toast";
 
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -90,17 +91,17 @@ export default function CadastroPage() {
       const { error } = await authClient.signUp.email(payload as any) 
       
       if (error) {
-        alert("Erro ao criar conta: " + error.message);
+        appToast.cadastroError(error.message);
         return
       }
 
-      alert("Conta Criada com sucesso! ")
+      appToast.cadastroSuccess()
 
       router.push("/")
       
     } catch (error: any) {
       console.error(error);
-      alert("Ocorreu um erro ao processar o cadastro.");
+      appToast.cadastroError("Ocorreu um erro ao processar o cadastro.");
     }
   };
 

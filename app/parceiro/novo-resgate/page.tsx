@@ -12,6 +12,7 @@ import { criarOferta } from "@/app/actions/ofertas";
 import { authClient } from "@/lib/auth-client";
 import Header from "../../pages/header"; 
 import InputForm from "../../componentes/InputForm";
+import { appToast } from "@/lib/toast";
 
 const categoriasDisponiveis = [
   { id: "Salgados", label: "Salgados", icon: "🥟" },
@@ -86,7 +87,7 @@ export default function CadastrarNovoResgate() {
 
   const onSubmit = async (data: ProdutoFormInputs) => {
     if (imagemFiles.length === 0) {
-      alert("Por favor, adicione pelo menos uma foto do lanche.");
+      appToast.aviso("Foto obrigatória", "Por favor, adicione pelo menos uma foto do lanche.");
       return;
     }
 
@@ -113,11 +114,11 @@ export default function CadastrarNovoResgate() {
 
       await criarOferta(serverData);
 
-      alert(`Sucesso! A oferta "${data.nome}" foi publicada.`);
+      appToast.sucesso("Oferta Publicada!", `A oferta "${data.nome}" foi publicada.`);
       router.push("/");
       
     } catch (error: any) {
-      alert(error.message);
+      appToast.erro("Erro ao publicar oferta", error.message);
       console.log(error);  
     }
   };

@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import Button from "../componentes/button"; 
+import { appToast } from "@/lib/toast";
 
 interface BotaoResgateProps {
   variant?: "primary" | "outline"; 
@@ -20,7 +21,7 @@ export default function BotaoResgate({
     setCarregando(true);
     setTimeout(() => {
       setCarregando(false);
-      alert("Salgado salvo com sucesso!");
+      appToast.sucesso("Salgado salvo com sucesso!");
     }, 2000);
   };
 

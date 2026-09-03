@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Lora, Inter } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/app/componentes/ui/sonner";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -30,6 +31,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={`${playfair.variable} ${lora.variable} ${inter.variable}`}>
         {children}
+        <Toaster />
       </body>
     </html>
   );

@@ -7,6 +7,15 @@ import { revalidatePath } from "next/cache"
 
 export async function buscarParceirosPendentes() {
 
+    const reqHeaders = await headers()
+    const session = await auth.api.getSession({
+        headers: reqHeaders
+    })
+
+    if (!session || session.user.role !== "ADMIN") {
+        throw new Error("Acesso negado: apenas administradores podem aprovar")
+    }
+
     const usuarios = await prisma.user.findMany({
         where: {
             cnpj: { not: null },
